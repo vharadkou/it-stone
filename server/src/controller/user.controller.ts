@@ -5,7 +5,7 @@ import { inject } from 'inversify';
 import { UserAuthenticationRepository } from 'service/user-authentication';
 import { User, Card, Deck } from '../models';
 import { CardRepository } from '../service/card';
-import { DeskRepository } from 'service';
+import { DeskRepository, ParserService } from 'service';
 import { LinkedinInfoParserService } from 'service/linkedinInfoParser';
 
 const data = {
@@ -46,6 +46,7 @@ export class UserController {
     @inject(CardRepository) private cardRepository: CardRepository,
     @inject(DeskRepository) private deskRepository: DeskRepository,
     @inject(LinkedinInfoParserService) private linkedinInfoParserService: LinkedinInfoParserService,
+    @inject(ParserService) private parserService: ParserService,
   ) { }
 
   @httpPost('/google-auth')
@@ -106,6 +107,18 @@ export class UserController {
 
     try {
       return this.linkedinInfoParserService.parseProfileData(data);
+    } catch (error) {
+      return response.status(500).json(error);
+    }
+  }
+  @httpPost('/parseUser')
+  public async parseUser(request: Request, response: Response): Promise<Response | string> {
+    const { name } = request.body;
+
+    console.log(name, "name parse");
+
+    try {
+      return await this.parserService.parseUser(name);
     } catch (error) {
       return response.status(500).json(error);
     }
