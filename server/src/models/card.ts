@@ -20,7 +20,6 @@ export const CARD_SCHEMA = {
     },
     image: {
         type: String,
-        required: true
     },
     superSkill: {
         type: String,

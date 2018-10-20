@@ -12,25 +12,25 @@ const data = {
   name: 'Nikita Bazhkou',
   currentPosition: '.Net Software Engineer - EPAM Systems',
   skills: [
-      'C#',
-      'JavaScript',
-      'SQL',
-      'Microsoft SQL Server',
-      'Cascading Style Sheets (CSS)',
-      'ASP.NET Core',
-      'ASP.NET MVC 5',
-      'Entity Framework',
-      'LINQ',
-      'ADO.NET',
-      'jQuery',
-      'React.js',
-      'Angular',
-      'git',
-      'AJAX',
-      'JIRA',
-      'Solr',
-      'EPiServer CMS',
-      'EPiServer Commerce'
+    'C#',
+    'JavaScript',
+    'SQL',
+    'Microsoft SQL Server',
+    'Cascading Style Sheets (CSS)',
+    'ASP.NET Core',
+    'ASP.NET MVC 5',
+    'Entity Framework',
+    'LINQ',
+    'ADO.NET',
+    'jQuery',
+    'React.js',
+    'Angular',
+    'git',
+    'AJAX',
+    'JIRA',
+    'Solr',
+    'EPiServer CMS',
+    'EPiServer Commerce'
   ],
   education: 5,
   // tslint:disable-next-line:max-line-length
@@ -61,9 +61,9 @@ export class UserController {
 
   @httpPost('/save-card')
   public async saveCard(request: Request, response: Response): Promise<Response | Card> {
-    const { name, currentPosition, education, skills, image, createAttack } = request.body;
+    const { name, hp, superSkill, ignore, createAttack, image } = request.body;
     try {
-      return this.cardRepository.saveCard(name, currentPosition, education, skills, image, createAttack);
+      return this.cardRepository.saveCard(name, hp, superSkill, ignore, createAttack, image);
     } catch (error) {
       return response.status(500).json(error);
     }
@@ -112,15 +112,19 @@ export class UserController {
     }
   }
   @httpPost('/parse-user')
-  public async parseUser(request: Request, response: Response): Promise<Response | string> {
+  public async parseUser(request: Request, response: Response): Promise<Response | Card> {
     const { name } = request.body;
 
     console.log(name, "name parse");
 
     try {
-      return await this.parserService.parseUser(name);
+      const user: any = await this.parserService.parseUser(name);
 
-      // this.cardRepository.saveCard(user);
+      const typedUser = user as Card;
+
+      // tslint:disable-next-line:max-line-length
+      this.cardRepository.saveCard(typedUser.name, typedUser.hp, typedUser.superSkill, typedUser.ignore, typedUser.createAttack, typedUser.image);
+      return typedUser;
     } catch (error) {
       return response.status(500).json(error);
     }

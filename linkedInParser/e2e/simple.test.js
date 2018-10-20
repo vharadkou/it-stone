@@ -129,7 +129,7 @@ describe('Visit base url', function () {
         console.dir(`calc Time: ${globalEducation}`);
 
         const exportJson = {
-            name: fullName,
+            name: username,
             currentPosition: position,
             // currentCompanyName: lastExperienceCompanyName,
             // currentCompanyTitle: lastExperienceCompanyTitle,
@@ -141,6 +141,6 @@ describe('Visit base url', function () {
             connections: connections,
         };
 
-        writeFileSync(`./${fullName}.json`, JSON.stringify(exportJson), { encoding: 'utf-8' });
+        writeFileSync(`./${username}.json`, JSON.stringify(exportJson), { encoding: 'utf-8' });
     }, 5 * 60 * 1000);
 }, 6 * 60 * 1000);

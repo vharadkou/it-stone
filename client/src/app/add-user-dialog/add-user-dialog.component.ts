@@ -35,6 +35,7 @@ export class DialogOverviewExampleDialogComponent {
     findUser(): void {
         this.userService.findUser(this.userName).subscribe((data) => {
             console.log('data from find', data);
+            this.findedUser = data;
         });
     }
 }
