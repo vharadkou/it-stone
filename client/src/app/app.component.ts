@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { SocketService } from './services/socket.service';
 enum Status {
   GameField,
   Auth
@@ -13,7 +14,7 @@ enum Status {
 export class AppComponent {
   public myCard = [
     {
-      firstName: 'Valiantsin',
+      firstName: 'Valiantsin1',
       lastName: 'Tsikhanau',
       picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
       jobPosition: '...',
@@ -22,7 +23,7 @@ export class AppComponent {
       skil3: 'Skil3',
     },
     {
-      firstName: 'Valiantsin',
+      firstName: 'Valiantsin2',
       lastName: 'Tsikhanau',
       picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
       jobPosition: '...',
@@ -31,7 +32,7 @@ export class AppComponent {
       skil3: 'Skil3',
     },
     {
-      firstName: 'Valiantsin',
+      firstName: 'Valiantsin3',
       lastName: 'Tsikhanau',
       picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
       jobPosition: '...',
@@ -40,18 +41,31 @@ export class AppComponent {
       skil3: 'Skil3',
     },
   ];
-  public activeCard = [];
+  public myActiveCard = [];
+  public enemyActiveCard = [];
   public readonly Status = Status;
   public status: Status = Status.GameField;
 
-  drop(event: CdkDragDrop<string[]>) {
+  private socket: SocketIOClient.Socket;
+  constructor(
+    private socketService: SocketService
+  ) {
+    this.socket = this.socketService.getSocket();
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        transferArrayItem(event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex);
+            // this.socket.emit('onStep', {
+            //     id: 1,
+            //     cards: this.myActiveCard
+            // });
     }
+
   }
 }

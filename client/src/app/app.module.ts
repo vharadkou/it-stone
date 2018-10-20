@@ -12,6 +12,7 @@ import { SigninComponent } from './signin';
 import { AppComponent } from './app.component';
 import { CardComponent } from './card/card.component';
 import { TimerService } from './services/timer.service';
+import { SocketService } from './services/socket.service';
 
 import {DemoMaterialModule} from './material-module';
 import {MatNativeDateModule} from '@angular/material';
@@ -49,7 +50,8 @@ export function getAuthServiceConfigs() {
       provide: AuthServiceConfig,
       useFactory: getAuthServiceConfigs
     },
-    TimerService
+    TimerService,
+    SocketService
   ],
   bootstrap: [AppComponent]
 })

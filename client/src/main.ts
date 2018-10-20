@@ -1,5 +1,6 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+(window as any).global = window;
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';

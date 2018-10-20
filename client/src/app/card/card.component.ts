@@ -4,6 +4,8 @@ interface Person {
   firstName: string;
   lastName: string;
   jobPosition: string;
+  image: string;
+  skil1: string;
   skil2: string;
   skil3: string;
 }

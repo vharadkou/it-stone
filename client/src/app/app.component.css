@@ -29,7 +29,20 @@
     height: 290px;
     display: flex;
     font-display: row;
+}
 
+.myActiveCard {
+    border: 1px solid red;
+    width: 50%;
+    display: flex;
+    font-display: row;
+}
+
+.enemyActiveCard {
+    border: 1px solid blue;
+    width: 50%;
+    display: flex;
+    font-display: row;
 }
 
 .user2-field {
