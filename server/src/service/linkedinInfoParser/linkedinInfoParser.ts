@@ -39,6 +39,50 @@ const ignoreSkillsJson: any = {
     'Rust': 'C'
 };
 
+let superSkillsArray = (coreSkills: any) => {
+    if (coreSkills.indexOf("Java") !== -1) {
+
+        return (education: any) => {
+
+            return (connection: any) => {
+                if (education <= 2) {
+                    return "easyJava";
+                }
+
+                if (connection <= 50) {
+                    return "mediumJava";
+                }
+
+                return "hardJava";
+            };
+        }
+    }
+
+    if (coreSkills.indexOf(".Net") !== -1 || coreSkills.indexOf("C#") !== -1) {
+        return (education: any) => {
+
+            return (connection: any) => {
+
+                if (education <= 2) {
+                    return "easy.Net";
+                }
+
+                if (connection <= 50) {
+                    return "medium.Net";
+                }
+
+                return "hard.Net";
+            };
+        }
+    }
+
+    return (education: any) => {
+        return (connections: any) => {
+            return "Base";
+        }
+    }
+}
+
 const skillsValues: any = {
     'HTML': 1,
     'CSS': 2,
@@ -85,7 +129,7 @@ export class LinkedinInfoParserService {
             const skills = profile.skills;
             const coreSkills = skills.slice(0, 3);
 
-            return undefined;
+            return superSkillsArray(coreSkills)(education)(connections);
         };
 
         const getCoef = (coreSkills: any) => {
