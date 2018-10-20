@@ -1,12 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+interface Person {
+  firstName: string;
+  lastName: string;
+  jobPosition: string;
+  skil2: string;
+  skil3: string;
+}
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css']
 })
-export class CardComponent implements OnInit {
 
+export class CardComponent implements OnInit {
+  @Input() person: Person;
   constructor() { }
 
   ngOnInit() {

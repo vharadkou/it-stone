@@ -1,27 +1,33 @@
-<div class="game-field">
+<div class="game-field" *ngIf="status == Status.GameField">
   <div class="shadow">
     <div class="container">
       <div class="user1-field">
-        <app-card ></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-        <app-card></app-card>
-      </div>
-
-      <div class="battle-field">
 
       </div>
 
-      <div class="user2-field">
+      <div 
+        cdkDropList
+        #battleFieldRef="cdkDropList"
+        [cdkDropListData]="activeCard"
+        [cdkDropListConnectedTo]="[myCardRef]"
+        class="battle-field"
+        (cdkDropListDropped)="drop($event)"
+        >
+        <app-card  *ngFor="let person of activeCard" [person]="person" cdkDrag></app-card>
+      </div>
 
+      <div 
+        cdkDropList
+        #myCardRef="cdkDropList"
+        [cdkDropListData]="myCard"
+        [cdkDropListConnectedTo]="[battleFieldRef]"
+        class="user2-field"
+        (cdkDropListDropped)="drop($event)"
+        >
+        <app-card  *ngFor="let person of myCard" [person]="person" cdkDrag></app-card>
       </div>
     </div>
   </div>
 </div>
-<app-signin></app-signin>
+<app-signin *ngIf="status == Status.Auth"></app-signin>
 

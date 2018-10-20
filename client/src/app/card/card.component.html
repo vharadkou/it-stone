@@ -1,23 +1,23 @@
-<div class="card" cdkDrag>
+<div class="card">
   <div class="person-block">
     <div class="image-block">
-      <img class="image" src="https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg">
+      <img class="image" src={{person.picture}}>
     </div>
 
     <div class="name-block">
-      <div class="first-name">Valiantsin</div>
-      <div class="last-name">Tsikhanau</div>
+      <div class="first-name">{{person.firstName}}</div>
+      <div class="last-name">{{person.lastName}}</div>
     </div>
 
     <div class="job-position">
-      Web Developer
+      {{person.jobPosition}}
     </div>
   </div>
   <div class="skills-block">
     <ul class="skill-list">
-      <li class="skil-item">Skil1 1</li>
-      <li class="skil-item">Skil2 2</li>
-      <li class="skil-item">Skil3 3</li>
+      <li class="skil-item">{{person.skil1}}</li>
+      <li class="skil-item">{{person.skil1}}</li>
+      <li class="skil-item">{{person.skil1}}</li>
     </ul>
   </div>
 </div>

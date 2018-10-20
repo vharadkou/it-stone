@@ -3,8 +3,13 @@
     width:100px;
     height: 150px;
     background-color: #fff;
-    margin-left: 10px;
+    margin-left: 20px;
+    transform:translate(0, 50px) 
 }
+
+/* .card:hover {
+    transform:translate(0, 0) 
+} */
 
 .person-block {
     padding-top: 10px;
@@ -36,6 +41,7 @@
 }
 
 .job-position {
+    text-align: center;
     margin-top: 5px;
 }
 
