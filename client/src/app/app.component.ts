@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { HttpClient } from '@angular/common/http';
 import { SocketService } from './services/socket.service';
+import { baseUrl } from '../constants/baseUrl';
 enum Status {
     GameField,
     Auth
@@ -27,32 +29,59 @@ interface SelectedCard {
 export class AppComponent implements OnInit {
     public myCard = [
         {
-            firstName: 'Valiantsin1',
-            lastName: 'Tsikhanau',
-            picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-            jobPosition: '...',
-            skil1: 'Skil1',
-            skil2: 'Skil2',
-            skil3: 'Skil3',
+            name: 'Nikita Bazhkou',
+            image: 'https://media.licdn.com/dms/image/C4E03AQHQPp3axkhdSA/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=NkQL-yaMMRa4WzI22Ks9xrmeTLekzYAjYnhGWD1Nc1Y',
+            hp: 54,
+            superSkill: undefined,
+            createAttack:
+            {
+                'C#': 1,
+                JavaScript: 7,
+                SQL: 4,
+                'Microsoft SQL Server': 2,
+                'Cascading Style Sheets (CSS)': 2,
+                'ASP.NET Core': 2,
+                'ASP.NET MVC 5': 2,
+                'Entity Framework': 2,
+                LINQ: 2,
+                'ADO.NET': 2,
+                jQuery: 2,
+                'React.js': 2,
+                Angular: 2,
+                git: 2,
+                AJAX: 2,
+                JIRA: 2,
+                Solr: 2,
+                'EPiServer CMS': 2,
+                'EPiServer Commerce': 2
+            },
+            ignore: ['Java', 'TypeScript', 'NOSQL']
         },
         {
-            firstName: 'Valiantsin2',
-            lastName: 'Tsikhanau',
-            picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-            jobPosition: '...',
-            skil1: 'Skil1',
-            skil2: 'Skil2',
-            skil3: 'Skil3',
-        },
-        {
-            firstName: 'Valiantsin3',
-            lastName: 'Tsikhanau',
-            picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-            jobPosition: '...',
-            skil1: 'Skil1',
-            skil2: 'Skil2',
-            skil3: 'Skil3',
-        },
+            'name': 'Yury Tatarynovich',
+            'image': 'https://media.licdn.com/dms/image/C5603AQFj0AHyS3b2mw/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=o25zTwx4g3qhouVvFyHAPK2dvqFQ5EmmeJxGaSMkIus',
+            'hp': 21,
+            'superSkill': 'Base',
+            'createAttack': {
+                'JUnit': 2,
+                'Maven': 2,
+                'JIRA': 2,
+                'Test Driven Development': 2,
+                'Design Patterns': 2,
+                'Scrum': 2,
+                'Spring': 2,
+                'Subversion': 2,
+                'JSP': 2,
+                'Hibernate': 2,
+                'MongoDB': 2,
+                'Grails': 2,
+                'Freemarker': 2,
+                'Groovy': 2,
+                'TestNG': 2,
+                'Velocity': 2
+            },
+            'ignore': []
+        }
     ];
     public myActiveCard = [];
     public enemyActiveCard = [];
@@ -94,8 +123,10 @@ export class AppComponent implements OnInit {
         me: null,
         enemy: null
     };
+    private dataFromDb;
     constructor(
-        private socketService: SocketService
+        private socketService: SocketService,
+        private http: HttpClient
     ) {
         this.socket = this.socketService.getSocket();
     }
@@ -107,6 +138,10 @@ export class AppComponent implements OnInit {
             this.myCard = data.fields[3].cards;
             this.enemyActiveCard = data.fields[1].cards;
             this.myActiveCard = data.fields[2].cards;
+        });
+        const url = `${baseUrl}/api/users/get-cards`;
+        this.http.get(url).subscribe((data) => {
+            this.dataFromDb = data;
         });
     }
     public drop(event: CdkDragDrop<string[]>) {

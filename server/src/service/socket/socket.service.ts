@@ -15,9 +15,10 @@ interface GameStepData {
 export class SocketService {
     private static instance: SocketService;
     private clients: SocketIO.Socket[] = [];
-    @inject(CardRepository) private cardRepository: CardRepository;
 
-    constructor() {
+    private constructor(
+        @inject(CardRepository) private cardRepository: CardRepository
+    ) {
         if (SocketService.instance) {
             throw new Error('You try to destroy singleton');
         }
@@ -25,7 +26,7 @@ export class SocketService {
 
     public static getInstance() {
         if (!SocketService.instance) {
-            SocketService.instance = new SocketService();
+            SocketService.instance = new SocketService(new CardRepository());
         }
         return SocketService.instance;
     }
@@ -48,10 +49,7 @@ export class SocketService {
 
     public notifyOtherUser(client: SocketIO.Socket, data: GameStepData): void {
         const otherClient = this.clients.find((c) => c.id !== client.id);
-        console.log(data);
-        console.log(`=======================`);
         const newDate = this.swapStepData(data);
-        console.log(newDate);
         otherClient.emit('onStepChange', newDate);
     }
 
@@ -90,7 +88,7 @@ export class SocketService {
         return data;
     }
 
-    private async createDefaultState(): Promise<GameStepData[]> {
+    private async createDefaultState(): Promise<any[]> {
         const cards = await this.cardRepository.getCards();
 
         const firstDeck = [];

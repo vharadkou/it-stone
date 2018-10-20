@@ -13,6 +13,7 @@
 
 .person-block {
     padding-top: 10px;
+    position: relative;
 }
 
 .image-block {
@@ -30,6 +31,13 @@
     height: 26px;
     border-radius: 50%;
     margin: 0 auto;
+}
+
+.hp {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #00DEDF;
 }
 
 .name-block {

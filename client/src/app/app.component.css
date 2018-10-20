@@ -40,7 +40,7 @@
     color: #00DEDF;
 }
 
-.countOfHp h1 {
+.countOfHp  > h1 {
     text-align: center;
 }
 
