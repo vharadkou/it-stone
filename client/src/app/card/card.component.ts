@@ -45,8 +45,10 @@ export class CardComponent implements OnInit {
             this.lastName = nameArr[1];
             this.image = this.person.image;
             this.hp = this.person.hp;
+            console.log(this.person.createAttack);
             if (this.person.createAttack) {
                 const skillsArr = Object.keys(this.person.createAttack).slice(0, 3);
+                console.log(skillsArr);
                 this.skil1 = skillsArr[0];
                 this.skil2 = skillsArr[1];
                 this.skil3 = skillsArr[2];

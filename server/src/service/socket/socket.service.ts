@@ -96,10 +96,10 @@ export class SocketService {
                 image: card.image,
                 hp: card.hp,
                 superSkill: card.superSkill,
-                createAttack: card.createAttack
+                ignore: card.ignore,
+                createAttack: JSON.parse(card.createAttack)
             }
         });
-        console.log(cards);
         const firstDeck = [];
         const secondDeck = [];
 
@@ -116,7 +116,7 @@ export class SocketService {
         const firstUser = {
             fields: [{
                 id: 1,
-                cards: firstDeck,
+                cards: firstDeck.filter(v => v),
             }, {
                 id: 2,
                 cards: [],
@@ -125,7 +125,7 @@ export class SocketService {
                 cards: [],
             }, {
                 id: 4,
-                cards: secondDeck,
+                cards: secondDeck.filter(v => v),
             }],
             myHp: 100,
             enemyHp: 100,

@@ -143,8 +143,22 @@ export class AppComponent implements OnInit {
         });
 
         this.socket.on("onReady", (data: any) => {
-            console.log(data);
-            
+            this.enemyHp = data.enemyHp;
+            this.myHp = data.myHp;
+
+            this.enemyActiveCard = [];
+            this.myActiveCard = [];
+            data.fields.forEach(element => {
+                if(element.id == 1) {
+                    this.myCard = element.cards;
+                }
+                
+                if(element.id == 4) {
+                    this.enemyCard = element.cards;
+                } 
+                console.log(this.myCard);
+            });
+
         });
         const url = `${baseUrl}/api/users/get-cards`;
         // this.http.get(url).subscribe((data) => {
@@ -191,12 +205,15 @@ export class AppComponent implements OnInit {
             });
 
             this.attackStateArray = { me: null, enemy: null };
+            
         } else {
             let enemy = this.enemyActiveCard.find(person => {
-                return (person.name + " " + person.fullname === this.attackStateArray.enemy.name);
+                let attackName = this.attackStateArray.enemy.name;
+                return (attackName === this.attackStateArray.enemy.name);
             });
 
             enemy.hp = fightResult.enemyHp;
+            this.attackStateArray = { me: null, enemy: null };
         };
 
         this.socket.emit('onStep', {
