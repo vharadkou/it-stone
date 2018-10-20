@@ -18,7 +18,7 @@ describe('Visit base url', function () {
         await (await browser.findElement(by.css('#session_key-login'))).sendKeys(email);
         await (await browser.findElement(by.css('#session_password-login'))).sendKeys(password);
         await (await browser.findElement(by.css('input[type="submit"]'))).click();
-        await browser.sleep(5000);
+        await browser.sleep(5500);
 
         const searchElem = await browser.findElement(by.css('input[role="combobox"]'))
 
@@ -26,14 +26,14 @@ describe('Visit base url', function () {
 
         await searchElem.sendKeys(username);
 
-        await browser.sleep(4000);
+        await browser.sleep(4500);
 
         const searchTypeAhead = 'search-typeahead-v2__hit'
         const firstFindElem = await browser.findElement(by.css(`.${searchTypeAhead}.${searchTypeAhead}--profile-entity`));
 
         firstFindElem.click();
 
-        await browser.sleep(5000);
+        await browser.sleep(5500);
 
         // parsing data
 
@@ -87,17 +87,19 @@ describe('Visit base url', function () {
 
         const skillsHeaderElem = await browser.findElement(by.xpath('//h2[text()="Experience"]'));
 
-        await browser.sleep(200);
+        await browser.sleep(1000);
 
         await browser.executeScript("arguments[0].scrollIntoView();", skillsHeaderElem);
 
-        await browser.sleep(500);
+        await browser.sleep(3000);
 
         const expands = await browser.findElements(by.css('.pv-profile-section__card-action-bar'));
 
         // await browser.actions().mouseMove(expands[expands.length - 1]).perform();
 
-        await Promise.all(expands.map(async expand => await expand.click()));
+        await expands[expands.length - 1].click();
+
+        // await Promise.all(expands.map(async expand => await expand.click()));
 
         // await (await browser.findElement(by.css('.pv-profile-section__card-action-bar'))).click();
         // tools and technologies

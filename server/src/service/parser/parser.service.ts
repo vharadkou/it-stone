@@ -1,13 +1,14 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { spawn } from 'child_process';
 import * as fs from 'fs-extra';
+import { LinkedinInfoParserService } from 'service/linkedinInfoParser';
 
 @injectable()
 export class ParserService {
 
-    public constructor() {
-
-    }
+    public constructor(
+        @inject(LinkedinInfoParserService) private linkedinInfoParserService: LinkedinInfoParserService,
+    ) { }
 
     public parseUser(name: string): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -22,7 +23,9 @@ export class ParserService {
             const child = spawn('npm', args, opt);
 
             child.on('close', async () => {
-                const path = `../linkedInParser/${name}`;
+                const path = `../linkedInParser/${name}.json`;
+
+                console.log(__dirname, "__dirname");
 
                 const isPathExist = await fs.pathExists(path);
 
@@ -30,9 +33,13 @@ export class ParserService {
                     reject();
                 }
 
-                // const json = fs.readJson(path);
+                const json = await fs.readJson(path);
 
-                resolve(name);
+                console.log('JSON DATA', json);
+
+                const parsedData = this.linkedinInfoParserService.parseProfileData(json);
+
+                resolve(parsedData);
             });
         });
     }
