@@ -1,9 +1,10 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import SocketIO from 'socket.io';
+import { CardRepository } from '../card';
 
 interface GameStepData {
     fields: [{
-        id: 1 | 2 | 3 | 4,
+        id: number,
         cards: any[]
     }];
     myHp: number;
@@ -14,8 +15,9 @@ interface GameStepData {
 export class SocketService {
     private static instance: SocketService;
     private clients: SocketIO.Socket[] = [];
+    @inject(CardRepository) private cardRepository: CardRepository;
 
-    private constructor() {
+    constructor() {
         if (SocketService.instance) {
             throw new Error('You try to destroy singleton');
         }
@@ -30,10 +32,13 @@ export class SocketService {
 
     public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
 
-        socketIO.on('connection', (client: SocketIO.Socket) => {
+        socketIO.on('connection', async (client: SocketIO.Socket) => {
             this.clients.push(client);
             if (this.clients.length === 2) {
-                client.emit('onReady');
+                const states = await this.createDefaultState();
+                this.clients.forEach((c, index) => {
+                    c.emit('onReady', states[index]);
+                });
             }
 
             client.on('disconnect', () => this.onDisconnect(client));
@@ -55,8 +60,6 @@ export class SocketService {
     }
 
     private swapStepData(data: GameStepData): GameStepData {
-
-
         data.fields.map((gameStepData: any) => {
             if (gameStepData.id === 1) {
                 gameStepData.id = 4;
@@ -85,5 +88,44 @@ export class SocketService {
         data.enemyHp = tmp;
 
         return data;
+    }
+
+    private async createDefaultState(): Promise<GameStepData[]> {
+        const cards = await this.cardRepository.getCards();
+
+        const firstDeck = [];
+        const secondDeck = [];
+
+        for (let index = 0; index < 15; index++) {
+            const rnd = Math.floor(Math.random() * 10);
+            firstDeck.push(cards[rnd]);
+        }
+
+        for (let index = 0; index < 15; index++) {
+            const rnd = Math.floor(Math.random() * 10);
+            secondDeck.push(cards[rnd]);
+        }
+
+        const firstUser = {
+            fields: [{
+                id: 1,
+                cards: firstDeck,
+            }, {
+                id: 2,
+                cards: [],
+            }, {
+                id: 3,
+                cards: [],
+            }, {
+                id: 4,
+                cards: secondDeck,
+            }],
+            myHp: 100,
+            enemyHp: 100,
+        };
+
+        const secondUser = this.swapStepData(firstUser as GameStepData);
+
+        return [firstUser, secondUser]
     }
 }
