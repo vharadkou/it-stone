@@ -130,7 +130,7 @@ export class AppComponent implements OnInit {
     constructor(
         private socketService: SocketService,
 
-        private fightService: FightService
+        private fightService: FightService,
         private http: HttpClient,
         public dialog: MatDialog
     ) {
