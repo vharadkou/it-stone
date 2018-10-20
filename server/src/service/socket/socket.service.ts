@@ -28,6 +28,9 @@ export class SocketService {
 
     socketIO.on('connection', (client: SocketIO.Socket) => {
       this.clients.push(client);
+      if (this.clients.length === 2) {
+        client.emit('onReady');
+      }
 
       client.on('disconnect', () => this.onDisconnect(client));
       client.on('onStep', (data) => this.notifyOtherUser(client, data));
