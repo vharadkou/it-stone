@@ -38,9 +38,9 @@ export class SocketService {
   }
 
   public notifyOtherUser(client: SocketIO.Socket, data: GameStepData[]): void {
-    const otherClient = this.clients.find((c) => c.id !== client.id);
-    const newDate = this.swapStepData(data);
-    otherClient.emit('onStepChange', newDate);
+    // const otherClient = this.clients.find((c) => c.id !== client.id);
+    // const newDate = this.swapStepData(data);
+    // otherClient.emit('onStepChange', newDate);
   }
 
   private onDisconnect(client: SocketIO.Socket): void {

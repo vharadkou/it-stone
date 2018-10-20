@@ -106,6 +106,8 @@ export class AppComponent {
     ];
     public readonly Status = Status;
     public status: Status = Status.GameField;
+    public myHp = 100;
+    public enemyHp = 100;
 
     private socket: SocketIOClient.Socket;
     private attackStateArray = {

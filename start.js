@@ -1,4 +1,4 @@
-const clientArgs = ['run start -- --port 80'];
+const clientArgs = ['run start -- --port 4200'];
 const clientOpts = { stdio: 'inherit', cwd: 'client', shell: true };
 require('child_process').spawn('npm', clientArgs, clientOpts);
 

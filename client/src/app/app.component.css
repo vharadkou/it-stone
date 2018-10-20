@@ -25,6 +25,25 @@
     align-items: center;
 }
 
+.user1-cards {
+    display: flex;
+}
+
+.countOfHp {
+    width:50px;
+    height: 50px;
+    background-color: #fff;
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    color: #00DEDF;
+}
+
+.countOfHp h1 {
+    text-align: center;
+}
+
 .battle-field {
     border: 1px solid yellow;
     height: 290px;
@@ -55,6 +74,10 @@
     height: 180px;
     display: flex;
     align-items: center;
+}
+
+.user2-cards {
+    display: flex;  
 }
 
   
