@@ -2,12 +2,9 @@
   "name": "community-app-server",
   "version": "0.1.0",
   "scripts": {
-    "prebuild": "npm run lint",
     "build": "webpack --config webpack.config.js --env=dev",
     "start": "npm run build -- --watch",
     "prod": "webpack --config webpack.config.js --env=prod",
-    "lint": "tslint \"src/**/*.ts\"",
-    "tslint-fix": "tslint --fix -p tsconfig.json"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.4",
