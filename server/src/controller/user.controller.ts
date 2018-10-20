@@ -111,7 +111,7 @@ export class UserController {
       return response.status(500).json(error);
     }
   }
-  @httpPost('/parseUser')
+  @httpPost('/parse-user')
   public async parseUser(request: Request, response: Response): Promise<Response | string> {
     const { name } = request.body;
 
@@ -119,6 +119,8 @@ export class UserController {
 
     try {
       return await this.parserService.parseUser(name);
+
+      // this.cardRepository.saveCard(user);
     } catch (error) {
       return response.status(500).json(error);
     }

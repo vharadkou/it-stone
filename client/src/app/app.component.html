@@ -59,6 +59,9 @@
                 </div>
             </div>
         </div>
+
+        <button mat-raised-button (click)="openDialog()">Add new user to game</button>
     </div>
 </div>
+
 <app-signin *ngIf="status == Status.Auth"></app-signin>

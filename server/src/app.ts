@@ -22,11 +22,12 @@ server.setConfig((app) => {
         extended: true
     }));
     app.use(bodyParser.json());
+    // app.use(express.static(path.join(__dirname, '../../client/dist/client')));
 });
 
 const application = server.build();
 
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 9669;
 const serverInstance = application.listen(port, () => {
     console.log('Press CTRL+C to stop\n');
 });

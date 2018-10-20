@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Add new user</h1>
+<div mat-dialog-content>
+    <p>Person name to add (linkedin)</p>
+    <mat-form-field>
+        <input matInput [(ngModel)]="userName">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button (click)="findUser()">Find</button>
+    <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Find</button> -->
+</div>

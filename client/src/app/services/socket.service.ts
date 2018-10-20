@@ -8,7 +8,7 @@ export class SocketService {
 
     getSocket() {
         if (!this.socket) {
-            this.socket = openSocket('http://localhost:3030');
+            this.socket = openSocket('http://localhost:9669');
 
         }
 

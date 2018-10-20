@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import {
   SocialLoginModule,
@@ -13,10 +15,12 @@ import { AppComponent } from './app.component';
 import { CardComponent } from './card/card.component';
 import { TimerService } from './services/timer.service';
 import { SocketService } from './services/socket.service';
+import { UserService } from './services/user.service';
+import { DialogOverviewExampleDialogComponent } from './add-user-dialog/add-user-dialog.component';
 
-import {DemoMaterialModule} from './material-module';
-import {MatNativeDateModule} from '@angular/material';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { DemoMaterialModule } from './material-module';
+import { MatNativeDateModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FightService } from './services';
 
 export function getAuthServiceConfigs() {
@@ -33,18 +37,24 @@ export function getAuthServiceConfigs() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SigninComponent,
-    CardComponent
-  ],
   imports: [
     BrowserModule,
     SocialLoginModule,
+    HttpModule,
     HttpClientModule,
+    FormsModule,
     DemoMaterialModule,
     MatNativeDateModule,
     BrowserAnimationsModule,
+  ],
+  declarations: [
+    AppComponent,
+    SigninComponent,
+    CardComponent,
+    DialogOverviewExampleDialogComponent,
+  ],
+  entryComponents: [
+    DialogOverviewExampleDialogComponent,
   ],
   providers: [
     {
@@ -53,7 +63,8 @@ export function getAuthServiceConfigs() {
     },
     TimerService,
     SocketService,
-    FightService
+    FightService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

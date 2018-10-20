@@ -5,6 +5,8 @@ import { SocketService } from './services/socket.service';
 import { baseUrl } from '../constants/baseUrl';
 import { FightService } from './services';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { MatDialog } from '@angular/material';
+import { DialogOverviewExampleDialogComponent } from './add-user-dialog';
 
 enum Status {
     GameField,
@@ -127,8 +129,10 @@ export class AppComponent implements OnInit {
     private dataFromDb;
     constructor(
         private socketService: SocketService,
-        private http: HttpClientModule,
+
         private fightService: FightService
+        private http: HttpClient,
+        public dialog: MatDialog
     ) {
         this.socket = this.socketService.getSocket();
     }
@@ -231,5 +235,17 @@ export class AppComponent implements OnInit {
             console.log("WIN");
         }
         }
+    }
+
+    public openDialog(): void {
+        const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+            width: '300px',
+            data: { name: 'asdasd' }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            // this.animal = result;
+        });
     }
 }
