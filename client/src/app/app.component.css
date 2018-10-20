@@ -1,0 +1,35 @@
+.game-field {
+    margin:0px;
+    padding: 0px;
+    background: url('./../assets/bg.jpg');
+    height: 100vh;
+    width:100%;
+}
+
+.shadow {
+    background-color: rgba(3, 3, 3, 0.7);
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+.user1-field {
+    border: 1px solid red;
+    height: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.battle-field {
+    border: 1px solid yellow;
+    height: 290px;
+}
+
+.user2-field {
+    border: 1px solid green;
+    height: 180px;
+
+}
