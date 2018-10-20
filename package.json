@@ -1,0 +1,12 @@
+{
+  "name": "ITStone",
+  "version": "0.1.0",
+  "engines": {
+    "node": "8.11"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "install": "node install.js",
+    "prod": "node prod.js"
+  }
+}
