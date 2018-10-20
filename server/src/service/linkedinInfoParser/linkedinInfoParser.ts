@@ -1,4 +1,4 @@
-const ignoreSkillsJson = {
+const ignoreSkillsJson: any = {
     'HTML': 'XML',
     'CSS': [
         'Sass',
@@ -39,7 +39,7 @@ const ignoreSkillsJson = {
     'Rust': 'C'
 };
 
-const skillsValues = {
+const skillsValues: any = {
     'HTML': 1,
     'CSS': 2,
     'JavaScript': 7,
