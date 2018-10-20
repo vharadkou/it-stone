@@ -18,6 +18,8 @@ interface Person {
 
 export class CardComponent implements OnInit {
   @Input() person: Person;
+  @Input() isShowCard = true;
+
   constructor() { }
 
   ngOnInit() {

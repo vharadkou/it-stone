@@ -3,7 +3,9 @@
     <div class="shadow">
         <div class="container">
             <div class="user1-field">
-
+                <app-card *ngFor="let person of enemyCard" [isShowCard]="false"
+                [person]="person"
+                ></app-card>
             </div>
 
             <div class="battle-field">
@@ -14,13 +16,15 @@
                      class="myActiveCard"
                      (cdkDropListDropped)="drop($event)">
                     <app-card *ngFor="let person of myActiveCard"
-                              [person]="person"
+                              [person]="person" [isShowCard]="true" 
+                              (click)="onCardSelect({type: 'my', person: person})"
                               cdkDrag></app-card>
                 </div>
 
                 <div class="enemyActiveCard">
                     <app-card *ngFor="let person of enemyActiveCard"
-                              [person]="person"
+                              [person]="person" [isShowCard]="true"
+                              (click)="onCardSelect({type: 'enemy', person: person})"
                               cdkDrag></app-card>
                 </div>
             </div>
@@ -32,7 +36,7 @@
                  class="user2-field"
                  (cdkDropListDropped)="drop($event)">
                 <app-card *ngFor="let person of myCard"
-                          [person]="person"
+                          [person]="person" [isShowCard]="true"
                           cdkDrag></app-card>
             </div>
         </div>
