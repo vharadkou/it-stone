@@ -141,6 +141,11 @@ export class AppComponent implements OnInit {
             this.enemyActiveCard = data.fields[1].cards;
             this.myActiveCard = data.fields[2].cards;
         });
+
+        this.socket.on("onReady", (data: any) => {
+            console.log(data);
+            
+        });
         const url = `${baseUrl}/api/users/get-cards`;
         // this.http.get(url).subscribe((data) => {
         //     this.dataFromDb = data;
@@ -204,10 +209,10 @@ export class AppComponent implements OnInit {
             myHp: this.myHp,
             enemyHp: this.enemyHp
         });
-        
-        // this.fightService.fight(this.attackStateArray.me, this.attackStateArray.enemy).then(resultDamage => {
-        //     console.log(resultDamage);
-        // });
+
+        if(this.enemyHp <= 0) {
+            console.log("WIN");
+        }
         }
     }
 }

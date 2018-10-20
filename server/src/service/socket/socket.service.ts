@@ -89,8 +89,17 @@ export class SocketService {
     }
 
     private async createDefaultState(): Promise<any[]> {
-        const cards = await this.cardRepository.getCards();
-
+        let cards: any = await this.cardRepository.getCards();
+        cards = cards.map((card: any) => card['_doc']).map((card: any) => {
+            return {
+                name: card.name,
+                image: card.image,
+                hp: card.hp,
+                superSkill: card.superSkill,
+                createAttack: card.createAttack
+            }
+        });
+        console.log(cards);
         const firstDeck = [];
         const secondDeck = [];
 
