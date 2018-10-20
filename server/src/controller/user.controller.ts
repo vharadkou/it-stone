@@ -61,9 +61,9 @@ export class UserController {
 
   @httpPost('/save-card')
   public async saveCard(request: Request, response: Response): Promise<Response | Card> {
-    const { name, currentPosition, education, skills, image } = request.body;
+    const { name, currentPosition, education, skills, image, createAttack } = request.body;
     try {
-      return this.cardRepository.saveCard(name, currentPosition, education, skills, image);
+      return this.cardRepository.saveCard(name, currentPosition, education, skills, image, createAttack);
     } catch (error) {
       return response.status(500).json(error);
     }
