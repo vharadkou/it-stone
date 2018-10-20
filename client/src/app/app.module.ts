@@ -17,6 +17,7 @@ import { SocketService } from './services/socket.service';
 import {DemoMaterialModule} from './material-module';
 import {MatNativeDateModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { FightService } from './services';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -51,7 +52,8 @@ export function getAuthServiceConfigs() {
       useFactory: getAuthServiceConfigs
     },
     TimerService,
-    SocketService
+    SocketService,
+    FightService
   ],
   bootstrap: [AppComponent]
 })

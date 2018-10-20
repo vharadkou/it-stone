@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SocketService } from './services/socket.service';
 import { baseUrl } from '../constants/baseUrl';
+import { FightService } from './services';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 enum Status {
     GameField,
     Auth
@@ -85,33 +88,31 @@ export class AppComponent implements OnInit {
     ];
     public myActiveCard = [];
     public enemyActiveCard = [];
-    public enemyCard = [{
-        firstName: 'Valiantsin1',
-        lastName: 'Tsikhanau',
-        picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-        jobPosition: '...',
-        skil1: 'Skil1',
-        skil2: 'Skil2',
-        skil3: 'Skil3',
-    },
-    {
-        firstName: 'Valiantsin2',
-        lastName: 'Tsikhanau',
-        picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-        jobPosition: '...',
-        skil1: 'Skil1',
-        skil2: 'Skil2',
-        skil3: 'Skil3',
-    },
-    {
-        firstName: 'Valiantsin3',
-        lastName: 'Tsikhanau',
-        picture: 'https://static.cdn.epam.com/avatar/60655420492f5fca5a2f840c132d7e82.jpg',
-        jobPosition: '...',
-        skil1: 'Skil1',
-        skil2: 'Skil2',
-        skil3: 'Skil3',
-    },
+    public enemyCard = [ {
+        "name": "Yury Tatarynovich",
+        "image": "https://media.licdn.com/dms/image/C5603AQFj0AHyS3b2mw/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=o25zTwx4g3qhouVvFyHAPK2dvqFQ5EmmeJxGaSMkIus",
+        "hp": 21,
+        "superSkill": "Base",
+        "createAttack": {
+            "JUnit": 2,
+            "Maven": 2,
+            "JIRA": 2,
+            "Test Driven Development": 2,
+            "Design Patterns": 2,
+            "Scrum": 2,
+            "Spring": 2,
+            "Subversion": 2,
+            "JSP": 2,
+            "Hibernate": 2,
+            "MongoDB": 2,
+            "Grails": 2,
+            "Freemarker": 2,
+            "Groovy": 2,
+            "TestNG": 2,
+            "Velocity": 2
+        },
+        "ignore": ['C#', 'Microsoft SQL Server']
+    }
     ];
     public readonly Status = Status;
     public status: Status = Status.GameField;
@@ -126,7 +127,8 @@ export class AppComponent implements OnInit {
     private dataFromDb;
     constructor(
         private socketService: SocketService,
-        private http: HttpClient
+        private http: HttpClientModule,
+        private fightService: FightService
     ) {
         this.socket = this.socketService.getSocket();
     }
@@ -140,9 +142,9 @@ export class AppComponent implements OnInit {
             this.myActiveCard = data.fields[2].cards;
         });
         const url = `${baseUrl}/api/users/get-cards`;
-        this.http.get(url).subscribe((data) => {
-            this.dataFromDb = data;
-        });
+        // this.http.get(url).subscribe((data) => {
+        //     this.dataFromDb = data;
+        // });
     }
     public drop(event: CdkDragDrop<string[]>) {
         if (event.previousContainer === event.container) {
@@ -173,7 +175,38 @@ export class AppComponent implements OnInit {
         }
 
         if (this.attackStateArray.enemy && this.attackStateArray.me) {
-            console.log(`FIGHT`);
+            console.log(this.fightService.fight(this.attackStateArray.me, this.attackStateArray.enemy));
+        let fightResult = this.fightService.fight(this.attackStateArray.me, this.attackStateArray.enemy);
+
+        if (fightResult.enemyHp === 0) {
+            this.enemyHp = this.enemyHp - fightResult.damage;
+            this.enemyActiveCard = this.enemyActiveCard.filter(person => {
+                return !(person.name + " " + person.fullname === this.attackStateArray.enemy.name);
+            });
+
+            this.attackStateArray = { me: null, enemy: null };
+        } else {
+            let enemy = this.enemyActiveCard.find(person => {
+                return (person.name + " " + person.fullname === this.attackStateArray.enemy.name);
+            });
+
+            enemy.hp = fightResult.enemyHp;
+        };
+
+        this.socket.emit('onStep', {
+            fields: [
+                { id: 1, cards: this.myCard },
+                { id: 2, cards: this.myActiveCard },
+                { id: 3, cards: this.enemyActiveCard },
+                { id: 4, cards: this.enemyCard },
+            ],
+            myHp: this.myHp,
+            enemyHp: this.enemyHp
+        });
+        
+        // this.fightService.fight(this.attackStateArray.me, this.attackStateArray.enemy).then(resultDamage => {
+        //     console.log(resultDamage);
+        // });
         }
     }
 }
