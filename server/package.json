@@ -4,7 +4,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js --env=dev",
     "start": "npm run build -- --watch",
-    "prod": "webpack --config webpack.config.js --env=prod",
+    "prod": "webpack --config webpack.config.js --env=prod"
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.4",
