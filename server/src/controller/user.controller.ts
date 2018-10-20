@@ -6,6 +6,37 @@ import { UserAuthenticationRepository } from 'service/user-authentication';
 import { User, Card, Deck } from '../models';
 import { CardRepository } from '../service/card';
 import { DeskRepository } from 'service';
+import { LinkedinInfoParserService } from 'service/linkedinInfoParser';
+
+const data = {
+  name: 'Nikita Bazhkou',
+  currentPosition: '.Net Software Engineer - EPAM Systems',
+  skills: [
+      'C#',
+      'JavaScript',
+      'SQL',
+      'Microsoft SQL Server',
+      'Cascading Style Sheets (CSS)',
+      'ASP.NET Core',
+      'ASP.NET MVC 5',
+      'Entity Framework',
+      'LINQ',
+      'ADO.NET',
+      'jQuery',
+      'React.js',
+      'Angular',
+      'git',
+      'AJAX',
+      'JIRA',
+      'Solr',
+      'EPiServer CMS',
+      'EPiServer Commerce'
+  ],
+  education: 5,
+  // tslint:disable-next-line:max-line-length
+  image: 'https://media.licdn.com/dms/image/C4E03AQHQPp3axkhdSA/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=NkQL-yaMMRa4WzI22Ks9xrmeTLekzYAjYnhGWD1Nc1Y',
+  connections: 50
+};
 
 @controller('/api/users')
 export class UserController {
@@ -14,6 +45,7 @@ export class UserController {
     @inject(UserAuthenticationRepository) private userAuthenticationRepository: UserAuthenticationRepository,
     @inject(CardRepository) private cardRepository: CardRepository,
     @inject(DeskRepository) private deskRepository: DeskRepository,
+    @inject(LinkedinInfoParserService) private linkedinInfoParserService: LinkedinInfoParserService,
   ) { }
 
   @httpPost('/google-auth')
@@ -63,6 +95,17 @@ export class UserController {
 
     try {
       return this.deskRepository.getDeckCards(userEmail);
+    } catch (error) {
+      return response.status(500).json(error);
+    }
+  }
+
+  @httpGet('/test-parser')
+  public async TestParser(request: Request, response: Response): Promise<Response | Card[]> {
+    const userEmail = request.params.userEmail;
+
+    try {
+      return this.linkedinInfoParserService.parseProfileData(data);
     } catch (error) {
       return response.status(500).json(error);
     }

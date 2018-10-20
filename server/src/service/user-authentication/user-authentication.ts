@@ -1,4 +1,3 @@
-
 import { injectable } from 'inversify';
 import { Mongoose, Schema, Model } from 'mongoose';
 
