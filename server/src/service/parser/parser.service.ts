@@ -13,19 +13,21 @@ export class ParserService {
     public parseUser(name: string): Promise<string> {
         return new Promise((resolve, reject) => {
             const opt = {
-                stdio: 'inherit', shell: true,
+                stdio: 'inherit',
+                shell: true,
                 cwd: '../linkedInParser',
             };
 
             // tslint:disable-next-line:max-line-length
             const args = [`run test -- --params.login.email=wot220697@gmail.com --params.login.password=Kin11001 --params.search.username=\"${name}\"`];
 
+            console.log(__dirname, "__dirname before spawn");
             const child = spawn('npm', args, opt);
 
             child.on('close', async () => {
                 const path = `../linkedInParser/${name}.json`;
 
-                console.log(__dirname, "__dirname");
+                console.log(__dirname, "__dirname on close");
 
                 const isPathExist = await fs.pathExists(path);
 
