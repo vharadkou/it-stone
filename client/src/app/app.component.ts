@@ -181,7 +181,8 @@ export class AppComponent implements OnInit {
         if (fightResult.enemyHp === 0) {
             this.enemyHp = this.enemyHp - fightResult.damage;
             this.enemyActiveCard = this.enemyActiveCard.filter(person => {
-                return !(person.name + " " + person.fullname === this.attackStateArray.enemy.name);
+                let attackName = this.attackStateArray.enemy.name;
+                return !(person.name === attackName);
             });
 
             this.attackStateArray = { me: null, enemy: null };
