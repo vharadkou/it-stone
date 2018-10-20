@@ -32,7 +32,7 @@ export class UserAuthenticationRepository {
                     console.log(error);
                 } else {
                     resolve(data);
-                    console.log(`Save ${data._id} booking fitness info success`);
+                    console.log(`Save ${data._id} user success`);
                 }
             });
         });
