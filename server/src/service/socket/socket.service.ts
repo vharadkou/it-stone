@@ -1,7 +1,10 @@
 import { injectable } from 'inversify';
 import SocketIO from 'socket.io';
 
-import { inject } from '../services-registration';
+interface GameStepData {
+  id: 1 | 2 | 3 | 4;
+  cards: any[];
+}
 
 @injectable()
 export class SocketService {
@@ -27,17 +30,45 @@ export class SocketService {
       this.clients.push(client);
 
       client.on('disconnect', () => this.onDisconnect(client));
-      client.on('onStep', () => this.notifyAllClients())
+      client.on('onStep', (data) => this.notifyOtherUser(client, data));
     });
   }
 
-  public notifyAllClients(): void {
-    this.clients.forEach((client) => {
-      // client.emit(eventName, payload);
-    });
+  public notifyOtherUser(client: SocketIO.Socket, data: GameStepData[]): void {
+    const otherClient = this.clients.find((c) => c.id !== client.id);
+    const newDate = this.swapStepData(data);
+    otherClient.emit('onStepChange', newDate);
   }
 
   private onDisconnect(client: SocketIO.Socket): void {
     this.clients.splice(this.clients.indexOf(client), 1);
+  }
+
+  private swapStepData(data: GameStepData[]): GameStepData[] {
+    const newData: GameStepData[] = [];
+
+    data.forEach((gameStepData: GameStepData) => {
+      if (gameStepData.id === 1) {
+        const newGameStepData: GameStepData = { id: 4, cards: gameStepData.cards };
+        newData.push(newGameStepData);
+      }
+
+      if (gameStepData.id === 4) {
+        const newGameStepData: GameStepData = { id: 1, cards: gameStepData.cards };
+        newData.push(newGameStepData);
+      }
+
+      if (gameStepData.id === 2) {
+        const newGameStepData: GameStepData = { id: 3, cards: gameStepData.cards };
+        newData.push(newGameStepData);
+      }
+
+      if (gameStepData.id === 3) {
+        const newGameStepData: GameStepData = { id: 2, cards: gameStepData.cards };
+        newData.push(newGameStepData);
+      }
+    });
+
+    return newData;
   }
 }
