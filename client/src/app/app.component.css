@@ -1,0 +1,83 @@
+.game-field {
+    margin:0px;
+    padding: 0px;
+    background: url('./../assets/bg.jpg');
+    height: 100vh;
+    width:100%;
+    overflow: hidden;
+    display: flex;
+}
+
+.shadow {
+    background-color: rgba(3, 3, 3, 0.7);
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+.user1-field {
+    border: 1px solid red;
+    height: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.user1-cards {
+    display: flex;
+}
+
+.countOfHp {
+    width:50px;
+    height: 50px;
+    background-color: #fff;
+    position: absolute;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    color: #00DEDF;
+}
+
+.countOfHp  > h1 {
+    text-align: center;
+}
+
+.battle-field {
+    border: 1px solid yellow;
+    height: 290px;
+    display: flex;
+    font-display: row;
+}
+
+.enemyCard {
+    background-color: #fff !important;
+}
+
+.myActiveCard {
+    border: 1px solid red;
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.enemyActiveCard {
+    border: 1px solid blue;
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.user2-field {
+    border: 1px solid green;
+    height: 180px;
+    display: flex;
+    align-items: center;
+}
+
+.user2-cards {
+    display: flex;  
+}
+
+  

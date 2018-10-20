@@ -1,0 +1,28 @@
+{
+  "name": "protractor-js-cirleci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/protractor ./protractor.conf.js ",
+    "postinstall": "npm run update",
+    "update": "node ./node_modules/protractor/bin/webdriver-manager update"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitalics/protractor-js-cirleci.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitalics/protractor-js-cirleci/issues"
+  },
+  "homepage": "https://github.com/vitalics/protractor-js-cirleci#readme",
+  "dependencies": {
+    "@types/jasmine": "^2.8.9",
+    "@types/node": "^10.12.0",
+    "@types/protractor": "^4.0.0",
+    "protractor": "^5.4.1"
+  }
+}

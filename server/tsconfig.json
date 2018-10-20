@@ -1,0 +1,87 @@
+{
+  "files": [
+    "src/app.ts"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "target": "es5",
+    "lib": [
+      "es6",
+      "dom",
+    ],
+    "outDir": "build",
+    "sourceMap": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "*": [
+        "node_modules/@types/*"
+      ],
+      "errors": [
+        "errors"
+      ],
+      "errors/*": [
+        "errors/*"
+      ],
+      "interfaces": [
+        "interfaces"
+      ],
+      "interfaces/*": [
+        "interfaces/*"
+      ],
+      "models": [
+        "models"
+      ],
+      "models/*": [
+        "models/*"
+      ],
+      "config/*": [
+        "src/config/*"
+      ],
+      "controller": [
+        "src/controller"
+      ],
+      "controller/*": [
+        "src/controller/*"
+      ],
+      "service": [
+        "src/service"
+      ],
+      "service/*": [
+        "src/service/*"
+      ],
+      "typing": [
+        "src/typing"
+      ],
+      "typing/*": [
+        "src/typing/*"
+      ],
+      "validation": [
+        "src/validation"
+      ],
+      "validation/*": [
+        "src/validation/*"
+      ],
+    },
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "enableTsDiagnostics": true
+      }
+    }
+  }
+}
