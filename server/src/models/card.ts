@@ -2,9 +2,10 @@ import * as mongoose from 'mongoose';
 
 export interface Card extends mongoose.Document {
     name: string;
-    currentPosition: string;
-    education: number;
-    skills: string[];
+    hp: number;
+    superSkill: string;
+    ignore: string[];
+    createAttack: Array<{ [name: string]: string }>;
     image: string;
 }
 
@@ -13,19 +14,22 @@ export const CARD_SCHEMA = {
         type: String,
         required: true
     },
-    currentPosition: {
-        type: String,
+    hp: {
+        type: Number,
         required: true
     },
     image: {
         type: String,
         required: true
     },
-    education: {
-        type: Number,
+    superSkill: {
+        type: String,
         required: true
     },
-    skills: {
+    ignore: {
+        type: [String],
+    },
+    createAttack: {
         type: [String],
     },
 };

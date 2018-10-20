@@ -21,17 +21,20 @@ export class CardRepository {
 
     public async saveCard(
         name: string,
-        currentPosition: string,
-        education: number,
-        skills: string[],
+        hp: number,
+        superSkill: string,
+        ignore: string[],
+        createAttack: Array<{ [name: string]: string }>,
         image: string,
     ): Promise<Card> {
+        const createAttackJSON = JSON.stringify(createAttack);
         const newCard: Card = new this.cardModel({
             name,
-            currentPosition,
-            education,
-            skills,
-            image
+            image,
+            hp,
+            superSkill,
+            ignore,
+            createAttack: createAttackJSON,
         });
 
         return new Promise<Card>((resolve, reject) => {
@@ -53,7 +56,9 @@ export class CardRepository {
                 if (error) {
                     reject(error);
                 } else {
-                    resolve(data);
+                    const newDate = data
+                        .map((d) => ({ ...d, createAttack: JSON.parse(d.createAttack as any) }));
+                    resolve(newDate as any);
                     console.log(`Get all cards`);
                 }
             });
