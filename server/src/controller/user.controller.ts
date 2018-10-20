@@ -78,7 +78,7 @@ export class UserController {
     }
   }
 
-  @httpPut('update-deck')
+  @httpPut('/update-deck')
   public async updateImage(request: Request, response: Response): Promise<Response | Deck> {
     const userEmail = request.body.email;
     const cardIds = request.body.cardIds;
