@@ -8,7 +8,7 @@ export class SocketService {
 
     getSocket() {
         if (!this.socket) {
-            this.socket = openSocket('https://f605d263.ngrok.io');
+            this.socket = openSocket('http://localhost:9669');
 
         }
 

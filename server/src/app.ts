@@ -13,7 +13,7 @@ import './controller';
 import { CONTAINER } from './service/services-registration';
 import { SocketService } from 'service/socket';
 
-const ngrok = require('ngrok');
+// const ngrok = require('ngrok');
 
 const server = new InversifyExpressServer(CONTAINER);
 
@@ -37,8 +37,8 @@ const serverInstance = application.listen(port, async () => {
     //     console.log(`Node.js local server is publicly-accessible at ${url}`);
     // });
 
-    const url = await ngrok.connect(port);
-    console.log(url);
+    // const url = await ngrok.connect(port);
+    // console.log(url);
 });
 
 const socketService: SocketService = SocketService.getInstance();
