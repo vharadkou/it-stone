@@ -7,6 +7,7 @@ import { Action } from '@ngrx/store';
 
 import * as cardActions from './cards.action';
 import { Card } from 'models';
+
 @Injectable()
 export class CardsEffects {
 
@@ -15,9 +16,10 @@ export class CardsEffects {
     switchMap((action: cardActions.GetCards) =>
       this.http.get('http://www.mocky.io/v2/5bd6f6183500000523fd7e40').pipe(
         map((data: Card[]) => new cardActions.GetCardsSuccess(data)),
-        catchError((error) => of(new cardActions.GetCardsError(error))
-        ))
-    ));
+        catchError((error) => of(new cardActions.GetCardsError(error)))
+      )
+    )
+  );
 
   public constructor(
     private http: HttpClient,
