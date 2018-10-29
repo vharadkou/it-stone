@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 import {
   SocialLoginModule,
@@ -22,6 +25,8 @@ import { DemoMaterialModule } from './material-module';
 import { MatNativeDateModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FightService } from './services';
+import { reducers } from 'store/store.config';
+import {CardsEffects} from 'store/cards';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -46,6 +51,11 @@ export function getAuthServiceConfigs() {
     DemoMaterialModule,
     MatNativeDateModule,
     BrowserAnimationsModule,
+    StoreModule.forRoot(reducers, {}),
+    EffectsModule.forRoot([CardsEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    }),
   ],
   declarations: [
     AppComponent,
