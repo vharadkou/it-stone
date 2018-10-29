@@ -1,4 +1,4 @@
-import {Status, Card} from 'models';
+import { Status, Card } from 'models';
 
 export interface CardsState {
   status: Status;
