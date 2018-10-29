@@ -19,7 +19,3 @@ export interface Card {
   connections: number;
   currentPosition: string;
 }
-
-export interface Deck {
-  deck: Card[];
-}
