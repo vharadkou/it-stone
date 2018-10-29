@@ -5,23 +5,25 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import {
-  SocialLoginModule,
   AuthServiceConfig,
+  SocialLoginModule,
   GoogleLoginProvider,
 } from 'angular-6-social-login';
 
-import { SigninComponent } from './signin';
 import { AppComponent } from './app.component';
-import { CardComponent } from './card/card.component';
+import { CardComponent } from './components/card/card.component';
+import { DialogOverviewExampleDialogComponent } from './components/add-user-dialog';
+import { WelcomePageComponent } from './pages/welcome/welcome.component';
+
 import { TimerService } from './services/timer.service';
 import { SocketService } from './services/socket.service';
 import { UserService } from './services/user.service';
-import { DialogOverviewExampleDialogComponent } from './add-user-dialog/add-user-dialog.component';
+import { FightService } from './services';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DemoMaterialModule } from './material-module';
 import { MatNativeDateModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FightService } from './services';
+import { FightPageComponent } from './pages/fight/fight.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -49,9 +51,10 @@ export function getAuthServiceConfigs() {
   ],
   declarations: [
     AppComponent,
-    SigninComponent,
     CardComponent,
     DialogOverviewExampleDialogComponent,
+    WelcomePageComponent,
+    FightPageComponent,
   ],
   entryComponents: [
     DialogOverviewExampleDialogComponent,
