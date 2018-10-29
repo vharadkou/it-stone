@@ -25,6 +25,9 @@ import { DemoMaterialModule } from './material-module';
 import { MatNativeDateModule } from '@angular/material';
 import { FightPageComponent } from './pages/fight/fight.component';
 
+import { RouterModule, Routes } from '@angular/router';
+import { NotFoundPageComponent } from './pages/not-found/not-found.component';
+
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
     [
@@ -38,6 +41,16 @@ export function getAuthServiceConfigs() {
   return config;
 }
 
+const appRoutes: Routes = [
+  { path: 'welcome', component: WelcomePageComponent },
+  { path: 'battle', component: FightPageComponent },
+  { path: '',
+    redirectTo: '/heroes',
+    pathMatch: 'full'
+  },
+  { path: '**', component: NotFoundPageComponent }
+];
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -48,6 +61,10 @@ export function getAuthServiceConfigs() {
     DemoMaterialModule,
     MatNativeDateModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true}
+    )
   ],
   declarations: [
     AppComponent,
