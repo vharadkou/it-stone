@@ -45,13 +45,14 @@ const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', component: FightPageComponent },
   { path: '',
-    redirectTo: '/heroes',
+    redirectTo: '/welcome',
     pathMatch: 'full'
   },
   { path: '**', component: NotFoundPageComponent }
 ];
 
 @NgModule({
+  exports: [ RouterModule ],
   imports: [
     BrowserModule,
     SocialLoginModule,
@@ -72,6 +73,7 @@ const appRoutes: Routes = [
     DialogOverviewExampleDialogComponent,
     WelcomePageComponent,
     FightPageComponent,
+    NotFoundPageComponent,
   ],
   entryComponents: [
     DialogOverviewExampleDialogComponent,
