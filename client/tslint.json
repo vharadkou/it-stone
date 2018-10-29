@@ -1,52 +1,76 @@
 {
+  "extends": [
+    "tslint:recommended"
+  ],
+  "defaultSeverity": "warning",
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  },
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
   "rules": {
-    "arrow-return-shorthand": true,
-    "callable-types": true,
+    "align": [
+      true,
+      "parameters",
+      "arguments",
+      "statements"
+    ],
+    "ban": false,
     "class-name": true,
     "comment-format": [
       true,
-      "check-space"
+      "check-space",
+      "check-lowercase"
     ],
     "curly": true,
-    "deprecation": {
-      "severity": "warn"
-    },
     "eofline": true,
     "forin": true,
-    "import-blacklist": [
-      true,
-      "rxjs/Rx"
-    ],
-    "import-spacing": true,
     "indent": [
       true,
       "spaces"
     ],
-    "interface-over-type-literal": true,
+    "jsdoc-format": true,
     "label-position": true,
     "max-line-length": [
       true,
       140
     ],
-    "member-access": false,
+    "member-access": true,
     "member-ordering": [
       true,
       {
         "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
+          "public-static-field",
+          "protected-static-field",
+          "private-static-field",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "protected-constructor",
+          "private-constructor",
+          "public-static-method",
+          "protected-static-method",
+          "private-static-method",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
         ]
       }
     ],
+    "no-angle-bracket-type-assertion": true,
+    "no-any": true,
     "no-arg": true,
     "no-bitwise": true,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": true,
     "no-console": [
-      true,
+      false,
+      "log",
       "debug",
       "info",
       "time",
@@ -54,47 +78,58 @@
       "trace"
     ],
     "no-construct": true,
+    "no-constructor-vars": false,
     "no-debugger": true,
-    "no-duplicate-super": true,
-    "no-empty": false,
-    "no-empty-interface": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
     "no-eval": true,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
-    "no-misused-new": true,
-    "no-non-null-assertion": true,
+    "no-inferrable-types": false,
+    "no-internal-module": false,
+    "no-null-keyword": false,
+    "no-require-imports": false,
     "no-shadowed-variable": true,
     "no-string-literal": false,
-    "no-string-throw": true,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
-    "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
+    "no-var-requires": true,
     "object-literal-sort-keys": false,
     "one-line": [
       true,
       "check-open-brace",
       "check-catch",
       "check-else",
+      "check-finally",
       "check-whitespace"
     ],
-    "prefer-const": true,
     "quotemark": [
       true,
-      "single"
+      "single",
+      "avoid-escape"
     ],
     "radix": true,
     "semicolon": [
       true,
       "always"
     ],
+    "switch-default": true,
+    "trailing-comma": [
+      false,
+      {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    ],
     "triple-equals": [
       true,
       "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "call-signature",
+      "parameter",
+      "property-declaration"
     ],
     "typedef-whitespace": [
       true,
@@ -104,10 +139,20 @@
         "parameter": "nospace",
         "property-declaration": "nospace",
         "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "space",
+        "index-signature": "space",
+        "parameter": "space",
+        "property-declaration": "space",
+        "variable-declaration": "space"
       }
     ],
-    "unified-signatures": true,
-    "variable-name": false,
+    "variable-name": [
+      true,
+      "allow-leading-underscore",
+      "ban-keywords"
+    ],
     "whitespace": [
       true,
       "check-branch",
@@ -116,15 +161,14 @@
       "check-separator",
       "check-type"
     ],
-    "no-output-on-prefix": true,
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
-    "use-life-cycle-interface": true,
-    "use-pipe-transform-interface": true,
-    "component-class-suffix": true,
-    "directive-class-suffix": true
+    "no-default-export": true,
+    "newline-before-return": false,
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "ordered-imports": false,
+    "max-classes-per-file": false,
+    "prefer-for-of": false
   }
 }
