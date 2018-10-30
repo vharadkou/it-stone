@@ -23,6 +23,13 @@ export const cardsReducer = (state: State = initialState, action: CardsActions):
         ...state,
         status: Status.Error
       };
+    case CardsActionTypes.MoveCardToHandFromDeck:
+      const id = state.deck.pop();
+      return {
+        ...state,
+        deck: state.deck,
+        myActiveCards: [...state.myActiveCards, id]
+      }
     default: return state;
   }
 };

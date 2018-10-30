@@ -12,6 +12,7 @@ export interface Player {
 }
 
 export interface Card {
+  id: number;
   name: string;
   image: string;
   skills: string[];
