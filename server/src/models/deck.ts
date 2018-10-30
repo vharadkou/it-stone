@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Card, CARD_SCHEMA } from './card';
 
 export interface Deck extends mongoose.Document {
     userEmail: string;
