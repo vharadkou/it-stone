@@ -1,39 +1,47 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
-
-import {
-  AuthServiceConfig,
-  SocialLoginModule,
-  GoogleLoginProvider,
-} from 'angular-6-social-login';
-
-import { AppComponent } from './app.component';
-import { CardComponent } from './components/card/card.component';
-import { DialogOverviewExampleDialogComponent } from './components/add-user-dialog';
-import { WelcomePageComponent } from './pages/welcome/welcome.component';
-
-import { TimerService } from './services/timer.service';
-import { SocketService } from './services/socket.service';
-import { UserService } from './services/user.service';
-import { FightService } from './services';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DemoMaterialModule } from './material-module';
+import { NgModule } from '@angular/core';
 import { MatNativeDateModule } from '@angular/material';
-import { FightPageComponent } from './pages/fight/fight.component';
-
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundPageComponent } from './pages/not-found/not-found.component';
-import { reducers } from './../store';
-import { CardsEffects } from './../store/cards';
+
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import {
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  SocialLoginModule,
+} from 'angular-6-social-login';
 
+import { AppComponent } from './app.component';
+import {
+  CardComponent,
+  DialogOverviewExampleDialogComponent,
+} from 'components';
+
+import {
+  FightPageComponent,
+  NotFoundPageComponent,
+  WelcomePageComponent,
+} from 'pages';
+
+import {
+  FightService,
+  SocketService,
+  TimerService,
+  UserService,
+} from 'services';
+
+import { 
+  CardsEffects,
+  reducers,
+} from 'store';
+
+import { DemoMaterialModule } from './material-module';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
