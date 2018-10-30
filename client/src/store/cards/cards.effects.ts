@@ -6,7 +6,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { Action } from '@ngrx/store';
 
 import * as cardActions from './cards.action';
-import { Card } from './../../models';
+import { Card } from 'models';
 
 @Injectable()
 export class CardsEffects {

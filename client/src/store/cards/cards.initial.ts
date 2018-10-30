@@ -1,4 +1,4 @@
-import { Status } from './../../models';
+import { Status } from 'models';
 import { CardsState } from './interfaces';
 
 type State = CardsState;

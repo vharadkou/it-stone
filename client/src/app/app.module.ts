@@ -27,8 +27,8 @@ import { FightPageComponent } from './pages/fight/fight.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundPageComponent } from './pages/not-found/not-found.component';
-import { reducers } from 'src/store';
-import { CardsEffects } from 'src/store/cards';
+import { reducers } from './../store';
+import { CardsEffects } from './../store/cards';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
