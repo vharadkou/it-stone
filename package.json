@@ -8,11 +8,5 @@
     "start": "node start.js",
     "install": "node install.js",
     "prod": "node prod.js"
-  },
-  "dependencies": {
-    "@ngrx/effects": "^6.1.0",
-    "@ngrx/entity": "^6.1.0",
-    "@ngrx/store": "^6.1.0",
-    "@ngrx/store-devtools": "^6.1.0"
   }
 }
