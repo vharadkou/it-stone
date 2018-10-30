@@ -5,5 +5,11 @@ type State = CardsState;
 
 export const initialState: State = {
   status: Status.Init,
-  cards: []
+  ids: [],
+  cards: [],
+  deck: [],
+  myCards: [],
+  enemyActiveCards: [],
+  enemyCards: [],
+  myActiveCards: [],
 };
