@@ -1,6 +1,12 @@
 import { injectable, inject } from "inversify";
 
-import { Room, PlayersBind, ParticipationStatus, ResultStatus, RoomStatus } from '../../model'
+import { 
+    Room, 
+    PlayersBind, 
+    ParticipationStatus, 
+    ResultStatus, 
+    RoomStatus 
+} from '../../model'
 
 import { RoomRepository } from './room.repository'
 

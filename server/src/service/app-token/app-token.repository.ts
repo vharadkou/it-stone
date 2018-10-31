@@ -1,4 +1,3 @@
-/* import { injectable, inject } from 'inversify'; */
 import { Mongoose, Schema, Model } from 'mongoose';
 import { APPTOKEN_COLLECTION } from '../../constants/db';
 import { APPTOKEN_SCHEMA } from '../../models';
@@ -42,6 +41,7 @@ export class AppTokenRepository {
                 } else {
                     const newData: AppTokenDB[] = data.map((item) => item);
                     resolve(newData);
+                    console.log(newData);
                     console.log(`Get appToken`);
                 }
             });

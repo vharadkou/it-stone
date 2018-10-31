@@ -15,19 +15,22 @@ export class RoomController {
 
     @httpPost('/start-new-room')
     public async startNewRoom(request: Request, response: Response): Promise<void | Response>{
+        
         try {
-            const appToken = 'Bearer ' + (await this.appTokenService.getAppToken()).token;
+                        
+            const appToken = 'Bearer ' + (await this.appTokenService.getAppToken())[0].token;
+            console.log(appToken);
 
             if(request.headers.authorization === appToken){
                 const roomToken = this.roomService.createToken();
                 response.status(200).send(roomToken);
-            } else {
-                response.status(401).send('test message')
+            } else {                
+                response.status(401).send('test error message')
             }
 
         } catch (err) {
             return response.status(400)
-                .json('test message')
+                .json('test error message')
         }
     }
 }
