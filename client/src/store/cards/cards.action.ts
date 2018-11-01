@@ -5,8 +5,8 @@ export enum CardsActionTypes {
   GetCards = '[cards] Get Cards',
   GetCardsSuccess = '[cards] GetCards (Success)',
   GetCardsError = '[cards] GetCards (Error)',
-  MoveCardsFromDeckToMe = '[cards] Move cards to me from deck',
-  MoveCardsFromDeckToEnemy = '[cards] Move cards to enemy from deck',
+  GetCardsToMe = '[cards] Move cards to me from deck',
+  GetCardsToEnemy = '[cards] Move cards to enemy from deck',
   MoveMyCardToBattle = '[cards] Move my card to battle',
   MoveEnemyCardToBattle = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
@@ -29,14 +29,14 @@ export class GetCardsError implements Action {
   constructor(public payload: Error) {}
 }
 
-export class MoveCardsFromDeckToMe implements Action {
-  public readonly type = CardsActionTypes.MoveCardsFromDeckToMe;
+export class GetCardsToMe implements Action {
+  public readonly type = CardsActionTypes.GetCardsToMe;
 
   constructor(public payload: { amount: number }) {}
 }
 
-export class MoveCardsFromDeckToEnemy implements Action {
-  public readonly type = CardsActionTypes.MoveCardsFromDeckToEnemy;
+export class GetCardsToEnemy implements Action {
+  public readonly type = CardsActionTypes.GetCardsToEnemy;
 
   constructor(public payload: { amount: number }) {}
 }
@@ -69,8 +69,8 @@ export type CardsActions =
   | GetCards
   | GetCardsSuccess
   | GetCardsError
-  | MoveCardsFromDeckToMe
-  | MoveCardsFromDeckToEnemy
+  | GetCardsToMe
+  | GetCardsToEnemy
   | MoveMyCardToBattle
   | MoveEnemyCardToBattle
   | DeleteMyCardFromBattle
