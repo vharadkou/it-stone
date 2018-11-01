@@ -16,7 +16,6 @@ export interface Card {
   name: string;
   image: string;
   skills: string[];
-  education: number;
-  connections: number;
-  currentPosition: string;
+  hp: number;
+  damage: number;
 }
