@@ -29,7 +29,7 @@ export const cardsReducer = (
         status: Status.Error
       };
 
-    case CardsActionTypes.GetCardsFromDeckToMe:
+    case CardsActionTypes.MoveCardsFromDeckToMe:
       const cardsArrToMe = state.deck.splice(
         state.deck.length - action.payload.amount,
         action.payload.amount
@@ -40,7 +40,7 @@ export const cardsReducer = (
         myCards: [...state.myCards, ...cardsArrToMe]
       };
 
-    case CardsActionTypes.GetCardsFromDeckToEnemy:
+    case CardsActionTypes.MoveCardsFromDeckToEnemy:
       const cardsArrToEnemy = state.deck.splice(
         state.deck.length - action.payload.amount,
         action.payload.amount
