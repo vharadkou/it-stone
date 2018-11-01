@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 
 import { CardsState } from './interfaces';
 
-import * as cardsQuery from './cards.selectors';
+import { cardsQuery } from './cards.selectors';
 
 import {
   DeleteEnemyCardFromBattle,

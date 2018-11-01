@@ -7,19 +7,19 @@ import * as fromCard from './cards.reducer';
 
 import { CardsState } from './interfaces';
 
-export const getCardState = createFeatureSelector<CardsState>('cardsState');
+const getCardState = createFeatureSelector<CardsState>('cardsState');
 
-export const getCards = createSelector(
+const getCards = createSelector(
     getCardState,
     fromCard.getCards,
 );
 
-export const getDeckId = createSelector(
+const getDeckId = createSelector(
     getCardState,
     fromCard.getDeckCards,
 );
 
-export const getDeck = createSelector(
+const getDeck = createSelector(
     getDeckId,
     getCards,
     (deckCardsId, cards) => {
@@ -27,12 +27,12 @@ export const getDeck = createSelector(
     }
 )
 
-export const getEnemyCardsId = createSelector(
+const getEnemyCardsId = createSelector(
     getCardState,
     fromCard.getEnemyCards,
 );
 
-export const getEnemyCards = createSelector(
+const getEnemyCards = createSelector(
     getEnemyCardsId,
     getCards,
     (enemyCardsId, cards) => {
@@ -40,12 +40,12 @@ export const getEnemyCards = createSelector(
     },
 );
 
-export const getEnemyActiveCardsId = createSelector(
+const getEnemyActiveCardsId = createSelector(
     getCardState,
     fromCard.getEnemyActiveCards,
 );
 
-export const getEnemyActiveCards = createSelector(
+const getEnemyActiveCards = createSelector(
     getEnemyActiveCardsId,
     getCards,
     (enemyCardsId, cards) => {
@@ -53,12 +53,12 @@ export const getEnemyActiveCards = createSelector(
     },
 );
 
-export const getMyCardsId = createSelector(
+const getMyCardsId = createSelector(
     getCardState,
     fromCard.getMyCards,
 );
 
-export const getMyCards = createSelector(
+const getMyCards = createSelector(
     getMyCardsId,
     getCards,
     (myCardsId, cards) => {
@@ -66,15 +66,30 @@ export const getMyCards = createSelector(
     }
 );
 
-export const getMyActiveCardsId = createSelector(
+const getMyActiveCardsId = createSelector(
     getCardState,
     fromCard.getMyCards,
 );
 
-export const getMyActiveCards = createSelector(
+const getMyActiveCards = createSelector(
     getMyActiveCardsId,
     getCards,
     (myActiveCardsId, cards) => {
         return myActiveCardsId.map(id => cards[id])
     }
 );
+
+export const cardsQuery = {
+    getCards,
+    getCardState,
+    getDeck,
+    getDeckId,
+    getEnemyActiveCards,
+    getEnemyActiveCardsId,
+    getEnemyCards,
+    getEnemyCardsId,
+    getMyActiveCards,
+    getMyActiveCardsId,
+    getMyCards,
+    getMyCardsId,
+}
