@@ -2,8 +2,7 @@ import { Status, Card } from 'models';
 
 export interface CardsState {
   status: Status;
-  ids: number[];
-  cards: Card[];
+  cards: { [id: number]: Card };
   deck: number[];
   myCards: number[];
   myActiveCards: number[];
