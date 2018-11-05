@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 import { inject } from 'inversify';
 
-import { AppTokenRepository } from 'service/app-token/app-token.repository'
+import { AppTokenRepository } from 'service/app-token/app-token.repository';
 import { RoomService } from 'service/room/room.service';
 
 @controller('/api')

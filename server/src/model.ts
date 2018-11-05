@@ -38,3 +38,7 @@ export interface Player {
     participationStatus: ParticipationStatus;
     resultStatus: ResultStatus;
 }
+
+export interface User {
+    userToken: string;
+}

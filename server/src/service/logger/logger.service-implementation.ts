@@ -1,4 +1,4 @@
-/* import { injectable } from 'inversify';
+import { injectable } from 'inversify';
 
 import {
     createLogger,
@@ -40,4 +40,4 @@ export class LoggerServiceImplementation implements LoggerService{
         this.logger.error(message);
     }
 
-} */
+}
