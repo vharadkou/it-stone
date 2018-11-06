@@ -1,22 +1,19 @@
 .its-player-hand {
-  background-color: #e57373;
 
   &__container {
-    width: 40%;
-    height: 200px;
+    height: 220px;
     margin: 10px auto;
     display: flex;
+    justify-content: center;
     align-items: center;
     flex-flow: row nowrap;
-    background-color: lightgreen;
-    border: 2px solid lightskyblue;
-    border-radius: 5px;
+    background-color: #546e7a;
   }
 
   &__card {
-    width: 100px;
-    height: 150px;
+    width: 150px;
+    height: 200px;
     margin: 10px;
-    background-color: #c5cae9;
+    background-color: #ff9800;
   }
 }
