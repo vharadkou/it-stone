@@ -1,16 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+    Component,
+    OnInit,
+} from '@angular/core';
+import { faUsb } from '@fortawesome/free-brands-svg-icons';
+import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-    selector: 'app-card',
-    templateUrl: './card.component.html',
-    styleUrls: ['./card.component.css']
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.scss'],
 })
-
 export class CardComponent implements OnInit {
+  constructor() {}
 
-    constructor() { }
+  faUsb = faUsb;
+  faShieldAlt = faShieldAlt;
 
-    ngOnInit() {
-    }
-
+  isFront = false;
+  ngOnInit() {}
 }
