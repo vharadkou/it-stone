@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { MatNativeDateModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -42,6 +44,7 @@ import {
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
+import { PipesModule } from './pipes/pipes.module';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -86,6 +89,8 @@ const appRoutes: Routes = [
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
+    FontAwesomeModule,
+    PipesModule,
   ],
   declarations: [
     AppComponent,
