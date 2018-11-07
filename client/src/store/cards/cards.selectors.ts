@@ -27,17 +27,9 @@ const getDeck = createSelector(
     }
 )
 
-const getEnemyCardsId = createSelector(
+const getEnemyCardCount = createSelector(
     getCardState,
-    fromCard.getEnemyCards,
-);
-
-const getEnemyCards = createSelector(
-    getEnemyCardsId,
-    getCards,
-    (enemyCardsId, cards) => {
-        return enemyCardsId.map(id => cards[id])
-    },
+    fromCard.getEnemyCardCount,
 );
 
 const getEnemyActiveCardsId = createSelector(
@@ -86,8 +78,7 @@ export const cardsQuery = {
     getDeckId,
     getEnemyActiveCards,
     getEnemyActiveCardsId,
-    getEnemyCards,
-    getEnemyCardsId,
+    getEnemyCardCount,
     getMyActiveCards,
     getMyActiveCardsId,
     getMyCards,

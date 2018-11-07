@@ -5,10 +5,10 @@ export enum CardsActionTypes {
   GetCards = '[cards] Get Cards',
   GetCardsSuccess = '[cards] GetCards (Success)',
   GetCardsError = '[cards] GetCards (Error)',
-  GetCardsToMe = '[cards] Move cards to me from deck',
-  GetCardsToEnemy = '[cards] Move cards to enemy from deck',
-  MoveMyCardToBattle = '[cards] Move my card to battle',
-  MoveEnemyCardToBattle = '[cards] Move enemy card to battle',
+  GetMyNewCards = '[cards] Move cards to me from deck',
+  GetEnemyNewCards = '[cards] Move cards to enemy from deck',
+  GetMyBattleCard = '[cards] Move my card to battle',
+  GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
   DeleteEnemyCardFromBattle = '[cards] Delete enemy card from battle field'
 }
@@ -29,26 +29,26 @@ export class GetCardsError implements Action {
   constructor(public payload: Error) {}
 }
 
-export class GetCardsToMe implements Action {
-  public readonly type = CardsActionTypes.GetCardsToMe;
+export class GetMyNewCards implements Action {
+  public readonly type = CardsActionTypes.GetMyNewCards;
 
   constructor(public payload: { amount: number }) {}
 }
 
-export class GetCardsToEnemy implements Action {
-  public readonly type = CardsActionTypes.GetCardsToEnemy;
+export class GetEnemyNewCards implements Action {
+  public readonly type = CardsActionTypes.GetEnemyNewCards;
 
   constructor(public payload: { amount: number }) {}
 }
 
-export class MoveMyCardToBattle implements Action {
-  public readonly type = CardsActionTypes.MoveMyCardToBattle;
+export class GetMyBattleCard implements Action {
+  public readonly type = CardsActionTypes.GetMyBattleCard;
 
   constructor(public payload: { id: number }) {}
 }
 
-export class MoveEnemyCardToBattle implements Action {
-  public readonly type = CardsActionTypes.MoveEnemyCardToBattle;
+export class GetEnemyBattleCard implements Action {
+  public readonly type = CardsActionTypes.GetEnemyBattleCard;
 
   constructor(public payload: { id: number }) {}
 }
@@ -69,9 +69,9 @@ export type CardsActions =
   | GetCards
   | GetCardsSuccess
   | GetCardsError
-  | GetCardsToMe
-  | GetCardsToEnemy
-  | MoveMyCardToBattle
-  | MoveEnemyCardToBattle
+  | GetMyNewCards
+  | GetEnemyNewCards
+  | GetMyBattleCard
+  | GetEnemyBattleCard
   | DeleteMyCardFromBattle
   | DeleteEnemyCardFromBattle;

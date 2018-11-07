@@ -40,6 +40,6 @@ export const initialState: State = {
   deck: [1, 2, 3],
   myCards: [],
   enemyActiveCards: [],
-  enemyCards: [],
+  enemyCardCount: 0,
   myActiveCards: [],
 };

@@ -29,7 +29,7 @@ export const cardsReducer = (
         status: Status.Error
       };
 
-    case CardsActionTypes.GetCardsToMe:
+    case CardsActionTypes.GetMyNewCards:
       const cardsArrToMe = state.deck.splice(
         state.deck.length - action.payload.amount,
         action.payload.amount
@@ -40,24 +40,20 @@ export const cardsReducer = (
         myCards: [...state.myCards, ...cardsArrToMe]
       };
 
-    case CardsActionTypes.GetCardsToEnemy:
-      const cardsArrToEnemy = state.deck.splice(
-        state.deck.length - action.payload.amount,
-        action.payload.amount
-      );
+    case CardsActionTypes.GetEnemyNewCards:
       return {
         ...state,
         deck: state.deck,
-        enemyCards: [...state.enemyCards, ...cardsArrToEnemy]
+        enemyCardCount: state.enemyCardCount + action.payload.amount
       };
 
-    case CardsActionTypes.MoveMyCardToBattle:
+    case CardsActionTypes.GetMyBattleCard:
       return {
         ...state,
         myActiveCards: [...state.myActiveCards, action.payload.id]
       };
 
-    case CardsActionTypes.MoveEnemyCardToBattle:
+    case CardsActionTypes.GetEnemyBattleCard:
       return {
         ...state,
         myActiveCards: [...state.enemyActiveCards, action.payload.id]
@@ -90,5 +86,5 @@ export const getCards = (state: State) => state.cards;
 export const getDeckCards = (state: State) => state.deck;
 export const getMyCards = (state: State) => state.myCards;
 export const getMyActiveCards = (state: State) => state.myActiveCards;
-export const getEnemyCards = (state: State) => state.enemyCards;
+export const getEnemyCardCount = (state: State) => state.enemyCardCount;
 export const getEnemyActiveCards = (state: State) => state.enemyActiveCards;
