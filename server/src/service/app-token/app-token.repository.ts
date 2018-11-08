@@ -34,18 +34,34 @@ export class AppTokenRepository {
         });
     }
 
-    public async getAppToken(): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
+    public async getAppToken(): Promise<AppTokenDB[]> {
+        return new Promise<AppTokenDB[]>((resolve, reject) => {
             this.appTokenModel.find({}, (error, data: AppTokenDB[]) => {
                 if (error) {
                     reject(error);
                     this.loggerService.errorLog(error);
                 } else {
-                    const newData: AppTokenDB[] = data.map((item) => item);
+                    const newData: AppTokenDB[] = data;
+                    console.log(newData);
                     resolve(newData);                    
                     this.loggerService.infoLog(`Getting appToken`);
                 }
             });
         });
     }
+
+    public deleteAppToken(appToken: string): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.appTokenModel.deleteOne({ token: appToken }, (error) => {
+                if (error) {
+                    reject(error);
+                    this.loggerService.errorLog(error);
+                } else {
+                    resolve(true);
+                    this.loggerService.infoLog('Application token has been deleted');
+                }
+            });
+        });
+    }
+
 }

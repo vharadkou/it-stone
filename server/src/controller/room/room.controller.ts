@@ -18,19 +18,18 @@ export class RoomController {
         
         try {
                         
-            const appToken = 'Bearer ' + (await this.appTokenService.getAppToken())[0].token;
-            console.log(appToken);
+            const appToken = 'Bearer ' + (await this.appTokenService.getAppToken())[0].token;            
 
             if(request.headers.authorization === appToken){
                 const roomToken = this.roomService.createToken();
                 response.status(200).send(roomToken);
             } else {                
-                response.status(401).send('test error message')
+                response.status(401).send('error message')
             }
 
         } catch (err) {
             return response.status(400)
-                .json('test error message')
+                .json('error message')
         }
     }
 }

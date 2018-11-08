@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { CommunityLayer, GameResult, ResultStatus, ParticipationStatus } from 'community-layer';
-import { AppTokenRepository } from '../app-token/app-token.repository';
+import { AppTokenRepository } from 'service/app-token';
 import { UserService } from '../user/user.service';
 import { LoggerService } from 'service/logger';
 const communityLayer = new CommunityLayer();
@@ -43,10 +43,11 @@ export class SendResultService {
 
         try {
             appToken = 'Bearer ' + (await this.appTokenRepository.getAppToken())[0].token;
+            console.log('________________' + appToken + '________________');
         } catch {
             const error = 'Apptoken error';
             
-            this.loggerService.errorLog(error);
+            this.loggerService.errorLog(error)
             throw new Error(error);
         }
 

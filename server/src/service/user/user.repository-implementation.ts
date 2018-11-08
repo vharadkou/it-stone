@@ -29,23 +29,54 @@ export class UserRepositoryImplementation implements UserRepository {
                 } else {
                     resolve(data)
                 }
-            })
-        })
-    }
+            });
+        });
+    }      
 
-    public async getUser(userToken: string): Promise<any>{
+    public async getUser(token: string): Promise<UserDB>{
+        
         return new Promise<any>((resolve, reject) => {
-            this.userModel.find({}, (error, data: UserDB[]) => {
+            this.userModel.find({userToken: token}, (error, data: UserDB) => {
                 if(error){
                     reject(error);
                 } else {
-                    const newData: UserDB[] = data.map((item) => item);
+                    const newData: UserDB = data;
                     resolve(newData);
                     this.loggerService.infoLog(`Get user`);
                 }
             });
         });
+    }
 
+    public async getAllUsersTokens(): Promise<UserDB[]>{
+
+        return new Promise<any>((resolve, reject) => {
+            this.userModel.find({}, (error, data: UserDB[]) => {
+                if(error){
+                    reject(error);
+                } else {
+                    const newData: UserDB[] = data;
+                    resolve(newData);                    
+                    this.loggerService.infoLog(`Get all users tokens`);
+                }
+            });
+        });
+    }
+
+    public async cleanUsersCollection(): Promise<boolean>{
+        
+        return new Promise<boolean> ((resolve, reject) => {
+            
+            this.userModel.remove({}, (error) => {
+                if (error) {
+                    reject(error);
+                    this.loggerService.errorLog(error);
+                } else {                    
+                    resolve(true);
+                    this.loggerService.infoLog('Users collection in database has been cleaned');
+                }
+            });
+        });
     }
 
 }

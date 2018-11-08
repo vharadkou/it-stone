@@ -35,7 +35,17 @@ export class AppTokenController{
             return this.appTokenRepository.getAppToken();
           } catch (error) {
             return response.status(500).json(error);
-          }
+        }
+    }
+
+    @httpPost('/delete-app-token/')
+    public async deleteAppToken(request: Request, response: Response): Promise<void | Response>{
+        let appToken = request.body.token
+        try {
+            this.appTokenRepository.deleteAppToken(appToken);
+          } catch (error) {
+            return response.status(500).json(error);
+        }
     } 
 
 }

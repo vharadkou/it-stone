@@ -24,6 +24,7 @@ export class PlayersBindService {
     }
 
     public checkPlayersBind(playersBind: PlayersBind): boolean {
+        
         if(!playersBind.room){
             const error = 'no room';
 
@@ -31,17 +32,17 @@ export class PlayersBindService {
             throw new Error(error);
         } else if (!playersBind.players){
             const error = 'no players';
-
             
             this.loggerService.errorLog(error);
             throw new Error(error);
-        } else if (playersBind.players.length <= 1) {
+        } else if (playersBind.players.length <= 1) {            
             const error = 'not enough players';
                         
-            this.loggerService.errorLog(error);
-            throw new Error(error);
+            this.loggerService.errorLog(error);            
+            throw new Error(error);            
         } else {
-            this.userService.addUserToDb(playersBind.players[0]);            
+            this.userService.addUserToDb(playersBind.players[0]);
+            this.userService.addUserToDb(playersBind.players[1]);
             this.loggerService.infoLog('Room and players have been binded');
 
             return true
