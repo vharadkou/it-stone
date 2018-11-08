@@ -1,0 +1,102 @@
+$programmer-color: #ec9b3b;
+
+.its-card {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 130px;
+    height: 200px;
+    margin: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 
+      0 2px 1px -1px rgba(0, 0, 0, 0.2),
+      0 1px 1px 0 rgba(0, 0, 0, 0.14),
+      0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  &__background-cont {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  &__image {
+    background-image: url("./../../../assets/js-machine.jpg");
+    background-size: 43px 51px;
+    width: 129px;
+    height: 200px;
+    border-radius: 5px;
+  }
+
+  &__picture {
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  &__title {
+    padding: 0 10px;
+    margin-top: 10px;
+    color: $programmer-color;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__subtitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  &__pers-info {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  &__stat {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
+  }
+
+  &__stat-name {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__stat-value {
+    text-transform: capitalize;
+    font-size: 0.8rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 3px 10px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: white;
+    background-color: $programmer-color;
+  }
+
+  &__skill {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

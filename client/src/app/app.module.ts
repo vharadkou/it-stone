@@ -8,6 +8,8 @@ import { MatNativeDateModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 import { MatDialogModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -43,8 +45,10 @@ import {
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
+
 import { LayoutModule } from '@angular/cdk/layout';
-import { PlayerHandComponent } from './components/player-hand/player-hand.component';
+import { PlayerHandComponent } from './components/player-hand/player-hand.component'
+import { PipesModule } from './pipes/pipes.module';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -97,6 +101,8 @@ const appRoutes: Routes = [
     MatIconModule,
     MatButtonModule,
     LayoutModule,
+    FontAwesomeModule,
+    PipesModule,
   ],
   declarations: [
     AppComponent,
