@@ -116,7 +116,7 @@ export class SocketService {
         const firstUser = {
             fields: [{
                 id: 1,
-                cards: firstDeck.filter((v) => v),
+                cards: firstDeck.filter(v => v),
             }, {
                 id: 2,
                 cards: [],
@@ -125,7 +125,7 @@ export class SocketService {
                 cards: [],
             }, {
                 id: 4,
-                cards: secondDeck.filter((v) => v),
+                cards: secondDeck.filter(v => v),
             }],
             myHp: 100,
             enemyHp: 100,
