@@ -24,7 +24,7 @@ export class SocketService {
         }
     }
 
-    public static getInstance() {
+    public static getInstance(): SocketService {
         if (!SocketService.instance) {
             SocketService.instance = new SocketService(new CardRepository());
         }
@@ -81,7 +81,7 @@ export class SocketService {
 
         });
 
-        let tmp = data.myHp;
+        const tmp = data.myHp;
         data.myHp = data.enemyHp;
         data.enemyHp = tmp;
 
@@ -98,7 +98,7 @@ export class SocketService {
                 superSkill: card.superSkill,
                 ignore: card.ignore,
                 createAttack: JSON.parse(card.createAttack)
-            }
+            };
         });
         const firstDeck = [];
         const secondDeck = [];
@@ -133,7 +133,6 @@ export class SocketService {
 
         const secondUser = this.swapStepData(firstUser as GameStepData);
 
-        return [firstUser, secondUser]
+        return [firstUser, secondUser];
     }
 }
-
