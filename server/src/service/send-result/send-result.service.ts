@@ -14,36 +14,11 @@ export class SendResultService {
     ) { }
 
     public async sendResult(token: string): Promise<boolean> {
-        /* let userId: string;
-        let scores: number = 0;
-        let appToken: string;
-        let finalUsersStat;
-
-        try {
-            userId = (await this.userService.getUser(userToken)).userToken
-        } catch {
-            const error = 'send user error';
-
-            this.loggerService.errorLog(error);
-            throw new Error(error);
-        }
-
-        try {
-            appToken = 'Bearer ' + (await this.appTokenRepository.getAppToken())[0].token
-        } catch {
-            const error = 'Get token error';
-
-            this.loggerService.errorLog(error);
-            throw new Error(error);
-        }
-
-        scores = 2000; */
-
+        
         let appToken: string;
 
         try {
-            appToken = 'Bearer ' + (await this.appTokenRepository.getAppToken())[0].token;
-            console.log('________________' + appToken + '________________');
+            appToken = 'Bearer ' + (await this.appTokenRepository.getAppToken())[0].token;            
         } catch {
             const error = 'Apptoken error';
             
@@ -51,10 +26,12 @@ export class SendResultService {
             throw new Error(error);
         }
 
+        let userToken = token;       
+
         const finalUsersStat = {
-            userToken: '28f60f26-df97-4566-9749-bfd7e9bfb9c9', 
-            playedTime: 33,
-            scores: 33,
+            userToken, 
+            playedTime: 29,
+            scores: 29,
             resultStatus: ResultStatus.Lose, 
             participationStatus: ParticipationStatus.Play,
         }
