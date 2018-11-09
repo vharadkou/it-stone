@@ -2,13 +2,13 @@ import { controller, httpGet, httpPost } from 'inversify-express-utils';
 import { Request, Response } from 'express';
 import { inject } from 'inversify';
 
-import { AppTokenRepository } from 'service/app-token';
+import { AppTokenService } from 'service/app-token';
 
 @controller('/api')
 export class AppTokenController{
 
     public constructor(
-        @inject(AppTokenRepository) private appTokenRepository: AppTokenRepository) {
+        @inject(AppTokenService) private appTokenService: AppTokenService) {
     }
 
     @httpPost('/save-app-token/')
@@ -17,22 +17,22 @@ export class AppTokenController{
         const appToken = request.body.token;
         
         try {
-            const isSave = await this.appTokenRepository.saveAppToken(appToken);            
+            const isSave = await this.appTokenService.saveAppToken(appToken);            
             if (isSave) {                
                 response.status(200).send({status: 'Saved'});
             } else {
                 response.status(400).send({status: 'Error'});
             }
 
-        } catch (err){
-            console.log(err)
+        } catch (error){
+            return response.status(500).json(error);
         }
     }
 
     @httpGet('/get-app-token/')
     public async getAppToken(request: Request, response: Response){        
         try {
-            return this.appTokenRepository.getAppToken();
+            return this.appTokenService.getAppToken();
           } catch (error) {
             return response.status(500).json(error);
         }
@@ -42,7 +42,7 @@ export class AppTokenController{
     public async deleteAppToken(request: Request, response: Response): Promise<void | Response>{
         let appToken = request.body.token
         try {
-            this.appTokenRepository.deleteAppToken(appToken);
+            this.appTokenService.deleteAppToken(appToken);
           } catch (error) {
             return response.status(500).json(error);
         }

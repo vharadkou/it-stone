@@ -11,16 +11,14 @@ export class UserController {
 
     @httpGet('/clean-users-database')
     public async cleanUsersCollection(request: Request, response: Response): Promise<boolean | Response>{
-        try {
-            console.log('Fuck you');
-            const isClean = await this.userService.cleanUsersCollection();
-            console.log('Fuck you2');
-
-            return isClean
+        try {            
+            const baseIsClean = await this.userService.cleanUsersCollection();
+            
+            return baseIsClean
         } catch (err) {
             return response.status(400).json({
                 status: 'error',
-                message: 'Database dont cleaned'
+                message: 'Database don`t cleaned'
             });
         }
     }

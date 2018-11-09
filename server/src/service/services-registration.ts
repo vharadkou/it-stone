@@ -12,10 +12,12 @@ import { RoomService, RoomRepository, RoomRepositoryImplementation } from './roo
 import { PlayerBindRepository, PlayersBindRepositoryImplementation, PlayersBindService} from './player-bind';
 import { SendResultService } from './send-result';
 import { LoggerService, LoggerServiceImplementation} from './logger'
+import { AppTokenRepositoryImplementation } from './app-token/app-token.repository-implementation';
+import { AppTokenService } from './app-token/app-token.service';
 
 export const CONTAINER = new Container();
 
-CONTAINER.bind<AppTokenRepository>(AppTokenRepository).to(AppTokenRepository);
+CONTAINER.bind<AppTokenRepository>(AppTokenRepository).to(AppTokenRepositoryImplementation);
 CONTAINER.bind<CardRepository>(CardRepository).to(CardRepository);
 CONTAINER.bind<DeskRepository>(DeskRepository).to(DeskRepository);
 CONTAINER.bind<PlayerBindRepository>(PlayerBindRepository).to(PlayersBindRepositoryImplementation);
@@ -23,6 +25,7 @@ CONTAINER.bind<RoomRepository>(RoomRepository).to(RoomRepositoryImplementation);
 CONTAINER.bind<UserAuthenticationRepository>(UserAuthenticationRepository).to(UserAuthenticationRepository);
 CONTAINER.bind<UserRepository>(UserRepository).to(UserRepositoryImplementation);
 
+CONTAINER.bind<AppTokenService>(AppTokenService).to(AppTokenService);
 CONTAINER.bind<LinkedinInfoParserService>(LinkedinInfoParserService).to(LinkedinInfoParserService);
 CONTAINER.bind<LoggerService>(LoggerService).to(LoggerServiceImplementation);
 CONTAINER.bind<ParserService>(ParserService).to(ParserService);
