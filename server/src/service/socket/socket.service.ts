@@ -4,7 +4,7 @@ import { CardRepository } from '../card';
 import { Card } from './../../models';
 
 interface DataFromFront {
-  myCardCount: number;
+  myCards: number[];
   enemyCardCount?: number;
   myActiveCards: number[];
   enemyActiveCards: number[];
@@ -34,12 +34,12 @@ export class SocketService {
     }
   }
 
-    public static getInstance(): SocketService {
-        if (!SocketService.instance) {
-            SocketService.instance = new SocketService(new CardRepository());
-        }
-        return SocketService.instance;
+  public static getInstance(): SocketService {
+    if (!SocketService.instance) {
+      SocketService.instance = new SocketService(new CardRepository());
     }
+    return SocketService.instance;
+  }
 
   public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
     socketIO.on('connection', async (client: SocketIO.Socket) => {
@@ -52,7 +52,7 @@ export class SocketService {
       }
 
       client.on('disconnect', () => this.onDisconnect(client));
-      client.on('onStep', data => this.notifyOtherUser(client, data));
+      client.on('onStep', (data: DataFromFront) => this.notifyOtherUser(client, data));
     });
   }
 
@@ -72,13 +72,13 @@ export class SocketService {
       data.myActiveCards.length
     );
     const myActiveCards = data.enemyActiveCards.slice(
-        0,
-        data.enemyActiveCards.length
+      0,
+      data.enemyActiveCards.length
     );
 
     data.myActiveCards = myActiveCards;
     data.enemyActiveCards = enemyActiveCards;
-    data.enemyCardCount = data.myCardCount;
+    data.enemyCardCount = data.myCards.length - 1;
 
     const tmp = data.myHp;
     data.myHp = data.enemyHp;
@@ -87,10 +87,34 @@ export class SocketService {
     return data;
   }
 
-  private async createDefaultState(deckLength: number, cardsLength: number): Promise<any[]> {
-    let cards: any = await this.cardRepository.getCards();
+  private generateRndCards(amount: number, interval: number) {
+    let Arr: number[] = new Array(amount);
+
+    for (let i = 0; i < amount; i++) {
+      const rnd = Math.floor(Math.random() * interval);
+      Arr.push(rnd);
+    }
+
+    return Arr;
+  }
+
+  private getCardFromDeck(arrFrom: number[], amount: number) {
+    let arr: number[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      arr.push(...arrFrom.splice(arrFrom.length - 1, 1));
+    };
+
+    return arr;
+  }
+
+  private async createDefaultState(
+    deckLength: number,
+    userCardsAmount: number
+  ): Promise<User[]> {
+    let cards = await this.cardRepository.getCards();
     let cardId = 0;
-    cards = cards.map((card: any) => card['_doc']).map((card: any) => {
+    cards = cards.map((card: Card) => {
       return {
         id: cardId++,
         name: card.name,
@@ -98,38 +122,39 @@ export class SocketService {
         hp: card.hp,
         superSkill: card.superSkill,
         ignore: card.ignore,
-        createAttack: JSON.parse(card.createAttack)
-      };
+        damage: card.hp * 2
+      } as Card;
     });
-    const firstDeck = [];
-    const secondDeck = [];
-    const myCardArr = [];
 
-    for (let i = 0; i < cardsLength; i++) {
-      const rnd = Math.floor(Math.random() * cards.length);
-      myCardArr.push(rnd);
-    }
+    const firstDeck: number[] = this.generateRndCards(deckLength, cards.length);
+    const secondDeck: number[] = this.generateRndCards(
+      deckLength,
+      cards.length
+    );
 
-    for (let index = 0; index < deckLength; index++) {
-      const rnd = Math.floor(Math.random() * 10);
-      firstDeck.push(rnd);
-    }
+    let myCardArr: number[] = [];
+    let enemyCardArr: number[] = [];
 
-    for (let index = 0; index < deckLength; index++) {
-      const rnd = Math.floor(Math.random() * 10);
-      secondDeck.push(rnd);
-    }
+    myCardArr.push(...this.getCardFromDeck(firstDeck, userCardsAmount));
+    enemyCardArr.push(...this.getCardFromDeck(secondDeck, userCardsAmount));
 
     const firstUser: User = {
       cards: cards as Card[],
       deck: firstDeck,
-      enemyCardCount: 5,
+      enemyCardCount: userCardsAmount,
       myCards: myCardArr,
       enemyActiveCards: [],
       myActiveCards: [],
     };
 
-    const secondUser = this.swapStepData(firstUser as any);
+    const secondUser: User = {
+      cards: cards as Card[],
+      deck: secondDeck,
+      enemyCardCount: userCardsAmount,
+      myCards: enemyCardArr,
+      enemyActiveCards: [],
+      myActiveCards: [],
+    };
 
     return [firstUser, secondUser];
   }
