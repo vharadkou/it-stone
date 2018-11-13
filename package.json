@@ -8,5 +8,10 @@
     "start": "node start.js",
     "install": "node install.js",
     "prod": "node prod.js"
+  },
+  "dependencies": {
+    "@types/uuid": "^3.4.4",
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0"
   }
 }

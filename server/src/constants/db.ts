@@ -3,3 +3,5 @@ export const DB_URL: string = 'mongodb://it-stone:g3QMmzLgTp1qGRXf2n89jVlc5iVxHG
 export const USER_COLLECTION: string = 'user';
 export const CARD_COLLECTION: string = 'card';
 export const DECK_COLLECTION: string = 'deck';
+export const APPTOKEN_COLLECTION: string = 'appToken';
+export const ROOM_COLLECTION: string = 'room';
