@@ -1,15 +1,40 @@
 import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Store } from '@ngrx/store';
+
+import { Card } from 'models';
+import { State } from 'store';
 
 @Component({
   selector: 'app-fight',
   templateUrl: './fight.component.html',
-  styleUrls: ['./fight.component.css']
+  styleUrls: ['./fight.component.scss']
 })
+
 export class FightPageComponent implements OnInit {
+  public myHandArray: Card[];
+  public enemyHandArray: Card[];
+  public myActiveCard: Card[];
+  public enemyActiveCard: Card[];
 
-  constructor() { }
+  constructor(private store: Store<State>) { }
 
-  ngOnInit() {
+  public drop(event: CdkDragDrop<string[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
   }
 
+  public ngOnInit(): void {
+    this.store.select((s) => s.cards)
+      .subscribe((cards) => {
+        console.log(cards.cards);
+      });
+  }
 }
