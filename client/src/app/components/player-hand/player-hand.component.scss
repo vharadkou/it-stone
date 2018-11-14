@@ -2,18 +2,13 @@
 
   &__container {
     height: 220px;
-    margin: 10px auto;
+    margin: 0 auto;
     display: flex;
+    flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
-    flex-flow: row nowrap;
     background-color: #546e7a;
-  }
-
-  &__card {
-    width: 150px;
-    height: 200px;
-    margin: 10px;
-    background-color: #ff9800;
+    // overflow-y: hidden;
+    // overflow-x: auto;
   }
 }
