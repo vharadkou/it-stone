@@ -91,8 +91,7 @@ export class SocketService {
     let Arr: number[] = new Array(amount);
 
     for (let i = 0; i < amount; i++) {
-      const rnd = Math.floor(Math.random() * interval);
-      Arr.push(rnd);
+      Arr.push(Math.floor(Math.random() * interval));
     }
 
     return Arr;
