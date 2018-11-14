@@ -53,12 +53,6 @@ export const cardsReducer = (
         myActiveCards: [...state.myActiveCards, action.payload.id]
       };
 
-    case CardsActionTypes.GetEnemyBattleCard:
-      return {
-        ...state,
-        myActiveCards: [...state.enemyActiveCards, action.payload.id]
-      };
-
     case CardsActionTypes.DeleteMyCardFromBattle:
       const myPrunedIds = state.myActiveCards.filter(item => {
         return item !== action.payload.id;
@@ -68,13 +62,16 @@ export const cardsReducer = (
         myActiveCards: myPrunedIds
       };
 
-    case CardsActionTypes.DeleteEnemyCardFromBattle:
-      const enemyPrunedIds = state.enemyActiveCards.filter(item => {
-        return item !== action.payload.id;
-      });
+    case CardsActionTypes.DecrementEnemyCardCount:
+      if (state.enemyCardCount > 0) {
+        const enemyPrunedIds = state.enemyCardCount--;
+        return {
+          ...state,
+          enemyCardCount: enemyPrunedIds
+        };
+      }
       return {
-        ...state,
-        myActiveCards: enemyPrunedIds
+        ...state
       };
 
     default:

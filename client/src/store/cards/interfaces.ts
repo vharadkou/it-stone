@@ -7,5 +7,4 @@ export interface CardsState {
   myCards: number[];
   myActiveCards: number[];
   enemyCardCount: number;
-  enemyActiveCards: number[];
 }
