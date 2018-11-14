@@ -12,11 +12,11 @@ export interface Player {
 }
 
 export interface Card {
+  id: number;
   name: string;
   surname: string;
   image: string;
   skills: string[];
-  education: number;
-  connections: number;
-  currentPosition: string;
+  hp: number;
+  damage: number;
 }

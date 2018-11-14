@@ -14,14 +14,12 @@ import { Card } from 'models';
   styleUrls: ['./card.component.scss'],
 })
 
-export class CardComponent implements OnInit {
+export class CardComponent {
   @Input() public card: Card;
 
-  constructor() { }
+  public isFront = false;
+  public faUsb = faUsb;
+  public faShieldAlt = faShieldAlt;
 
-  faUsb = faUsb;
-  faShieldAlt = faShieldAlt;
-
-  isFront = true;
   ngOnInit() { }
 }
