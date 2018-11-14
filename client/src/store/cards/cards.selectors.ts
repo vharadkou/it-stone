@@ -1,14 +1,14 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import * as fromCard from './cards.reducer';
+import { CardsState } from './interfaces';
 
-const getCardState = createFeatureSelector<fromCard.State>('cardsState');
+const getCardState = createFeatureSelector<CardsState>('cardsState');
 
-const GetCards = (state: fromCard.State) => state.cards;
-const GetDeck = (state: fromCard.State) => state.deck;
-const GetMyCards = (state: fromCard.State) => state.myCards;
-const GetMyActiveCards = (state: fromCard.State) => state.myActiveCards;
-const GetEnemyCardCount = (state: fromCard.State) => state.enemyCardCount;
+const GetCards = (state: CardsState) => state.cards;
+const GetDeck = (state: CardsState) => state.deck;
+const GetMyCards = (state: CardsState) => state.myCards;
+const GetMyActiveCards = (state: CardsState) => state.myActiveCards;
+const GetEnemyCardCount = (state: CardsState) => state.enemyCardCount;
 
 const getCards = createSelector(
   getCardState,
