@@ -1,5 +1,5 @@
-.its-infobar{
-    
+.its-infobar {
+
     &__wrapper {
         width: 100px;
         display: flex;
@@ -8,18 +8,24 @@
         justify-content: flex-start;        
     }
 
-    &__avatar {        
+    &__avatar {
         width: 100px;
         height: 100px;
     }
 
-    &__hp-indicator {
-        font-family: 'Righteous', cursive;
+    &__hp-indicator {        
         width: 100px;
-        height: 75px;
-        font-size: 65px;
-        text-align: center;
-        background-color: grey;
+        height: 60px;
+        font-size: 60px;
+        text-align: center;        
+        background-color: rgb(196, 196, 196);
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+    
+    &__hp-indicator-value {        
+        font-family: 'Righteous', cursive;        
     }
 
     &__deck {
@@ -27,11 +33,11 @@
         height: 120px;        
         background-image: url("./../../../assets/js-machine.jpg");
         background-repeat: round;
-    }   
+    }
 
     &__count-of-cards {
         font-family: 'Righteous', cursive;
-        color: white;
+        color: black;
         font-size: 100px;        
         -webkit-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
@@ -40,19 +46,37 @@
         position: relative;
         top: 50%;
         left: 50%;
-    }    
+    }
+
+    &__deck-overlay {    
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: .5s ease;
+        background-color: rgb(255, 218, 9);
+    }
+
+    &__deck-overlay:hover {    
+        opacity: 1
+    }
 
     &__turn-trigger {        
         width: 100px;
-        height: 40px;
-        font-family: 'Righteous', cursive;
+        height: 40px;        
         font-size: 23px;
         text-align: center;
-        background-color: yellow;
+        background-color: rgb(221, 206, 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     &__turn-trigger:hover {        
-        background-color: rgb(250, 250, 99);
+        background-color: rgb(207, 177, 4);
+    }
+
+    &__turn-trigger-text {
+        font-family: 'Righteous', cursive;
     }
 
     &__wrapper-player1-data{
@@ -67,17 +91,5 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-    }
-}
-
-.overlay {    
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: .5s ease;
-    background-color: rgb(218, 214, 3);    
-}
-
-.overlay:hover {    
-    opacity: 1
+    }    
 }
