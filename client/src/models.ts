@@ -13,6 +13,7 @@ export interface Player {
 
 export interface Card {
   name: string;
+  surname: string;
   image: string;
   skills: string[];
   education: number;
