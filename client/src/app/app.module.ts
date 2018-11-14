@@ -6,6 +6,9 @@ import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { MatNativeDateModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
+import { MatDialogModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
+
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -36,12 +39,16 @@ import {
   UserService,
 } from 'services';
 
-import { 
+import {
   CardsEffects,
   reducers,
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
+
+import { LayoutModule } from '@angular/cdk/layout';
+import { PlayerHandComponent } from './components/player-hand/player-hand.component'
+import { PipesModule } from './pipes/pipes.module';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -59,15 +66,16 @@ export function getAuthServiceConfigs() {
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', component: FightPageComponent },
-  { path: '',
-    redirectTo: '/welcome',
+  {
+    path: '',
+    redirectTo: '/battle',
     pathMatch: 'full'
   },
   { path: '**', component: NotFoundPageComponent }
 ];
 
 @NgModule({
-  exports: [ RouterModule ],
+  exports: [RouterModule],
   imports: [
     BrowserModule,
     SocialLoginModule,
@@ -77,15 +85,24 @@ const appRoutes: Routes = [
     DemoMaterialModule,
     MatNativeDateModule,
     BrowserAnimationsModule,
+    MatDialogModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true}
+      { enableTracing: true }
     ),
     StoreModule.forRoot(reducers, {}),
     EffectsModule.forRoot([CardsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
+    FontAwesomeModule,
+    PipesModule,
   ],
   declarations: [
     AppComponent,
@@ -94,9 +111,9 @@ const appRoutes: Routes = [
     WelcomePageComponent,
     FightPageComponent,
     NotFoundPageComponent,
+    PlayerHandComponent,
   ],
   entryComponents: [
-    DialogOverviewExampleDialogComponent,
   ],
   providers: [
     {
@@ -110,4 +127,5 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
