@@ -47,8 +47,9 @@ import {
 import { DemoMaterialModule } from './material-module';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { PlayerHandComponent } from './components/player-hand/player-hand.component'
+import { PlayerHandComponent } from './components/player-hand/player-hand.component';
 import { PipesModule } from './pipes/pipes.module';
+import { ActiveCardComponent } from './components/active-card/active-card.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -75,7 +76,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  exports: [RouterModule],
+  exports: [RouterModule, PlayerHandComponent, CardComponent],
   imports: [
     BrowserModule,
     SocialLoginModule,
@@ -112,6 +113,7 @@ const appRoutes: Routes = [
     FightPageComponent,
     NotFoundPageComponent,
     PlayerHandComponent,
+    ActiveCardComponent,
   ],
   entryComponents: [
   ],
