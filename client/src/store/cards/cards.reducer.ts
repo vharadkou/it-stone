@@ -3,7 +3,7 @@ import { initialState } from './cards.initial';
 import { CardsState } from './interfaces';
 import { Status } from 'models';
 
-type State = CardsState;
+export type State = CardsState;
 
 export const cardsReducer = (
   state: State = initialState,
@@ -81,10 +81,3 @@ export const cardsReducer = (
       return state;
   }
 };
-
-export const getCards = (state: State) => state.cards;
-export const getDeckCards = (state: State) => state.deck;
-export const getMyCards = (state: State) => state.myCards;
-export const getMyActiveCards = (state: State) => state.myActiveCards;
-export const getEnemyCardCount = (state: State) => state.enemyCardCount;
-export const getEnemyActiveCards = (state: State) => state.enemyActiveCards;

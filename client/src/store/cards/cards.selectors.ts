@@ -1,86 +1,87 @@
-import {
-    createSelector,
-    createFeatureSelector,
-} from '@ngrx/store';
+import { createSelector, createFeatureSelector } from '@ngrx/store';
 
 import * as fromCard from './cards.reducer';
 
-import { CardsState } from './interfaces';
+const getCardState = createFeatureSelector<fromCard.State>('cardsState');
 
-const getCardState = createFeatureSelector<CardsState>('cardsState');
+const GetCards = (state: fromCard.State) => state.cards;
+const GetDeck = (state: fromCard.State) => state.deck;
+const GetMyCards = (state: fromCard.State) => state.myCards;
+const GetMyActiveCards = (state: fromCard.State) => state.myActiveCards;
+const GetEnemyCardCount = (state: fromCard.State) => state.enemyCardCount;
 
 const getCards = createSelector(
-    getCardState,
-    fromCard.getCards,
+  getCardState,
+  GetCards
 );
 
 const getDeckId = createSelector(
-    getCardState,
-    fromCard.getDeckCards,
+  getCardState,
+  GetDeck
 );
 
 const getDeck = createSelector(
-    getDeckId,
-    getCards,
-    (deckCardsId, cards) => {
-        return deckCardsId.map(id => cards[id]);
-    }
-)
+  getDeckId,
+  getCards,
+  (deckCardsId, cards) => {
+    return deckCardsId.map(id => cards[id]);
+  }
+);
 
 const getEnemyCardCount = createSelector(
-    getCardState,
-    fromCard.getEnemyCardCount,
+  getCardState,
+  GetEnemyCardCount
 );
 
 const getEnemyActiveCardsId = createSelector(
-    getCardState,
-    fromCard.getEnemyActiveCards,
+  getCardState,
+  GetMyActiveCards
 );
 
 const getEnemyActiveCards = createSelector(
-    getEnemyActiveCardsId,
-    getCards,
-    (enemyCardsId, cards) => {
-        return enemyCardsId.map(id => cards[id])
-    },
+  getEnemyActiveCardsId,
+  getCards,
+  (enemyCardsId, cards) => {
+    return enemyCardsId.map(id => cards[id]);
+  }
 );
 
 const getMyCardsId = createSelector(
-    getCardState,
-    fromCard.getMyCards,
+  getCardState,
+  GetMyCards
 );
 
 const getMyCards = createSelector(
-    getMyCardsId,
-    getCards,
-    (myCardsId, cards) => {
-        return myCardsId.map(id => cards[id])
-    }
+  getMyCardsId,
+  getCards,
+  (myCardsId, cards) => {
+    return myCardsId.map(id => cards[id]);
+  }
 );
 
 const getMyActiveCardsId = createSelector(
-    getCardState,
-    fromCard.getMyCards,
+  getCardState,
+  GetMyCards
 );
 
 const getMyActiveCards = createSelector(
-    getMyActiveCardsId,
-    getCards,
-    (myActiveCardsId, cards) => {
-        return myActiveCardsId.map(id => cards[id])
-    }
+  getMyActiveCardsId,
+  getCards,
+  (myActiveCardsId, cards) => {
+    return myActiveCardsId.map(id => cards[id]);
+  }
 );
 
 export const cardsQuery = {
-    getCards,
-    getCardState,
-    getDeck,
-    getDeckId,
-    getEnemyActiveCards,
-    getEnemyActiveCardsId,
-    getEnemyCardCount,
-    getMyActiveCards,
-    getMyActiveCardsId,
-    getMyCards,
-    getMyCardsId,
-}
+  getCards,
+  getCardState,
+  getDeck,
+  getDeckId,
+  getEnemyActiveCards,
+  getEnemyActiveCardsId,
+  getEnemyCardCount,
+  getMyActiveCards,
+  getMyActiveCardsId,
+  getMyCards,
+  getMyCardsId
+};
