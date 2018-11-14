@@ -1,15 +1,23 @@
 <div class="its-infobar-block">
   <div class="its-infobar-wrapper">
     <div class="its-infobar-wrapper-player1-data">
-      <div class="its-infobar__deck"></div>      
-      <div class="its-infobar__hp-indicator">60</div>
-      <img class="its-infobar__avatar" src="https://media.giphy.com/media/noZcx30MrDozK/giphy.gif">
+      <div class="its-infobar__deck">
+          <div class="overlay">
+            <div class="its-infobar__count-of-cards">{{scndPlayercardLeft}}</div>          
+          </div>
+      </div>      
+      <div class="its-infobar__hp-indicator">{{scndPlayerHP}}</div>
+      <img class="its-infobar__avatar" src={{scndPlayerAvatar}}>
     </div>
-    <app-turn-button></app-turn-button>
+    <div class="its-infobar__turn-trigger" (click)="turnTrigger()"><span>End turn</span></div>
     <div class="its-infobar-wrapper-player2-data">
-      <img class="its-infobar__avatar" src="https://media.giphy.com/media/noZcx30MrDozK/giphy.gif">
-      <div class="its-infobar__hp-indicator">60</div>
-      <div class="its-infobar__deck"></div>
+      <img class="its-infobar__avatar" src={{fstPlayerAvatar}}>
+      <div class="its-infobar__hp-indicator">{{fstPlayerHP}}</div>
+      <div class="its-infobar__deck">
+        <div class="overlay">
+          <div class="its-infobar__count-of-cards">{{fstPlayercardLeft}}</div>
+        </div>
+      </div>
     </div>         
   </div>
 </div>
