@@ -1,9 +1,7 @@
 import { Status } from 'models';
 import { CardsState } from './interfaces';
 
-type State = CardsState;
-
-export const initialState: State = {
+export const initialState: CardsState = {
   status: Status.Init,
   cards: {
     1: {
