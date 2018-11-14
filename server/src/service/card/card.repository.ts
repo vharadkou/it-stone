@@ -24,17 +24,15 @@ export class CardRepository {
         hp: number,
         superSkill: string,
         ignore: string[],
-        createAttack: Array<{ [name: string]: string }>,
         image: string,
     ): Promise<Card> {
-        const createAttackJSON = JSON.stringify(createAttack);
         const newCard: Card = new this.cardModel({
             name,
             image,
             hp,
             superSkill,
             ignore,
-            createAttack: createAttackJSON,
+            damage: hp * 2,
         });
 
         return new Promise<Card>((resolve, reject) => {
@@ -55,10 +53,9 @@ export class CardRepository {
             this.cardModel.find({}, (error, data: Card[]) => {
                 if (error) {
                     reject(error);
+                    console.log(error);
                 } else {
-                    const newDate = data
-                        .map((d) => ({ ...d, createAttack: JSON.parse(d.createAttack as any) }));
-                    resolve(newDate as any);
+                    resolve(data);
                     console.log(`Get all cards`);
                 }
             });
