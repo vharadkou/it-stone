@@ -10,19 +10,16 @@ import { Card } from 'models';
 
 @Injectable()
 export class CardsEffects {
-
-  @Effect() public getCards$: Observable<Action> = this.actions$.pipe(
+  @Effect()
+  public getCards$: Observable<Action> = this.actions$.pipe(
     ofType<cardActions.GetCards>(cardActions.CardsActionTypes.GetCards),
     switchMap((action: cardActions.GetCards) =>
       this.http.get('http://www.mocky.io/v2/5bd6f6183500000523fd7e40').pipe(
         map((data: Card[]) => new cardActions.GetCardsSuccess(data)),
-        catchError((error) => of(new cardActions.GetCardsError(error)))
+        catchError(error => of(new cardActions.GetCardsError(error)))
       )
     )
   );
 
-  public constructor(
-    private http: HttpClient,
-    private actions$: Actions,
-  ) { }
+  public constructor(private http: HttpClient, private actions$: Actions) {}
 }
