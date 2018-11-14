@@ -167,6 +167,6 @@
     "ordered-imports": false,
     "max-classes-per-file": false,
     "prefer-for-of": false,
-    "arrow-parens": [true, "ban-single-arg-parens"],
+    "arrow-parens": false,
   }
 }

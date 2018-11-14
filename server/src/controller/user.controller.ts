@@ -63,7 +63,7 @@ export class UserController {
   public async saveCard(request: Request, response: Response): Promise<Response | Card> {
     const { name, hp, superSkill, ignore, createAttack, image } = request.body;
     try {
-      return this.cardRepository.saveCard(name, hp, superSkill, ignore, createAttack, image);
+      return this.cardRepository.saveCard(name, hp, superSkill, ignore, image);
     } catch (error) {
       return response.status(500).json(error);
     }
@@ -123,7 +123,7 @@ export class UserController {
       const typedUser = user as Card;
 
       // tslint:disable-next-line:max-line-length
-      this.cardRepository.saveCard(typedUser.name, typedUser.hp, typedUser.superSkill, typedUser.ignore, typedUser.createAttack, typedUser.image);
+      this.cardRepository.saveCard(typedUser.name, typedUser.hp, typedUser.superSkill, typedUser.ignore, typedUser.image);
       return typedUser;
     } catch (error) {
       return response.status(500).json(error);
