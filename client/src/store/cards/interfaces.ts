@@ -6,5 +6,6 @@ export interface CardsState {
   deck: number[];
   myCards: number[];
   myActiveCards: number[];
+  enemyActiveCards: number[];
   enemyCardCount: number;
 }

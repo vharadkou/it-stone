@@ -3,12 +3,10 @@ import { initialState } from './cards.initial';
 import { CardsState } from './interfaces';
 import { Status } from 'models';
 
-export type State = CardsState;
-
 export const cardsReducer = (
-  state: State = initialState,
+  state: CardsState = initialState,
   action: CardsActions
-): State => {
+): CardsState => {
   switch (action.type) {
     case CardsActionTypes.GetCards:
       return {

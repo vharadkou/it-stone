@@ -10,41 +10,36 @@ import {
   GetEnemyNewCards,
   GetMyBattleCard,
   GetEnemyBattleCard,
-  DeleteMyCardFromBattle,
-  DeleteEnemyCardFromBattle,
+  DeleteMyCardFromBattle
 } from './cards.action';
 
 @Injectable()
 export class CardsFacade {
-  deck$ = this.store.select(cardsQuery.getDeck);
-  myCards$ = this.store.select(cardsQuery.getMyCards);
-  enemyCardCount$ = this.store.select(cardsQuery.getEnemyCardCount);
-  myActiveCards$ = this.store.select(cardsQuery.getMyActiveCards);
-  enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
+  public deck$ = this.store.select(cardsQuery.getDeck);
+  public myCards$ = this.store.select(cardsQuery.getMyCards);
+  public enemyCardCount$ = this.store.select(cardsQuery.getEnemyCardCount);
+  public myActiveCards$ = this.store.select(cardsQuery.getMyActiveCards);
+  public enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
 
   public constructor(private store: Store<CardsState>) {}
 
-  getMyNewCards(amount: number) {
+  public getMyNewCards(amount: number): void {
     this.store.dispatch(new GetMyNewCards({ amount }));
   }
 
-  getEnemyNewCards(amount: number) {
+  public getEnemyNewCards(amount: number): void {
     this.store.dispatch(new GetEnemyNewCards({ amount }));
   }
 
-  getMyBattleCard(id: number) {
+  public getMyBattleCard(id: number): void {
     this.store.dispatch(new GetMyBattleCard({ id }));
   }
 
-  getEnemyBattleCard(id: number) {
+  public getEnemyBattleCard(id: number): void {
     this.store.dispatch(new GetEnemyBattleCard({ id }));
   }
 
-  deleteMyCardFromBattle(id: number) {
+  public deleteMyCardFromBattle(id: number): void {
     this.store.dispatch(new DeleteMyCardFromBattle({ id }));
-  }
-
-  deleteEnemyCardFromBattle(id: number) {
-    this.store.dispatch(new DeleteEnemyCardFromBattle({ id }));
   }
 }
