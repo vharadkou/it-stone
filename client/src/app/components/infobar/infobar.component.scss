@@ -8,6 +8,16 @@
         justify-content: flex-start;        
     }
 
+    &-wrapper-player2-data {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-wrapper-player1-data {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__avatar {
         width: 100px;
         height: 100px;
@@ -46,6 +56,7 @@
         position: relative;
         top: 50%;
         left: 50%;
+        cursor: pointer;
     }
 
     &__deck-overlay {    
@@ -69,6 +80,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
     }
 
     &__turn-trigger:hover {        
@@ -91,5 +103,7 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-    }    
+    }
+    
+        
 }
