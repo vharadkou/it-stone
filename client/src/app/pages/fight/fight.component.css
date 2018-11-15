@@ -1,4 +1,8 @@
-.its-wrapper {
+.its-battlefield {
     display: flex;
     flex-direction: row;    
+}
+
+.its-battlefield__players-hands-wrapper {
+    width: 100%;
 }

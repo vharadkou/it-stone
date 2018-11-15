@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfobarComponent implements OnInit {
 
+  // all data typed below is just a mock and will be changed later
   public fstPlayerHP = 39;
   public scndPlayerHP = 35;
   public fstPlayerAvatar = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cc/cc97ee90c11a8378ee78cc8c776bb694210da1d9_full.jpg';

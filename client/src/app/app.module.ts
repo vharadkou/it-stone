@@ -50,7 +50,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PlayerHandComponent } from './components/player-hand/player-hand.component'
 import { PipesModule } from './pipes/pipes.module';
 import { InfobarComponent } from './components/infobar/infobar.component';
-import { TurnButtonComponent } from './components/ng-material/turn-button/turn-button.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -114,8 +113,7 @@ const appRoutes: Routes = [
     FightPageComponent,
     NotFoundPageComponent,
     PlayerHandComponent,
-    InfobarComponent,
-    TurnButtonComponent,
+    InfobarComponent    
   ],
   entryComponents: [
   ],
