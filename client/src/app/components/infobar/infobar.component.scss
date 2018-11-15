@@ -20,13 +20,13 @@
 
     &__avatar {
         width: 100px;
-        height: 100px;
+        height: 90px;
     }
 
     &__hp-indicator {        
         width: 100px;
-        height: 60px;
-        font-size: 60px;
+        height: 40px;
+        font-size: 40px;
         text-align: center;        
         background-color: rgb(196, 196, 196);
         display: flex;
@@ -40,7 +40,7 @@
 
     &__deck {
         width: 100px;
-        height: 120px;        
+        height: 85px;        
         background-image: url("./../../../assets/js-machine.jpg");
         background-repeat: round;
     }
@@ -73,7 +73,7 @@
 
     &__turn-trigger {        
         width: 100px;
-        height: 40px;        
+        height: 30px;        
         font-size: 23px;
         text-align: center;
         background-color: rgb(221, 206, 0);
@@ -103,7 +103,5 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-    }
-    
-        
+    }        
 }

@@ -21,7 +21,7 @@ export class InfobarComponent implements OnInit {
   }
 
   public turnTrigger(): void {
-    alert('Fuck you jerk ;)');
+    alert('Some action');
   }
 
 }
