@@ -12,10 +12,6 @@ import { State } from 'store';
 })
 
 export class FightPageComponent implements OnInit {
-  public myHandArray: Card[];
-  public enemyHandArray: Card[];
-  public myActiveCard: Card[];
-  public enemyActiveCard: Card[];
 
   constructor(private store: Store<State>) { }
 
@@ -31,10 +27,6 @@ export class FightPageComponent implements OnInit {
     }
   }
 
-  public ngOnInit(): void {
-    this.store.select((s) => s.cards)
-      .subscribe((cards) => {
-        console.log(cards.cards);
-      });
-  }
+  public ngOnInit(): void {}
+
 }

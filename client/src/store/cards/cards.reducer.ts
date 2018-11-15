@@ -18,7 +18,7 @@ export const cardsReducer = (
       return {
         ...state,
         status: Status.Success,
-        cards: action.payload
+        cards: [...state.cards, ...action.payload]
       };
 
     case CardsActionTypes.GetCardsError:

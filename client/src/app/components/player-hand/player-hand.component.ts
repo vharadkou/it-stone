@@ -12,15 +12,15 @@ import { Card } from 'models';
 })
 
 export class PlayerHandComponent implements OnInit {
-  public allCards: Card[];
+  public allCards: { [id: number]: Card };
 
   constructor(private store: Store<State>) { }
 
   public ngOnInit(): void {
     this.store.dispatch(new CardsAction.GetCards());
 
-    this.store.select((s) => s.cards)
-      .subscribe((cards) => {
+    this.store.select(s => s.cards)
+      .subscribe(cards => {
         this.allCards = cards.cards;
         console.log(this.allCards);
       });

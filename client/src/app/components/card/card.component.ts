@@ -17,7 +17,7 @@ import { Card } from 'models';
 export class CardComponent {
   @Input() public card: Card;
 
-  public isFront = false;
+  public isFront = true;
   public faUsb = faUsb;
   public faShieldAlt = faShieldAlt;
 
