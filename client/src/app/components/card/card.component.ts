@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input
-} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { faUsb } from '@fortawesome/free-brands-svg-icons';
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 
