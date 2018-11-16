@@ -52,6 +52,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PlayerHandComponent } from './components/player-hand/player-hand.component';
 import { PipesModule } from './pipes/pipes.module';
 import { ActiveCardComponent } from './components/active-card/active-card.component';
+import { InfobarComponent } from './components/infobar/infobar.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -119,6 +120,7 @@ const appRoutes: Routes = [
     NotFoundPageComponent,
     PlayerHandComponent,
     ActiveCardComponent,
+    InfobarComponent
   ],
   entryComponents: [
   ],
