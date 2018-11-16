@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 
-import { State } from 'store';
-import * as CardsAction from 'store';
-import { Card } from 'models';
+import { CardsFacade } from 'store';
 
 @Component({
   selector: 'app-player-hand',
@@ -12,17 +9,11 @@ import { Card } from 'models';
 })
 
 export class PlayerHandComponent implements OnInit {
-  public allCards: { [id: number]: Card };
+  public allCards$ = this.cardsFacade.allCards$;
 
-  constructor(private store: Store<State>) { }
-
-  public ngOnInit(): void {
-    this.store.dispatch(new CardsAction.GetCards());
-
-    this.store.select(s => s.cards)
-      .subscribe(cards => {
-        this.allCards = cards.cards;
-        console.log(this.allCards);
-      });
+  constructor(private cardsFacade: CardsFacade) {
+    this.cardsFacade.getCards();
   }
+
+  public ngOnInit(): void { }
 }

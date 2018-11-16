@@ -42,6 +42,8 @@ import {
 import {
   CardsEffects,
   reducers,
+  CardsFacade,
+  initialState
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
@@ -91,7 +93,10 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true }
     ),
-    StoreModule.forRoot(reducers, {}),
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('cardsState', reducers.cards, {
+      initialState
+    }),
     EffectsModule.forRoot([CardsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
@@ -125,7 +130,8 @@ const appRoutes: Routes = [
     TimerService,
     SocketService,
     FightService,
-    UserService
+    UserService,
+    CardsFacade
   ],
   bootstrap: [AppComponent]
 })
