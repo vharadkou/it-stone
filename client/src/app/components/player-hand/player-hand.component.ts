@@ -12,7 +12,7 @@ export class PlayerHandComponent implements OnInit {
   public allCards$ = this.cardsFacade.allCards$;
 
   constructor(private cardsFacade: CardsFacade) {
-    this.cardsFacade.getCards();
+    this.cardsFacade.loadCards();
   }
 
   public ngOnInit(): void { }
