@@ -11,7 +11,7 @@ import {
   GetMyBattleCard,
   GetEnemyBattleCard,
   DeleteMyCardFromBattle,
-  GetCards
+  LoadCards
 } from './cards.action';
 
 @Injectable()
@@ -25,8 +25,8 @@ export class CardsFacade {
 
   public constructor(private store: Store<CardsState>) {}
 
-  public getCards(): void {
-    this.store.dispatch(new GetCards());
+  public loadCards(): void {
+    this.store.dispatch(new LoadCards());
   }
 
   public getMyNewCards(amount: number): void {

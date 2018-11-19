@@ -14,11 +14,11 @@ export class CardsEffects {
   public secondUrl = 'http://www.mocky.io/v2/5be983f82e00005f00f14631';
 
   @Effect() public getCards$: Observable<Action> = this.actions$.pipe(
-    ofType<cardActions.GetCards>(cardActions.CardsActionTypes.GetCards),
-    switchMap((action: cardActions.GetCards) =>
+    ofType<cardActions.LoadCards>(cardActions.CardsActionTypes.LoadCards),
+    switchMap((action: cardActions.LoadCards) =>
       this.http.get(this.baseUrl).pipe(
-        map((data: Card[]) => new cardActions.GetCardsSuccess(data)),
-        catchError(error => of(new cardActions.GetCardsError(error)))
+        map((data: Card[]) => new cardActions.LoadCardsSuccess(data)),
+        catchError(error => of(new cardActions.LoadCardsError(error)))
       )
     )
   );
