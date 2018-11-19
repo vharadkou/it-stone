@@ -10,11 +10,13 @@ import {
   GetEnemyNewCards,
   GetMyBattleCard,
   GetEnemyBattleCard,
-  DeleteMyCardFromBattle
+  DeleteMyCardFromBattle,
+  LoadCards
 } from './cards.action';
 
 @Injectable()
 export class CardsFacade {
+  public allCards$ = this.store.select(cardsQuery.getCards);
   public deck$ = this.store.select(cardsQuery.getDeck);
   public myCards$ = this.store.select(cardsQuery.getMyCards);
   public enemyCardCount$ = this.store.select(cardsQuery.getEnemyCardCount);
@@ -22,6 +24,10 @@ export class CardsFacade {
   public enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
 
   public constructor(private store: Store<CardsState>) {}
+
+  public loadCards(): void {
+    this.store.dispatch(new LoadCards());
+  }
 
   public getMyNewCards(amount: number): void {
     this.store.dispatch(new GetMyNewCards({ amount }));
