@@ -42,13 +42,16 @@ import {
 import {
   CardsEffects,
   reducers,
+  CardsFacade,
+  initialState
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { PlayerHandComponent } from './components/player-hand/player-hand.component'
+import { PlayerHandComponent } from './components/player-hand/player-hand.component';
 import { PipesModule } from './pipes/pipes.module';
+import { ActiveCardComponent } from './components/active-card/active-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
 
 export function getAuthServiceConfigs() {
@@ -76,7 +79,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  exports: [RouterModule],
+  exports: [RouterModule, PlayerHandComponent, CardComponent],
   imports: [
     BrowserModule,
     SocialLoginModule,
@@ -91,7 +94,10 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true }
     ),
-    StoreModule.forRoot(reducers, {}),
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('cardsState', reducers.cards, {
+      initialState
+    }),
     EffectsModule.forRoot([CardsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
@@ -113,7 +119,8 @@ const appRoutes: Routes = [
     FightPageComponent,
     NotFoundPageComponent,
     PlayerHandComponent,
-    InfobarComponent    
+    ActiveCardComponent,
+    InfobarComponent
   ],
   entryComponents: [
   ],
@@ -125,7 +132,8 @@ const appRoutes: Routes = [
     TimerService,
     SocketService,
     FightService,
-    UserService
+    UserService,
+    CardsFacade
   ],
   bootstrap: [AppComponent]
 })

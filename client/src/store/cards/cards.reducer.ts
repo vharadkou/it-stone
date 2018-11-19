@@ -8,20 +8,20 @@ export const cardsReducer = (
   action: CardsActions
 ): CardsState => {
   switch (action.type) {
-    case CardsActionTypes.GetCards:
+    case CardsActionTypes.LoadCards:
       return {
         ...state,
         status: Status.Init
       };
 
-    case CardsActionTypes.GetCardsSuccess:
+    case CardsActionTypes.LoadCardsSuccess:
       return {
         ...state,
         status: Status.Success,
-        cards: action.payload
+        cards: [...state.cards, ...action.payload]
       };
 
-    case CardsActionTypes.GetCardsError:
+    case CardsActionTypes.LoadCardsError:
       return {
         ...state,
         status: Status.Error

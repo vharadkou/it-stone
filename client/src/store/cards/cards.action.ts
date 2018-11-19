@@ -2,9 +2,9 @@ import { Action } from '@ngrx/store';
 import { Card } from 'models';
 
 export enum CardsActionTypes {
-  GetCards = '[cards] Get Cards',
-  GetCardsSuccess = '[cards] GetCards (Success)',
-  GetCardsError = '[cards] GetCards (Error)',
+  LoadCards = '[cards] Load Cards',
+  LoadCardsSuccess = '[cards] Load Cards (Success)',
+  LoadCardsError = '[cards] Load Cards (Error)',
   GetMyNewCards = '[cards] Move cards to me from deck',
   GetEnemyNewCards = '[cards] Move cards to enemy from deck',
   GetMyBattleCard = '[cards] Move my card to battle',
@@ -13,18 +13,18 @@ export enum CardsActionTypes {
   DecrementEnemyCardCount = '[cards] decrement enemy number of cards'
 }
 
-export class GetCards implements Action {
-  public readonly type = CardsActionTypes.GetCards;
+export class LoadCards implements Action {
+  public readonly type = CardsActionTypes.LoadCards;
 }
 
-export class GetCardsSuccess implements Action {
-  public readonly type = CardsActionTypes.GetCardsSuccess;
+export class LoadCardsSuccess implements Action {
+  public readonly type = CardsActionTypes.LoadCardsSuccess;
 
   constructor(public payload: Card[]) {}
 }
 
-export class GetCardsError implements Action {
-  public readonly type = CardsActionTypes.GetCardsError;
+export class LoadCardsError implements Action {
+  public readonly type = CardsActionTypes.LoadCardsError;
 
   constructor(public payload: Error) {}
 }
@@ -66,9 +66,9 @@ export class DecrementEnemyCardCount implements Action {
 }
 
 export type CardsActions =
-  | GetCards
-  | GetCardsSuccess
-  | GetCardsError
+  | LoadCards
+  | LoadCardsSuccess
+  | LoadCardsError
   | GetMyNewCards
   | GetEnemyNewCards
   | GetMyBattleCard

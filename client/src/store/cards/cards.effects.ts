@@ -10,13 +10,15 @@ import { Card } from 'models';
 
 @Injectable()
 export class CardsEffects {
-  @Effect()
-  public getCards$: Observable<Action> = this.actions$.pipe(
-    ofType<cardActions.GetCards>(cardActions.CardsActionTypes.GetCards),
-    switchMap((action: cardActions.GetCards) =>
-      this.http.get('http://www.mocky.io/v2/5bd6f6183500000523fd7e40').pipe(
-        map((data: Card[]) => new cardActions.GetCardsSuccess(data)),
-        catchError(error => of(new cardActions.GetCardsError(error)))
+  public baseUrl = 'http://www.mocky.io/v2/5beacbc22f00004723da3c9a';
+  public secondUrl = 'http://www.mocky.io/v2/5be983f82e00005f00f14631';
+
+  @Effect() public getCards$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.LoadCards>(cardActions.CardsActionTypes.LoadCards),
+    switchMap((action: cardActions.LoadCards) =>
+      this.http.get(this.baseUrl).pipe(
+        map((data: Card[]) => new cardActions.LoadCardsSuccess(data)),
+        catchError(error => of(new cardActions.LoadCardsError(error)))
       )
     )
   );
