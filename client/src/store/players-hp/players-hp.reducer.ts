@@ -7,6 +7,16 @@ export const playersHPreducer = (
     state: PlayersHPState = initialState
     ): PlayersHPState => {
     switch (action.type) {
+        case PlayersHPActionTypes.GetMyHP: {
+            return {
+                ...state
+            };
+        }
+        case PlayersHPActionTypes.GetEnemyHP: {
+            return {
+                ...state
+            };
+        }
         case PlayersHPActionTypes.IncreaseMyHP:
             return {
                 ...state,

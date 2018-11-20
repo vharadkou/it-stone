@@ -1,10 +1,24 @@
 import { Action } from '@ngrx/store';
 
 export enum PlayersHPActionTypes {
+    GetMyHP = '[playersHP] get my HP',
+    GetEnemyHP = '[playersHP] get enemy HP',
     IncreaseMyHP = '[playersHP] Increase my HP',
     DecreaseMyHP = '[playersHP] decrease my HP',
     IncreaseEnemyHP = '[playersHP] Increase enemy HP',
     DecreaseEnemyHP = '[playersHP] decrease enemy HP'
+}
+
+export class GetMyHP implements Action {
+    public readonly type = PlayersHPActionTypes.GetMyHP;
+}
+
+export class EnemyMyHP implements Action {
+    public readonly type = PlayersHPActionTypes.GetMyHP;
+}
+
+export class GetEnemyHP implements Action {
+    public readonly type = PlayersHPActionTypes.GetEnemyHP;
 }
 
 export class IncreaseMyHP implements Action {
@@ -32,6 +46,8 @@ export class DecreaseEnemyHP implements Action {
 }
 
 export type PlayersHPActions =
+    GetMyHP |
+    GetEnemyHP |
     IncreaseMyHP |
     DecreaseMyHP |
     IncreaseEnemyHP |
