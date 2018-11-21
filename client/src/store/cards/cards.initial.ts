@@ -3,10 +3,11 @@ import { CardsState } from './interfaces';
 
 export const initialState: CardsState = {
   status: Status.Init,
-  cards: {
-    1: {
+  cards: [
+     {
       id: 1,
-      name: 'Artsiom Marozau',
+      name: 'Artsiom',
+      surname: 'Marozaua',
       image: 'https://media.licdn.com/dms/image/C5603AQFZ0cLw7TZNKQ/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=PClUjbVszSX0U7EHV-jD75tIuIg81hXKk4SsaBqjYVk',
       skills: [
         'SQL', '.NET', 'C#', 'React'
@@ -14,9 +15,10 @@ export const initialState: CardsState = {
       hp: 39,
       damage: 30,
     },
-    2: {
+    {
       id: 2,
-      name: 'Denis Marozau',
+      name: 'Denis',
+      surname: 'Marozaua',
       image: 'https://media.licdn.com/dms/image/C5603AQFZ0cLw7TZNKQ/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=PClUjbVszSX0U7EHV-jD75tIuIg81hXKk4SsaBqjYVk',
       skills: [
         'SQL', '.NET', 'C#', 'React'
@@ -24,9 +26,10 @@ export const initialState: CardsState = {
       hp: 29,
       damage: 20,
     },
-    3: {
+    {
       id: 3,
       name: 'Kate Marozaua',
+      surname: 'Marozaua',
       image: 'https://media.licdn.com/dms/image/C5603AQFZ0cLw7TZNKQ/profile-displayphoto-shrink_800_800/0?e=1545264000&v=beta&t=PClUjbVszSX0U7EHV-jD75tIuIg81hXKk4SsaBqjYVk',
       skills: [
         'SQL', '.NET', 'C#', 'React'
@@ -34,7 +37,7 @@ export const initialState: CardsState = {
       hp: 49,
       damage: 40,
     },
-  },
+  ],
   deck: [1, 2, 3],
   myCards: [],
   enemyActiveCards: [],
