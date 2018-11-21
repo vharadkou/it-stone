@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
-import { CardsFacade } from 'store';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-player-hand',
@@ -9,11 +7,10 @@ import { CardsFacade } from 'store';
 })
 
 export class PlayerHandComponent implements OnInit {
-  public allCards$ = this.cardsFacade.allCards$;
+  @Input() public allCardsMy;
+  @Input() public allCardsEnemy;
 
-  constructor(private cardsFacade: CardsFacade) {
-    this.cardsFacade.loadCards();
-  }
+  constructor() {}
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {}
 }

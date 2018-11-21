@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-active-card',
@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class ActiveCardComponent implements OnInit {
+  @Input() public myActiveCards;
+  @Input() public enemyActiveCards;
 
   constructor() { }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void { }
 
 }
