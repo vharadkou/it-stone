@@ -53,6 +53,7 @@ import { PlayerHandComponent } from './components/player-hand/player-hand.compon
 import { PipesModule } from './pipes/pipes.module';
 import { ActiveCardComponent } from './components/active-card/active-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
+import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -133,7 +134,8 @@ const appRoutes: Routes = [
     SocketService,
     FightService,
     UserService,
-    CardsFacade
+    CardsFacade,
+    PlayersHPFacade
   ],
   bootstrap: [AppComponent]
 })

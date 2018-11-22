@@ -1,22 +1,18 @@
-import { PlayersHPState } from  "./interfaces";
-import { PlayersHPActions, PlayersHPActionTypes } from "./players-hp.action";
-import { initialState } from "./players-hp.initial";
+import { PlayersHPState } from './interfaces';
+import { PlayersHPActions, PlayersHPActionTypes } from './players-hp.action';
+import { initialState } from './players-hp.initial';
 
 export const playersHPreducer = (
     action: PlayersHPActions,
     state: PlayersHPState = initialState
     ): PlayersHPState => {
     switch (action.type) {
-        case PlayersHPActionTypes.GetMyHP: {
+        case PlayersHPActionTypes.GetPlayersHP:
             return {
-                ...state
+                myHp: 35,
+                enemyHp: 35
             };
-        }
-        case PlayersHPActionTypes.GetEnemyHP: {
-            return {
-                ...state
-            };
-        }
+
         case PlayersHPActionTypes.IncreaseMyHP:
             return {
                 ...state,
