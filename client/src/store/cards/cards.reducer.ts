@@ -24,6 +24,7 @@ export const cardsReducer = (
     case CardsActionTypes.LoadCardsError:
       return {
         ...state,
+        cards: state.cards,
         status: Status.Error
       };
 
