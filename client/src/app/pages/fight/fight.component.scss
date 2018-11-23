@@ -1,8 +1,27 @@
 .its-battlefield {
   display: flex;
-  flex-direction: row;    
-}
+  flex-flow: row nowrap;
 
-.its-battlefield__players-hands-wrapper {
-  width: 100%;
+  &__container {
+    flex-grow: 1;
+  }
+
+  &__players-hand {
+    height: 223px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #546e7a;
+  }
+
+  &__active-card {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    min-height: 230px;
+    background-color: #455a64;
+    border: .5px solid black;
+  }
 }

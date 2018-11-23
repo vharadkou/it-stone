@@ -52,9 +52,7 @@ import { PlayersHPEffects } from 'store/players-hp';
 import { DemoMaterialModule } from './material-module';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { PlayerHandComponent } from './components/player-hand/player-hand.component';
 import { PipesModule } from './pipes/pipes.module';
-import { ActiveCardComponent } from './components/active-card/active-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 
@@ -83,7 +81,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  exports: [RouterModule, PlayerHandComponent, CardComponent],
+  exports: [RouterModule, CardComponent],
   imports: [
     BrowserModule,
     SocialLoginModule,
@@ -123,8 +121,6 @@ const appRoutes: Routes = [
     WelcomePageComponent,
     FightPageComponent,
     NotFoundPageComponent,
-    PlayerHandComponent,
-    ActiveCardComponent,
     InfobarComponent
   ],
   entryComponents: [
