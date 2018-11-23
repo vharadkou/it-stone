@@ -1,42 +1,57 @@
 <div class="its-battlefield">
-  <div class="its-battlefield__players-hands-wrapper">
-    <app-player-hand
-    [allCardsMy]="allCardsMy$"
-    cdkDropList
-    #enemyCardList="cdkDropList"
-    [cdkDropListData]="allCardsMy$"
-    [cdkDropListConnectedTo]="[enemyActiveFieldList]"
-    (cdkDropListDropped)="drop($event)"
-    ></app-player-hand>
-
-    <app-active-card
-    [myActiveCards]="enemyActiveCards"
-    cdkDropList
-    #enemyActiveFieldList="cdkDropList"
-    [cdkDropListData]="enemyActiveCards"
-    [cdkDropListConnectedTo]="[]"
-    (cdkDropListDropped)="drop($event)"
-    ></app-active-card>
-
-    <app-active-card
-    [myActiveCards]="myActiveCards"
-    cdkDropList
-    #myActiveFieldList="cdkDropList"
-    [cdkDropListData]="myActiveCards"
-    [cdkDropListConnectedTo]="[]"
-    (cdkDropListDropped)="drop($event)"
-    ></app-active-card>
-    
-    <app-player-hand
-      [allCardsMy]="allCardsMy$"
-      cdkDropList
-      #myCardList="cdkDropList"
-      [cdkDropListData]="allCardsMy$"
-      [cdkDropListConnectedTo]="[myActiveFieldList]"
-      (cdkDropListDropped)="drop($event)"
-      ></app-player-hand>
+  <div class="its-battlefield__container"> 
+    <div class="its-battlefield__fight-area">
+      <div
+        class="its-battlefield__players-hand"
+        cdkDropList
+        orientation="horizontal"
+        #enemyCardList="cdkDropList"
+        [cdkDropListData]="allCardsEnemy"
+        [cdkDropListConnectedTo]="[enemyActiveFieldList]"
+        (cdkDropListDropped)="drop($event)"
+        >
+        <app-card *ngFor="let card of allCardsEnemy" [card]="card" cdkDrag></app-card>
+      </div>
+      </div>
+      <div class="its-battlefield__fight-area">
+        <div
+          class="its-battlefield__active-card"
+          cdkDropList
+          orientation="horizontal"
+          #enemyActiveFieldList="cdkDropList"
+          [cdkDropListData]="enemyActiveCards"
+          [cdkDropListConnectedTo]="[]"
+          (cdkDropListDropped)="drop($event)"
+          >
+            <app-card *ngFor="let card of enemyActiveCards" [card]="card" cdkDrag></app-card>
+        </div>
+        <div
+          class="its-battlefield__active-card"
+          cdkDropList
+          orientation="horizontal"
+          #myActiveFieldList="cdkDropList"
+          [cdkDropListData]="myActiveCards"
+          [cdkDropListConnectedTo]="[]"
+          (cdkDropListDropped)="drop($event)"
+          >
+          <app-card *ngFor="let card of myActiveCards" [card]="card" cdkDrag></app-card>
+        </div>
+      </div>
+      <div class="its-battlefield__fight-area">
+        <div
+          class="its-battlefield__players-hand"
+          cdkDropList
+          orientation="horizontal"
+          #myCardList="cdkDropList"
+          [cdkDropListData]="allCardsMy"
+          [cdkDropListConnectedTo]="[myActiveFieldList]"
+          (cdkDropListDropped)="drop($event)"
+          >
+            <app-card *ngFor="let card of allCardsMy" [card]="card" cdkDrag></app-card>
+        </div>
+      </div>
   </div>
-  <div>
-    <app-infobar></app-infobar>
-  </div>
+    <div class="its-infobar">
+      <app-infobar></app-infobar>
+    </div>
 </div>
