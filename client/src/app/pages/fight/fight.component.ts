@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Store } from '@ngrx/store';
 
 import { Card } from 'models';
-import { State } from 'store';
+import { CardsFacade } from 'store';
 
 @Component({
   selector: 'app-fight',
@@ -12,10 +11,23 @@ import { State } from 'store';
 })
 
 export class FightPageComponent implements OnInit {
+  public allCardsMy: Card[];
+  public allCardsEnemy: Card[];
+  public myActiveCards: Card[] = [];
+  public enemyActiveCards: Card[] = [];
 
-  constructor(private store: Store<State>) { }
+  constructor(private cardsFacade: CardsFacade) {
+    this.cardsFacade.loadCards();
+    this.cardsFacade.allCards$
+      .subscribe(card => {
+        this.allCardsMy = card;
+        this.allCardsEnemy = card;
+      });
+  }
 
-  public drop(event: CdkDragDrop<string[]>): void {
+  public ngOnInit(): void {}
+
+  public drop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -26,7 +38,4 @@ export class FightPageComponent implements OnInit {
         event.currentIndex);
     }
   }
-
-  public ngOnInit(): void {}
-
 }
