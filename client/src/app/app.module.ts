@@ -39,12 +39,13 @@ import {
   UserService,
 } from 'services';
 
+import { reducers } from 'store';
+
 import {
   CardsEffects,
-  reducers,
   CardsFacade,
   initialState,
-} from 'store';
+} from 'store/cards';
 
 import { PlayersHPEffects } from 'store/players-hp';
 

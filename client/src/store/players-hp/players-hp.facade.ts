@@ -9,18 +9,18 @@ import {
     DecreaseMyHP,
     DecreaseEnemyHP,
     IncreaseEnemyHP,
-    GetPlayersHP
+    LoadPlayersHP
 } from './players-hp.action';
 
 @Injectable()
 export class PlayersHPFacade {
-    public myHP$ = this.store.select(playersHPQuery.getMyHP);
-    public enemyHP$ = this.store.select(playersHPQuery.getEnemyHP);
+    public myHP$ = this.store.select(playersHPQuery.loadMyHP);
+    public enemyHP$ = this.store.select(playersHPQuery.loadEnemyHP);
 
     constructor( private store: Store<PlayersHPState>){ }
 
-    public getPlayersHP(data: PlayersHPState): void {
-        this.store.dispatch(new GetPlayersHP({
+    public loadPlayersHP(data: PlayersHPState): void {
+        this.store.dispatch(new LoadPlayersHP({
             myHP: data.myHP,
             enemyHP: data.enemyHP
         }));

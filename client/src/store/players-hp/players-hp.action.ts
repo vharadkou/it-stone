@@ -1,15 +1,15 @@
 import { Action } from '@ngrx/store';
 
 export enum PlayersHPActionTypes {
-    GetPlayersHP = '[playersHP] get players HP',
+    LoadPlayersHP = '[playersHP] get players HP',
     IncreaseMyHP = '[playersHP] Increase my HP',
     DecreaseMyHP = '[playersHP] decrease my HP',
     IncreaseEnemyHP = '[playersHP] Increase enemy HP',
     DecreaseEnemyHP = '[playersHP] decrease enemy HP'
 }
 
-export class GetPlayersHP implements Action {
-    public readonly type = PlayersHPActionTypes.GetPlayersHP;
+export class LoadPlayersHP implements Action {
+    public readonly type = PlayersHPActionTypes.LoadPlayersHP;
 
     constructor(public payload: {
         myHP: number,
@@ -42,7 +42,7 @@ export class DecreaseEnemyHP implements Action {
 }
 
 export type PlayersHPActions =
-    GetPlayersHP |
+    LoadPlayersHP |
     IncreaseMyHP |
     DecreaseMyHP |
     IncreaseEnemyHP |

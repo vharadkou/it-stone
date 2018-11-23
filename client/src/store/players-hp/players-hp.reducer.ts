@@ -7,7 +7,7 @@ export const playersHPReducer = (
     action: PlayersHPActions
     ): PlayersHPState => {
     switch (action.type) {
-        case PlayersHPActionTypes.GetPlayersHP:
+        case PlayersHPActionTypes.LoadPlayersHP:
             return {
                 myHP: action.payload.myHP,
                 enemyHP: action.payload.enemyHP,
