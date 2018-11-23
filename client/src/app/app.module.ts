@@ -39,12 +39,15 @@ import {
   UserService,
 } from 'services';
 
+import { reducers } from 'store';
+
 import {
   CardsEffects,
-  reducers,
   CardsFacade,
-  initialState
-} from 'store';
+  initialState,
+} from 'store/cards';
+
+import { PlayersHPEffects } from 'store/players-hp';
 
 import { DemoMaterialModule } from './material-module';
 
@@ -53,6 +56,7 @@ import { PlayerHandComponent } from './components/player-hand/player-hand.compon
 import { PipesModule } from './pipes/pipes.module';
 import { ActiveCardComponent } from './components/active-card/active-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
+import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -98,7 +102,8 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
-    EffectsModule.forRoot([CardsEffects]),
+    StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -133,7 +138,8 @@ const appRoutes: Routes = [
     SocketService,
     FightService,
     UserService,
-    CardsFacade
+    CardsFacade,
+    PlayersHPFacade
   ],
   bootstrap: [AppComponent]
 })
