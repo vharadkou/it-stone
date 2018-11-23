@@ -11,16 +11,18 @@ import { CardsFacade } from 'store';
 })
 
 export class FightPageComponent implements OnInit {
-  // temporary crutch
-  public allCardsMy$ = this.cardsFacade.allCards$
-    .subscribe(card => {
-      this.allCardsMy$ = card;
-    });
+  public allCardsMy: Card[];
+  public allCardsEnemy: Card[];
   public myActiveCards: Card[] = [];
   public enemyActiveCards: Card[] = [];
 
   constructor(private cardsFacade: CardsFacade) {
     this.cardsFacade.loadCards();
+    this.cardsFacade.allCards$
+      .subscribe(card => {
+        this.allCardsMy = card;
+        this.allCardsEnemy = card;
+      });
   }
 
   public ngOnInit(): void {}
