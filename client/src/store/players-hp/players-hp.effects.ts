@@ -12,7 +12,7 @@ import { PlayersHPState } from './interfaces';
 export class PlayersHPEffects {
   public baseUrl = 'http://www.mocky.io/v2/5bf697823200008e005d0ff1';
 
-  @Effect() public getPlayersHP$: Observable<Action> = this.actions$.pipe(
+  @Effect() public loadPlayersHP$: Observable<Action> = this.actions$.pipe(
     ofType<playersHPActions.GetPlayersHP>(playersHPActions.PlayersHPActionTypes.GetPlayersHP),
     switchMap((action: playersHPActions.GetPlayersHP) =>
       this.http.get(this.baseUrl).pipe(

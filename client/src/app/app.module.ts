@@ -44,10 +44,9 @@ import {
   reducers,
   CardsFacade,
   initialState,
-  playersHPinitialState,
-  PlayersHPActions,
-  PlayersHPEffects
 } from 'store';
+
+import { PlayersHPEffects } from 'store/players-hp';
 
 import { DemoMaterialModule } from './material-module';
 
