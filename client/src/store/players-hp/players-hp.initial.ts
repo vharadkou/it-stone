@@ -1,6 +1,6 @@
 import { PlayersHPState } from './interfaces';
 
-export const initialState: PlayersHPState = {
-    myHp: 30,
-    enemyHp: 30
+export const playersHPinitialState: PlayersHPState = {
+    myHP: 2,
+    enemyHP: 34
 };

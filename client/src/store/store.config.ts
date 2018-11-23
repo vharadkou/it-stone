@@ -1,6 +1,7 @@
 import { CardsState } from './cards/interfaces';
 import { cardsReducer } from './cards/cards.reducer';
 import { PlayersHPState } from './players-hp/interfaces';
+import { playersHPReducer } from './players-hp/players-hp.reducer';
 
 export enum Status {
   Initial,
@@ -15,5 +16,6 @@ export interface State {
 }
 
 export const reducers = {
-  cards: cardsReducer
+  cards: cardsReducer,
+  playersHP: playersHPReducer
 };

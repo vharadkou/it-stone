@@ -1,23 +1,20 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { PlayersHPState } from './interfaces';
 
-export const getPlayersHPState = createFeatureSelector<PlayersHPState>('playersHP');
+export const getPlayersHPState = createFeatureSelector<PlayersHPState>('playersHPState');
 
-/* export const GetMyHp = (state: PlayersHPState) => state.myHp;
-export const GetEnemyHp = (state: PlayersHPState) => state.enemyHp; */
-
-export const getMyHp = createSelector(
+export const getMyHP = createSelector(
     getPlayersHPState,
-    (state: PlayersHPState) => state.myHp
+    (state: PlayersHPState) => state.myHP
 );
 
-export const getEnemyHp = createSelector(
+export const getEnemyHP = createSelector(
     getPlayersHPState,
-    (state: PlayersHPState) => state.enemyHp
+    (state: PlayersHPState) => state.enemyHP
 );
 
 export const playersHPQuery = {
     getPlayersHPState,
-    getMyHp,
-    getEnemyHp
+    getMyHP,
+    getEnemyHP
 };

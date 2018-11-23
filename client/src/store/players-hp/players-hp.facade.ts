@@ -14,29 +14,31 @@ import {
 
 @Injectable()
 export class PlayersHPFacade {
-    public myHp$ = this.store.select(playersHPQuery.getMyHp);
-    public enemyHp$ = this.store.select(playersHPQuery.getEnemyHp);
+    public myHP$ = this.store.select(playersHPQuery.getMyHP);
+    public enemyHP$ = this.store.select(playersHPQuery.getEnemyHP);
 
     constructor( private store: Store<PlayersHPState>){ }
 
-    /* public getPlayersHP(): void {
-        console.log(playersHPQuery.getMyHp);
-        this.store.dispatch(new GetPlayersHP());
-    } */
+    public getPlayersHP(data: PlayersHPState): void {
+        this.store.dispatch(new GetPlayersHP({
+            myHP: data.myHP,
+            enemyHP: data.enemyHP
+        }));
+    }
 
-    public increaseMyHp(heal: number): void {
+    public increaseMyHP(heal: number): void {
         this.store.dispatch(new IncreaseMyHP({ heal }));
     }
 
-    public decreaseMyHp(damage: number): void {
+    public decreaseMyHP(damage: number): void {
         this.store.dispatch(new DecreaseMyHP({ damage }));
     }
 
-    public increaseEnemyHp(heal: number): void {
+    public increaseEnemyHP(heal: number): void {
         this.store.dispatch(new IncreaseEnemyHP({ heal }));
     }
 
-    public decreaseEnemyHp(damage: number): void {
+    public decreaseEnemyHP(damage: number): void {
         this.store.dispatch(new DecreaseEnemyHP({ damage }));
     }
 }

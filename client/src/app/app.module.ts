@@ -43,7 +43,10 @@ import {
   CardsEffects,
   reducers,
   CardsFacade,
-  initialState
+  initialState,
+  playersHPinitialState,
+  PlayersHPActions,
+  PlayersHPEffects
 } from 'store';
 
 import { DemoMaterialModule } from './material-module';
@@ -99,7 +102,8 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
-    EffectsModule.forRoot([CardsEffects]),
+    StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),

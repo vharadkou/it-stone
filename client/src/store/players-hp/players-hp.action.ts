@@ -10,6 +10,12 @@ export enum PlayersHPActionTypes {
 
 export class GetPlayersHP implements Action {
     public readonly type = PlayersHPActionTypes.GetPlayersHP;
+
+    constructor(public payload: {
+        myHP: number,
+        enemyHP: number
+    })
+    {}
 }
 export class IncreaseMyHP implements Action {
     public readonly type = PlayersHPActionTypes.IncreaseMyHP;

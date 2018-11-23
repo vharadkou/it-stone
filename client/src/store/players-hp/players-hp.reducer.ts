@@ -1,40 +1,40 @@
 import { PlayersHPState } from './interfaces';
 import { PlayersHPActions, PlayersHPActionTypes } from './players-hp.action';
-import { initialState } from './players-hp.initial';
+import { playersHPinitialState } from './players-hp.initial';
 
-export const playersHPreducer = (
-    action: PlayersHPActions,
-    state: PlayersHPState = initialState
+export const playersHPReducer = (
+    state: PlayersHPState = playersHPinitialState,
+    action: PlayersHPActions
     ): PlayersHPState => {
     switch (action.type) {
         case PlayersHPActionTypes.GetPlayersHP:
             return {
-                myHp: 35,
-                enemyHp: 35
+                myHP: action.payload.myHP,
+                enemyHP: action.payload.enemyHP,
             };
 
         case PlayersHPActionTypes.IncreaseMyHP:
             return {
                 ...state,
-                myHp: state.myHp + action.payload.heal
+                myHP: state.myHP + action.payload.heal
             };
 
         case PlayersHPActionTypes.DecreaseMyHP:
             return {
                 ...state,
-                myHp: state.myHp - action.payload.damage
+                myHP: state.myHP - action.payload.damage
             };
 
         case PlayersHPActionTypes.IncreaseEnemyHP:
             return {
                 ...state,
-                enemyHp: state.enemyHp + action.payload.heal
+                enemyHP: state.enemyHP + action.payload.heal
             };
 
         case PlayersHPActionTypes.DecreaseEnemyHP:
             return {
                 ...state,
-                enemyHp: state.enemyHp - action.payload.damage
+                enemyHP: state.enemyHP - action.payload.damage
             };
 
         default: return state;

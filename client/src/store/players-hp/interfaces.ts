@@ -1,4 +1,4 @@
 export interface PlayersHPState {
-    myHp: number;
-    enemyHp: number;
+    myHP: number;
+    enemyHP: number;
 }
