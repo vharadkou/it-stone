@@ -9,12 +9,13 @@ import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 export class InfobarComponent implements OnInit {
 
   // all data typed below is just a mock and will be changed later
-  public fstPlayerHP$ = this.playersHPFacade.myHP$;
-  public scndPlayerHP$ = this.playersHPFacade.enemyHP$;
+  public myHP$ = this.playersHPFacade.myHP$;
+  public enemyHP$ = this.playersHPFacade.enemyHP$;
 
-  public fstPlayerAvatar = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cc/cc97ee90c11a8378ee78cc8c776bb694210da1d9_full.jpg';
-  public fstPlayercardLeft = 10;
-  public scndPlayercardLeft = 8;
+  public myAvatar = 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/cc/cc97ee90c11a8378ee78cc8c776bb694210da1d9_full.jpg';
+  public enemyAvatar = 'https://m.media-amazon.com/images/M/MV5BMzc1YTA1ZjItMWRhMy00ZTBlLTkzNTgtNTc4ZDE3YTM3ZDk2XkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_SY1000_SX1000_AL_.jpg';
+  public myCardsLeft = 10;
+  public enemyCardsLeft = 8;
 
   constructor( public playersHPFacade: PlayersHPFacade) {
 
