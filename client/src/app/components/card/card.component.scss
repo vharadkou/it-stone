@@ -1,7 +1,7 @@
-$programmer-color: #ec9b3b;
+@import '../../settings';
 
 .its-card {
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: $roboto;
 
   &__container {
     display: flex;
@@ -11,11 +11,11 @@ $programmer-color: #ec9b3b;
     height: 200px;
     margin: 10px 5px;
     border-radius: 5px;
-    background-color: antiquewhite;
+    background-color: $antiquewhite;
     box-shadow: 
-      0 2px 1px -1px rgba(0, 0, 0, 0.2),
-      0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 1px 3px 0 rgba(0, 0, 0, 0.12);
+      0 2px 1px -1px opacify($black, 0.2),
+      0 1px 1px 0 opacify($black, 0.14),
+      0 1px 3px 0 opacify($black, 0.12);
   }
 
   &__background-cont {
@@ -40,8 +40,8 @@ $programmer-color: #ec9b3b;
   &__title {
     padding: 0 10px;
     margin-top: 10px;
-    color: $programmer-color;
-    font-size: 15px;
+    color: $orange;
+    font-size: $small-font;
     font-weight: 600;
     text-align: center;
   }
@@ -54,8 +54,8 @@ $programmer-color: #ec9b3b;
   }
 
   &__pers-info {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 14px;
+    color: opacify($black, 0.5);
+    font-size: $smaller-font;
     text-align: center;
   }
 
@@ -75,13 +75,13 @@ $programmer-color: #ec9b3b;
   }
 
   &__stat-name {
-    font-size: 1rem;
+    font-size: $default-font;
     font-weight: 600;
   }
 
   &__stat-value {
     text-transform: capitalize;
-    font-size: 0.8rem;
+    font-size: $extra-small-font;
   }
 
   &__footer {
@@ -90,8 +90,8 @@ $programmer-color: #ec9b3b;
     padding: 3px 10px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    color: white;
-    background-color: $programmer-color;
+    color: $white;
+    background-color: $orange;
   }
 
   &__skill {
