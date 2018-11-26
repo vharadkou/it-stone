@@ -1,3 +1,5 @@
+@import '../../settings';
+
 .its-battlefield {
   display: flex;
   flex-flow: row nowrap;
@@ -13,7 +15,7 @@
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
-    background-color: #546e7a;
+    background-color: $grey-light;
   }
 
   &__active-card {
@@ -21,7 +23,7 @@
     flex-flow: row nowrap;
     justify-content: flex-start;
     min-height: 230px;
-    background-color: #455a64;
-    border: .5px solid black;
+    background-color: $grey;
+    border: .5px solid $black;
   }
 }

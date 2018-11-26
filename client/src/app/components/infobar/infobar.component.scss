@@ -1,3 +1,5 @@
+@import '../../settings';
+
 .its-infobar {
 
     &-wrapper {
@@ -26,16 +28,16 @@
     &__hp-indicator {        
         width: 100px;
         height: 40px;
-        font-size: 40px;
+        font-size: $hp-size;
         text-align: center;        
-        background-color: rgb(196, 196, 196);
+        background-color: $grey-milk;
         display: flex;
         align-items: center;
         justify-content: center
     }
     
     &__hp-indicator-value {        
-        font-family: 'Righteous', cursive;        
+        font-family: $righteous-font;        
     }
 
     &__deck {
@@ -46,12 +48,10 @@
     }
 
     &__count-of-cards {
-        font-family: 'Righteous', cursive;
-        color: black;
-        font-size: 69px;
-        -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+        font-family: $righteous-font;
+        color: $black;
+        font-size: $count-cards-size;
+        @include transform(translate(-50%, -50%));
         text-align: center;
         position: relative;
         top: 50%;
@@ -64,7 +64,7 @@
         width: 100%;
         opacity: 0;
         transition: .5s ease;
-        background-color: rgb(255, 218, 9);
+        background-color: $yellow-bright;
     }
 
     &__deck-overlay:hover {    
@@ -74,9 +74,9 @@
     &__turn-trigger {        
         width: 100px;
         height: 30px;        
-        font-size: 23px;
+        font-size: $big-size;
         text-align: center;
-        background-color: rgb(221, 206, 0);
+        background-color: $yellow;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -84,11 +84,11 @@
     }
 
     &__turn-trigger:hover {        
-        background-color: rgb(207, 177, 4);
+        background-color: $yellow-dark;
     }
 
     &__turn-trigger-text {
-        font-family: 'Righteous', cursive;
+        font-family: $righteous-font;
     }
 
     &__wrapper-player1-data{
