@@ -28,7 +28,7 @@
     &__hp-indicator {        
         width: 100px;
         height: 40px;
-        font-size: $hp-font;
+        font-size: $hp-size;
         text-align: center;        
         background-color: $grey-milk;
         display: flex;
@@ -37,7 +37,7 @@
     }
     
     &__hp-indicator-value {        
-        font-family: $righteous;        
+        font-family: $righteous-font;        
     }
 
     &__deck {
@@ -48,9 +48,9 @@
     }
 
     &__count-of-cards {
-        font-family: $righteous;
+        font-family: $righteous-font;
         color: $black;
-        font-size: $count-cards-font;
+        font-size: $count-cards-size;
         @include transform(translate(-50%, -50%));
         text-align: center;
         position: relative;
@@ -74,7 +74,7 @@
     &__turn-trigger {        
         width: 100px;
         height: 30px;        
-        font-size: $big-font;
+        font-size: $big-size;
         text-align: center;
         background-color: $yellow;
         display: flex;
@@ -88,7 +88,7 @@
     }
 
     &__turn-trigger-text {
-        font-family: $righteous;
+        font-family: $righteous-font;
     }
 
     &__wrapper-player1-data{

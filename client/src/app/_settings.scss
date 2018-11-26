@@ -11,17 +11,17 @@ $white: white;
 $antiquewhite: antiquewhite;
 
 // FONT
-$roboto: Roboto, 'Helvetica Neue', sans-serif;
-$righteous: 'Righteous', cursive;
+$roboto-font: Roboto, 'Helvetica Neue', sans-serif;
+$righteous-font: 'Righteous', cursive;
 
 // FONT-SIZE
-$count-cards-font: 69px;
-$hp-font: 40px;
-$big-font: 23px;
-$default-font: 1rem;
-$small-font: 15px;
-$smaller-font: 14px;
-$extra-small-font: 0.8rem;
+$count-cards-size: 69px;
+$hp-size: 40px;
+$big-size: 23px;
+$default-size: 1rem;
+$small-size: 15px;
+$smaller-size: 14px;
+$extra-small-size: 0.8rem;
 
 //MIXIN
 @mixin transform($property) {

@@ -1,7 +1,7 @@
 @import '../../settings';
 
 .its-card {
-  font-family: $roboto;
+  font-family: $roboto-font;
 
   &__container {
     display: flex;
@@ -41,7 +41,7 @@
     padding: 0 10px;
     margin-top: 10px;
     color: $orange;
-    font-size: $small-font;
+    font-size: $small-size;
     font-weight: 600;
     text-align: center;
   }
@@ -55,7 +55,7 @@
 
   &__pers-info {
     color: opacify($black, 0.5);
-    font-size: $smaller-font;
+    font-size: $smaller-size;
     text-align: center;
   }
 
@@ -75,13 +75,13 @@
   }
 
   &__stat-name {
-    font-size: $default-font;
+    font-size: $default-size;
     font-weight: 600;
   }
 
   &__stat-value {
     text-transform: capitalize;
-    font-size: $extra-small-font;
+    font-size: $extra-small-size;
   }
 
   &__footer {
