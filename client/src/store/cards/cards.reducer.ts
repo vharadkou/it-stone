@@ -51,6 +51,7 @@ export const cardsReducer = (
       return {
         ...state
       };
+
     case CardsActionTypes.MoveEnemyCardsWithinArray:
       state.enemyCards.splice(action.payload.currentIndex, 0, state.enemyCards.splice(action.payload.previousIndex, 1)[0]);
       return {
