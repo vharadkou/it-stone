@@ -7,7 +7,9 @@ const getCardState = createFeatureSelector<CardsState>('cardsState');
 const GetCards = (state: CardsState) => state.cards;
 const GetDeck = (state: CardsState) => state.deck;
 const GetMyCards = (state: CardsState) => state.myCards;
+const GetEnemyCards = (state: CardsState) => state.enemyCards;
 const GetMyActiveCards = (state: CardsState) => state.myActiveCards;
+const GetEnemyActiveCards = (state: CardsState) => state.enemyActiveCards;
 const GetEnemyCardCount = (state: CardsState) => state.enemyCardCount;
 
 const getCards = createSelector(
@@ -28,6 +30,11 @@ const getDeck = createSelector(
   }
 );
 
+const getEnemyCards = createSelector(
+  getCardState,
+  GetEnemyCards
+);
+
 const getEnemyCardCount = createSelector(
   getCardState,
   GetEnemyCardCount
@@ -39,11 +46,8 @@ const getEnemyActiveCardsId = createSelector(
 );
 
 const getEnemyActiveCards = createSelector(
-  getEnemyActiveCardsId,
-  getCards,
-  (enemyCardsId, cards) => {
-    return enemyCardsId.map(id => cards[id]);
-  }
+  getCardState,
+  GetEnemyActiveCards
 );
 
 const getMyCardsId = createSelector(
@@ -52,11 +56,8 @@ const getMyCardsId = createSelector(
 );
 
 const getMyCards = createSelector(
-  getMyCardsId,
-  getCards,
-  (myCardsId, cards) => {
-    return myCardsId.map(id => cards[id]);
-  }
+  getCardState,
+  GetMyCards
 );
 
 const getMyActiveCardsId = createSelector(
@@ -65,11 +66,8 @@ const getMyActiveCardsId = createSelector(
 );
 
 const getMyActiveCards = createSelector(
-  getMyActiveCardsId,
-  getCards,
-  (myActiveCardsId, cards) => {
-    return myActiveCardsId.map(id => cards[id]);
-  }
+  getCardState,
+  GetMyActiveCards
 );
 
 export const cardsQuery = {
@@ -77,6 +75,7 @@ export const cardsQuery = {
   getCardState,
   getDeck,
   getDeckId,
+  getEnemyCards,
   getEnemyActiveCards,
   getEnemyActiveCardsId,
   getEnemyCardCount,
