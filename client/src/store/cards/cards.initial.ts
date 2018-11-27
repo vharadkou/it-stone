@@ -6,6 +6,7 @@ export const initialState: CardsState = {
   cards: [],
   deck: [1, 2, 3],
   myCards: [],
+  enemyCards: [],
   enemyActiveCards: [],
   enemyCardCount: 0,
   myActiveCards: [],
