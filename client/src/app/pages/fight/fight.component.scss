@@ -29,3 +29,7 @@
 .cdk-drag-placeholder {
   opacity: 0.5;
 }
+
+.cdk-drag-animating {
+  transition: transform 300ms ease;
+}
