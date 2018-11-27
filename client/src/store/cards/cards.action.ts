@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Card } from 'models';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 export enum CardsActionTypes {
   LoadCards = '[cards] Load Cards',
@@ -7,6 +8,8 @@ export enum CardsActionTypes {
   LoadCardsError = '[cards] Load Cards (Error)',
   GetMyNewCards = '[cards] Move cards to me from deck',
   GetEnemyNewCards = '[cards] Move cards to enemy from deck',
+  MoveMyCardsWithinArray = '[card] Move My Cards Within Array',
+  MoveEnemyCardsWithinArray = '[card] Move Enemy Cards Within Array',
   GetMyBattleCard = '[cards] Move my card to battle',
   GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
@@ -41,16 +44,28 @@ export class GetEnemyNewCards implements Action {
   constructor(public payload: { amount: number }) {}
 }
 
+export class MoveMyCardsWithinArray implements Action {
+  public readonly type = CardsActionTypes.MoveMyCardsWithinArray;
+
+  constructor(public payload: CdkDragDrop<Card[]>) {}
+}
+
+export class MoveEnemyCardsWithinArray implements Action {
+  public readonly type = CardsActionTypes.MoveEnemyCardsWithinArray;
+
+  constructor(public payload: CdkDragDrop<Card[]>) {}
+}
+
 export class GetMyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetMyBattleCard;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: CdkDragDrop<Card[]>) {}
 }
 
 export class GetEnemyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetEnemyBattleCard;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: CdkDragDrop<Card[]>) {}
 }
 
 export class DeleteMyCardFromBattle implements Action {
@@ -71,6 +86,8 @@ export type CardsActions =
   | LoadCardsError
   | GetMyNewCards
   | GetEnemyNewCards
+  | MoveMyCardsWithinArray
+  | MoveEnemyCardsWithinArray
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
