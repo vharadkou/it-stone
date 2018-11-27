@@ -1,6 +1,8 @@
 import { Action } from '@ngrx/store';
-import { Card } from 'models';
+
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+
+import { Card } from 'models';
 
 export enum CardsActionTypes {
   LoadCards = '[cards] Load Cards',

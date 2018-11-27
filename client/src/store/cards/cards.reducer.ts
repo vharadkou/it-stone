@@ -1,7 +1,8 @@
-import { CardsActions, CardsActionTypes } from './cards.action';
+import { Status } from 'models';
+
+import {CardsActionTypes, CardsActions } from './cards.action';
 import { initialState } from './cards.initial';
 import { CardsState } from './interfaces';
-import { Status, Card } from 'models';
 
 export const cardsReducer = (
   state: CardsState = initialState,
@@ -18,7 +19,7 @@ export const cardsReducer = (
       return {
         ...state,
         status: Status.Success,
-        myCards: [...state.cards, ...action.payload],
+        myCards: action.payload,
         enemyCards: [...state.cards, ...action.payload]
       };
 
@@ -35,8 +36,7 @@ export const cardsReducer = (
       );
       return {
         ...state,
-        deck: state.deck,
-        myCards: [...state.myCards]
+        deck: state.deck
       };
 
     case CardsActionTypes.GetEnemyNewCards:

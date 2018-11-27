@@ -1,12 +1,16 @@
+import { Action } from '@ngrx/store';
+import { Card } from 'models';
+
 import { Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { of, Observable } from 'rxjs';
+
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { Action } from '@ngrx/store';
+
+import {Observable, of } from 'rxjs';
 
 import * as cardActions from './cards.action';
-import { Card } from 'models';
 
 @Injectable()
 export class CardsEffects {
@@ -23,5 +27,5 @@ export class CardsEffects {
     )
   );
 
-  public constructor(private http: HttpClient, private actions$: Actions) {}
+  public constructor(private http: HttpClient, private actions$: Actions) { }
 }
