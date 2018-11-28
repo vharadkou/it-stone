@@ -4,8 +4,9 @@ export interface CardsState {
   status: Status;
   cards: Card[];
   deck: number[];
-  myCards: number[];
-  myActiveCards: number[];
-  enemyActiveCards: number[];
+  myCards: Card[];
+  enemyCards: Card[];
+  myActiveCards: Card[];
+  enemyActiveCards: Card[];
   enemyCardCount: number;
 }
