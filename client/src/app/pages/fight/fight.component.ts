@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 import { Card } from 'models';
@@ -11,31 +11,30 @@ import { CardsFacade } from 'store';
 })
 
 export class FightPageComponent implements OnInit {
-  public allCardsMy: Card[];
-  public allCardsEnemy: Card[];
-  public myActiveCards: Card[] = [];
-  public enemyActiveCards: Card[] = [];
+  public allCardsMy$ = this.cardsFacade.myCards$;
+  public allCardsEnemy$ = this.cardsFacade.enemyCards$;
+  public myActiveCards$ = this.cardsFacade.myActiveCards$;
+  public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
 
   constructor(private cardsFacade: CardsFacade) {
     this.cardsFacade.loadCards();
-    this.cardsFacade.allCards$
-      .subscribe(card => {
-        this.allCardsMy = card;
-        this.allCardsEnemy = card;
-      });
   }
 
   public ngOnInit(): void {}
 
-  public drop(event: CdkDragDrop<Card[]>): void {
+  public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      this.cardsFacade.moveMyCardsWithinArray(event);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      this.cardsFacade.getMyBattleCard(event);
+    }
+  }
+
+  public enemyDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      this.cardsFacade.moveEnemyCardsWithinArray(event);
+    } else {
+      this.cardsFacade.getEnemyBattleCard(event);
     }
   }
 }

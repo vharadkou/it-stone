@@ -1,7 +1,8 @@
-import { CardsActions, CardsActionTypes } from './cards.action';
+import { Status } from 'models';
+
+import {CardsActionTypes, CardsActions } from './cards.action';
 import { initialState } from './cards.initial';
 import { CardsState } from './interfaces';
-import { Status } from 'models';
 
 export const cardsReducer = (
   state: CardsState = initialState,
@@ -18,7 +19,8 @@ export const cardsReducer = (
       return {
         ...state,
         status: Status.Success,
-        cards: [...state.cards, ...action.payload]
+        myCards: action.payload,
+        enemyCards: [...state.cards, ...action.payload]
       };
 
     case CardsActionTypes.LoadCardsError:
@@ -34,8 +36,7 @@ export const cardsReducer = (
       );
       return {
         ...state,
-        deck: state.deck,
-        myCards: [...state.myCards, ...cardsArrToMe]
+        deck: state.deck
       };
 
     case CardsActionTypes.GetEnemyNewCards:
@@ -45,15 +46,47 @@ export const cardsReducer = (
         enemyCardCount: state.enemyCardCount + action.payload.amount
       };
 
+    case CardsActionTypes.MoveMyCardsWithinArray:
+      state.myCards.splice(action.payload.currentIndex, 0, state.myCards.splice(action.payload.previousIndex, 1)[0]);
+      return {
+        ...state
+      };
+
+    case CardsActionTypes.MoveEnemyCardsWithinArray:
+      state.enemyCards.splice(action.payload.currentIndex, 0, state.enemyCards.splice(action.payload.previousIndex, 1)[0]);
+      return {
+        ...state
+      };
+
     case CardsActionTypes.GetMyBattleCard:
+      const myActiveCardsArray = state.myCards.filter((item, index, array) => {
+        return array.indexOf(item) === action.payload.previousIndex;
+      });
+      const myUpdatedCards = state.myCards.filter((item, index, array) => {
+        return array.indexOf(item) !== action.payload.previousIndex;
+      });
       return {
         ...state,
-        myActiveCards: [...state.myActiveCards, action.payload.id]
+        myActiveCards: [...state.myActiveCards, ...myActiveCardsArray].reverse(),
+        myCards: myUpdatedCards
+      };
+
+    case CardsActionTypes.GetEnemyBattleCard:
+      const enemyActiveCardsArray = state.enemyCards.filter((item, index, array) => {
+        return array.indexOf(item) === action.payload.previousIndex;
+      });
+      const enemyUpdatedCards = state.enemyCards.filter((item, index, array) => {
+        return array.indexOf(item) !== action.payload.previousIndex;
+      });
+      return {
+        ...state,
+        enemyActiveCards: [...state.enemyActiveCards, ...enemyActiveCardsArray].reverse(),
+        enemyCards: enemyUpdatedCards
       };
 
     case CardsActionTypes.DeleteMyCardFromBattle:
       const myPrunedIds = state.myActiveCards.filter(item => {
-        return item !== action.payload.id;
+        return item.id !== action.payload.id;
       });
       return {
         ...state,

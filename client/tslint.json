@@ -167,7 +167,15 @@
       true,
       "never-prefix"
     ],
-    "ordered-imports": false,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true,
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "lowercase-last",
+        "module-source-path": "full"
+      }
+    ],
     "max-classes-per-file": false,
     "prefer-for-of": false,
     "arrow-parens": false

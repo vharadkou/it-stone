@@ -6,11 +6,11 @@
         cdkDropList
         orientation="horizontal"
         #enemyCardList="cdkDropList"
-        [cdkDropListData]="allCardsEnemy"
+        [cdkDropListData]="allCardsEnemy$"
         [cdkDropListConnectedTo]="[enemyActiveFieldList]"
-        (cdkDropListDropped)="drop($event)"
+        (cdkDropListDropped)="enemyDrop($event)"
         >
-        <app-card *ngFor="let card of allCardsEnemy" [card]="card" cdkDrag></app-card>
+        <app-card *ngFor="let card of allCardsEnemy$ | async" [card]="card" cdkDrag></app-card>
       </div>
       </div>
       <div class="its-battlefield__fight-area">
@@ -19,22 +19,22 @@
           cdkDropList
           orientation="horizontal"
           #enemyActiveFieldList="cdkDropList"
-          [cdkDropListData]="enemyActiveCards"
+          [cdkDropListData]="enemyActiveCards$"
           [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="drop($event)"
+          (cdkDropListDropped)="enemyDrop($event)"
           >
-            <app-card *ngFor="let card of enemyActiveCards" [card]="card" cdkDrag></app-card>
+            <app-card *ngFor="let card of enemyActiveCards$ | async" [card]="card" cdkDrag></app-card>
         </div>
         <div
           class="its-battlefield__active-card"
           cdkDropList
           orientation="horizontal"
           #myActiveFieldList="cdkDropList"
-          [cdkDropListData]="myActiveCards"
+          [cdkDropListData]="myActiveCards$"
           [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="drop($event)"
+          (cdkDropListDropped)="myDrop($event)"
           >
-          <app-card *ngFor="let card of myActiveCards" [card]="card" cdkDrag></app-card>
+          <app-card *ngFor="let card of myActiveCards$ | async" [card]="card" cdkDrag></app-card>
         </div>
       </div>
       <div class="its-battlefield__fight-area">
@@ -43,11 +43,11 @@
           cdkDropList
           orientation="horizontal"
           #myCardList="cdkDropList"
-          [cdkDropListData]="allCardsMy"
+          [cdkDropListData]="allCardsMy$"
           [cdkDropListConnectedTo]="[myActiveFieldList]"
-          (cdkDropListDropped)="drop($event)"
+          (cdkDropListDropped)="myDrop($event)"
           >
-            <app-card *ngFor="let card of allCardsMy" [card]="card" cdkDrag></app-card>
+            <app-card *ngFor="let card of allCardsMy$ | async" [card]="card" cdkDrag></app-card>
         </div>
       </div>
   </div>
