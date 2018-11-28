@@ -62,20 +62,26 @@ export const cardsReducer = (
       const myActiveCardsArray = state.myCards.filter((item, index, array) => {
         return array.indexOf(item) === action.payload.previousIndex;
       });
-      state.myCards.splice(action.payload.previousIndex, 1);
+      const myUpdatedCards = state.myCards.filter((item, index, array) => {
+        return array.indexOf(item) !== action.payload.previousIndex;
+      });
       return {
         ...state,
-        myActiveCards: [...state.myActiveCards, ...myActiveCardsArray].reverse()
+        myActiveCards: [...state.myActiveCards, ...myActiveCardsArray].reverse(),
+        myCards: myUpdatedCards
       };
 
     case CardsActionTypes.GetEnemyBattleCard:
       const enemyActiveCardsArray = state.enemyCards.filter((item, index, array) => {
         return array.indexOf(item) === action.payload.previousIndex;
       });
-      state.enemyCards.splice(action.payload.previousIndex, 1);
+      const enemyUpdatedCards = state.enemyCards.filter((item, index, array) => {
+        return array.indexOf(item) !== action.payload.previousIndex;
+      });
       return {
         ...state,
-        enemyActiveCards: [...state.enemyActiveCards, ...enemyActiveCardsArray].reverse()
+        enemyActiveCards: [...state.enemyActiveCards, ...enemyActiveCardsArray].reverse(),
+        enemyCards: enemyUpdatedCards
       };
 
     case CardsActionTypes.DeleteMyCardFromBattle:
