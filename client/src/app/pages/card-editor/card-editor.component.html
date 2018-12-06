@@ -1,0 +1,4 @@
+<div class="cards-container">
+  <app-card *ngFor="let card of allCardsMy$ | async" [card]="card" (click) = 'editCard(card)'></app-card>
+</div>
+<app-card-detail *ngIf = "selectedCard" [card]="selectedCard"></app-card-detail>

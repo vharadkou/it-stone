@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
@@ -55,6 +55,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PipesModule } from './pipes/pipes.module';
 import { InfobarComponent } from './components/infobar/infobar.component';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
+import { CardEditorComponent } from './pages/card-editor/card-editor.component';
+import { CardDetailComponent } from './components/card-detail/card-detail.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -72,6 +74,7 @@ export function getAuthServiceConfigs() {
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', component: FightPageComponent },
+  { path: 'editor', component: CardEditorComponent },
   {
     path: '',
     redirectTo: '/battle',
@@ -92,6 +95,7 @@ const appRoutes: Routes = [
     MatNativeDateModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }
@@ -121,7 +125,9 @@ const appRoutes: Routes = [
     WelcomePageComponent,
     FightPageComponent,
     NotFoundPageComponent,
-    InfobarComponent
+    InfobarComponent,
+    CardEditorComponent,
+    CardDetailComponent
   ],
   entryComponents: [
   ],
