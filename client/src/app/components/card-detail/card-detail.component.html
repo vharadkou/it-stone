@@ -1,39 +1,72 @@
 <div class="card-detail">
-  <h3 class="card-detail__title">Cards editor: {{card.name | uppercase}} {{card.surname | uppercase}}</h3>
+  <h1 class="card-detail__title">Cards editor: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
 
   <div class="card-detail__field">
 
     <div class="card-detail__edit-side">
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Name" [(ngModel)]="card.name">
-      </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Surname" [(ngModel)]="card.surname">
-      </mat-form-field>
+      <mat-accordion class="mat-accordion" multi="true">
+        <mat-expansion-panel class="mat-accordion__panel" expanded>
+          <mat-expansion-panel-header class="mat-accordion__header">
+            <mat-panel-title class="mat-accordion__title">
+              Personal data
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+              Type your FullName and Image
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
 
-      <mat-form-field class="example-full-width">
-        <input class="mat-form-field_number-input" type="number" matInput placeholder="Damage" [(ngModel)]="card.damage">
-      </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Name" [(ngModel)]="card.name">
+          </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-        <input class="mat-form-field_number-input" type="number" matInput placeholder="HP" [(ngModel)]="card.hp">
-      </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Surname" [(ngModel)]="card.surname">
+          </mat-form-field>
+        </mat-expansion-panel>
 
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Image URL" [(ngModel)]="card.image">
-      </mat-form-field>
+        <mat-expansion-panel  class="mat-accordion__panel" (opened)="panelOpenState = true" (closed)="panelOpenState = false" expanded>
+          <mat-expansion-panel-header class="mat-accordion__header">
+            <mat-panel-title class="mat-accordion__title">
+              Hp and Damage
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-      <mat-form-field>
-        <mat-select placeholder="Skills" [formControl]="toppings" multiple>
-          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input class="mat-form-field_number-input" type="number" matInput placeholder="HP" [(ngModel)]="card.hp">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <input class="mat-form-field_number-input" type="number" matInput placeholder="Damage" [(ngModel)]="card.damage">
+          </mat-form-field>
+
+        </mat-expansion-panel>
+
+        <mat-expansion-panel  class="mat-accordion__panel" (opened)="panelOpenState = true" (closed)="panelOpenState = false" expanded>
+          <mat-expansion-panel-header class="mat-accordion__header">
+            <mat-panel-title class="mat-accordion__title">
+              Skills and Image
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-form-field>
+            <mat-select placeholder="Skills" [formControl]="toppings" multiple>
+              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Image URL" [(ngModel)]="card.image">
+          </mat-form-field>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
     </div>
 
     <div class="card-detail__visual-side">
-      <app-card [card]="card"></app-card>
-    </div> 
+      <app-card [card]="card" [isEditor]="true"></app-card>
+    </div>
 
   </div>
 

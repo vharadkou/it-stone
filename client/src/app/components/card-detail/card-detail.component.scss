@@ -1,38 +1,54 @@
 @import '../../settings';
 
 .card-detail {
-    margin: 30px;
     display: flex;
     flex-direction: column;
     text-align: center;
+    background-color: #596275;
+    padding: 30px;
 
     .card-detail__title {
-        margin-bottom: 40px;
+        margin-bottom: 53px;
+        color: $antiquewhite;
+        font-weight: 300;
     }
 
     .card-detail__field {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: center;
         .card-detail__edit-side {
             display: flex;
             flex-direction: column;
             align-items: center;
-            .mat-form-field {
-                margin-top: 13px;
-                text-align: center;
-                width: 270px;
-                font-size: 19px;
-                .mat-form-field_number-input {
-                    padding-left: 7px;
+            margin-right: 50px;
+            .mat-accordion {
+                .mat-accordion__panel {
+                    background-color: $antiquewhite;
+                    .mat-accordion__header {
+                        text-align: center;
+                        .mat-accordion__title {
+                            font-size: $big-size;
+                        }
+                    }
+                    .mat-form-field {
+                        margin: 13px 10px 0;
+                        width: 270px;
+                        font-size: $default-bigger;
+                        .mat-form-field_number-input {
+                            padding-left: 7px;
+                        }
+                    }
                 }
             }
+            
         }
     
         .card-detail__visual-side {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-left: 50px;
         }
     }
 }

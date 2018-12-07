@@ -3,6 +3,39 @@
 .its-card {
   font-family: $roboto-font;
 
+  &.edit-version {
+    .its-card__container {
+      width: 320px;
+      height: 500px;
+      user-select: none;
+      box-shadow: 0 0px 10px 1px $antiquewhite;
+    }
+
+    .its-card__picture {
+      height: 130px;
+    }
+
+    .its-card__title {
+      font-size: $hp-size;
+    }
+
+    .its-card__name {
+      font-size: $hp-size;
+    }
+
+    .its-card__surname {
+      font-size: $hp-size;
+    }
+
+    .its-card__stat-name {
+      font-size: $thirty;
+    }
+
+    .its-card__stat-value {
+      font-size: $thirty;
+    }
+  }
+
   &__container {
     display: flex;
     flex-direction: column;
