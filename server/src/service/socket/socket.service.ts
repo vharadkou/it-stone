@@ -42,14 +42,18 @@ export class SocketService {
   }
 
   public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
+    console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+    console.log('Socket has been set on server');
+    console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
     socketIO.on('connection', async (client: SocketIO.Socket) => {
       this.clients.push(client);
       if (this.clients.length === 2) {
         const states = await this.createDefaultState(15, 5);
+        console.log(this.clients.length);
         this.clients.forEach((c, index) => {
           c.emit('onReady', states[index]);
         });
-      }
+      }      
 
       client.on('disconnect', () => this.onDisconnect(client));
       client.on('onStep', (data: DataFromFront) => this.notifyOtherUser(client, data));

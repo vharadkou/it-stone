@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 
 import { Card } from 'models';
 import { CardsFacade } from 'store';
+import { SocketService } from 'app/services';
 
 @Component({
   selector: 'app-fight',
@@ -15,12 +16,18 @@ export class FightPageComponent implements OnInit {
   public allCardsEnemy$ = this.cardsFacade.enemyCards$;
   public myActiveCards$ = this.cardsFacade.myActiveCards$;
   public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
+  private socket: SocketIOClient.Socket;
 
-  constructor(private cardsFacade: CardsFacade) {
+  constructor(private cardsFacade: CardsFacade,
+      private socketService: SocketService
+  ) {
     this.cardsFacade.loadCards();
+    this.socket = this.socketService.getSocket();
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.socket.on('connect', () => console.log('Fuck you'));
+  }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {

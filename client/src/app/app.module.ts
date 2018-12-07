@@ -77,7 +77,7 @@ const appRoutes: Routes = [
     redirectTo: '/battle',
     pathMatch: 'full'
   },
-  { path: '**', component: NotFoundPageComponent }
+  { path: '**', component: FightPageComponent }
 ];
 
 @NgModule({
