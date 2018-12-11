@@ -24,7 +24,7 @@ interface User {
 @injectable()
 export class SocketService {
   private static instance: SocketService;
-  private clients: SocketIO.Socket[] = [];
+  private clients: SocketIO.Socket[] = [];  
 
   private constructor(
     @inject(CardRepository) private cardRepository: CardRepository
@@ -48,15 +48,16 @@ export class SocketService {
     socketIO.on('connection', async (client: SocketIO.Socket) => {
       this.clients.push(client);
       if (this.clients.length === 2) {
-        const states = await this.createDefaultState(15, 5);
-        console.log(this.clients.length);
+        const states = await this.createDefaultState(15, 5);        
         this.clients.forEach((c, index) => {
           c.emit('onReady', states[index]);
         });
-      }      
+      };      
 
       client.on('disconnect', () => this.onDisconnect(client));
-      client.on('onStep', (data: DataFromFront) => this.notifyOtherUser(client, data));
+      client.on('onStep', () => console.log('Eat me'));
+      client.on('onTrip', () => console.log('Drink Me'));      
+      client.emit('test', 'message from back')
     });
   }
 
@@ -69,6 +70,10 @@ export class SocketService {
   private onDisconnect(client: SocketIO.Socket): void {
     this.clients.splice(this.clients.indexOf(client), 1);
   }
+
+  /* public testMethod(socketIO: SocketIO.Socket, data: any): void {
+    socketIO.on('onTrip', () => console.log('XXXXXXXX'));
+  } */
 
   private swapStepData(data: DataFromFront): DataFromFront {
     const enemyActiveCards = data.myActiveCards.slice(
