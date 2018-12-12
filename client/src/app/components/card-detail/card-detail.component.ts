@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Card } from 'models';
 import { FormControl } from '@angular/forms';
 
+import { Card } from 'models';
+import { SkillsService } from 'app/services/skills.service';
 
 @Component({
   selector: 'app-card-detail',
@@ -11,18 +12,18 @@ import { FormControl } from '@angular/forms';
 export class CardDetailComponent implements OnInit {
   @Input() card: Card;
 
-  public toppings = new FormControl();
-  public toppingList: string[] = ['QA', 'JS', '.NET', 'Java', 'TA'];           //['QA', 'JS', '.NET', 'Java', 'TA'] / this.card.skills
+  public skills = new FormControl();
+  public skillsList: any;
 
-  constructor() { }
-
-  setSkills(skills) {
-    console.log(this.card.skills);
-    this.card.skills = skills.split(',');
-    console.log(this.card.skills);
+  constructor(
+    private skillsService: SkillsService) {
   }
 
   ngOnInit() {
+    this.skillsService.getSkills()
+      .subscribe((response) => {
+        this.skillsList = response;
+      }) 
   }
 
 }

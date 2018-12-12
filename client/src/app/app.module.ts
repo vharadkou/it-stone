@@ -57,6 +57,7 @@ import { InfobarComponent } from './components/infobar/infobar.component';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import { CardEditorComponent } from './pages/card-editor/card-editor.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
+import { SkillsService } from './services/skills.service';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -140,6 +141,7 @@ const appRoutes: Routes = [
     SocketService,
     FightService,
     UserService,
+    SkillsService,
     CardsFacade,
     PlayersHPFacade
   ],

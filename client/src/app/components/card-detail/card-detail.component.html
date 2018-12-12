@@ -11,9 +11,6 @@
             <mat-panel-title class="mat-accordion__title">
               Personal data
             </mat-panel-title>
-            <!-- <mat-panel-description>
-              Type your FullName and Image
-            </mat-panel-description> -->
           </mat-expansion-panel-header>
 
           <mat-form-field class="example-full-width">
@@ -50,8 +47,8 @@
           </mat-expansion-panel-header>
 
           <mat-form-field>
-            <mat-select placeholder="Skills" [formControl]="toppings" multiple>
-              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+            <mat-select placeholder="Skills" [formControl]="skills" multiple>
+              <mat-option *ngFor="let skill of skillsList" [value]="skill">{{skill.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 
