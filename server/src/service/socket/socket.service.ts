@@ -41,10 +41,7 @@ export class SocketService {
     return SocketService.instance;
   }
 
-  public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
-    console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
-    console.log('Socket has been set on server');
-    console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
+  public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {    
     socketIO.on('connection', async (client: SocketIO.Socket) => {
       this.clients.push(client);
       if (this.clients.length === 2) {
@@ -54,10 +51,9 @@ export class SocketService {
         });
       };      
 
-      client.on('disconnect', () => this.onDisconnect(client));
-      client.on('onStep', () => console.log('Eat me'));
-      client.on('onTrip', () => console.log('Drink Me'));      
-      client.emit('test', 'message from back')
+      client.on('disconnect', () => this.onDisconnect(client));      
+      client.emit('test', {message: 'message from back'});
+      client.on('socketFromFront', (data) => console.log(data.a));
     });
   }
 
@@ -70,10 +66,6 @@ export class SocketService {
   private onDisconnect(client: SocketIO.Socket): void {
     this.clients.splice(this.clients.indexOf(client), 1);
   }
-
-  /* public testMethod(socketIO: SocketIO.Socket, data: any): void {
-    socketIO.on('onTrip', () => console.log('XXXXXXXX'));
-  } */
 
   private swapStepData(data: DataFromFront): DataFromFront {
     const enemyActiveCards = data.myActiveCards.slice(

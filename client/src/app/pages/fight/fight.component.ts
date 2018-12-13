@@ -16,7 +16,6 @@ export class FightPageComponent implements OnInit {
   public allCardsEnemy$ = this.cardsFacade.enemyCards$;
   public myActiveCards$ = this.cardsFacade.myActiveCards$;
   public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
-  public mess = 'Hola';
   private socket: SocketIOClient.Socket;
 
   constructor(private cardsFacade: CardsFacade,
@@ -30,17 +29,16 @@ export class FightPageComponent implements OnInit {
     this.socket.on('connect', () => console.log('Message from socket in front'));
 
     this.socket.on('test', data => console.log(data));
+    this.socket.emit('socketFromFront', {a: 'socket message from front'});
   }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       this.cardsFacade.moveMyCardsWithinArray(event);
-      console.log('Drag`n`drop I');
       this.socket.emit('onTrip', {data: 'str'});
     } else {
       this.cardsFacade.getMyBattleCard(event);
       this.socket.emit('onStep');
-      console.log('Drag`n`drop II');
     }
   }
 
