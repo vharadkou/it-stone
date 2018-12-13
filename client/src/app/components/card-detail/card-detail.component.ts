@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
 
-import { Card } from 'models';
-import { SkillsService } from 'app/services/skills.service';
+import { Card, Skill } from 'models';
+import { SkillsFacade } from 'store';
 
 @Component({
   selector: 'app-card-detail',
@@ -13,17 +14,12 @@ export class CardDetailComponent implements OnInit {
   @Input() card: Card;
 
   public skills = new FormControl();
-  public skillsList: any;
+  public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
 
-  constructor(
-    private skillsService: SkillsService) {
+  constructor( private skillsFacade: SkillsFacade) {
+    this.skillsFacade.loadSkills();
   }
 
-  ngOnInit() {
-    this.skillsService.getSkills()
-      .subscribe((response) => {
-        this.skillsList = response;
-      }) 
-  }
+  ngOnInit() {}
 
 }

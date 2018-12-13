@@ -47,6 +47,12 @@ import {
   initialState,
 } from 'store/cards';
 
+import {
+  SkillsEffects,
+  SkillsFacade,
+  skillsInitialState
+} from 'store/skills';
+
 import { PlayersHPEffects } from 'store/players-hp';
 
 import { DemoMaterialModule } from './material-module';
@@ -105,8 +111,9 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
+    StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects]),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SkillsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -143,6 +150,7 @@ const appRoutes: Routes = [
     UserService,
     SkillsService,
     CardsFacade,
+    SkillsFacade,
     PlayersHPFacade
   ],
   bootstrap: [AppComponent]

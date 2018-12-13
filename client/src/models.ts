@@ -20,3 +20,9 @@ export interface Card {
   hp: number;
   damage: number;
 }
+
+export interface Skill {
+  id: number;
+  name: string;
+  description: string;
+}
