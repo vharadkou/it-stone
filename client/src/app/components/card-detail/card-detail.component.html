@@ -1,4 +1,5 @@
 <div class="card-detail">
+
   <h1 class="card-detail__title">Cards editor: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
 
   <div class="card-detail__field">
@@ -63,6 +64,9 @@
 
     <div class="card-detail__visual-side">
       <app-card [card]="card" [isEditor]="true"></app-card>
+
+      <button *ngIf="isCreator" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="deleteCard(card.id)">+</button>
+      <button *ngIf="!isCreator" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">+</button>
     </div>
 
   </div>

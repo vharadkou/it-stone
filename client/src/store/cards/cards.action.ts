@@ -15,7 +15,9 @@ export enum CardsActionTypes {
   GetMyBattleCard = '[cards] Move my card to battle',
   GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
-  DecrementEnemyCardCount = '[cards] decrement enemy number of cards'
+  DecrementEnemyCardCount = '[cards] decrement enemy number of cards',
+  DeleteCard = '[cards] Delete card from Cards list',
+  UploadCard = '[cards] Upload new card to Cards list'
 }
 
 export class LoadCards implements Action {
@@ -82,6 +84,18 @@ export class DecrementEnemyCardCount implements Action {
   constructor(public payload: { id: number }) {}
 }
 
+export class DeleteCard implements Action {
+  public readonly type = CardsActionTypes.DeleteCard;
+
+  constructor(public payload: { id: number }) {}
+}
+
+export class UploadCard implements Action {
+  public readonly type = CardsActionTypes.UploadCard;
+
+  constructor(public payload: { card: Card }) {}
+}
+
 export type CardsActions =
   | LoadCards
   | LoadCardsSuccess
@@ -93,4 +107,6 @@ export type CardsActions =
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
-  | DecrementEnemyCardCount;
+  | DecrementEnemyCardCount
+  | DeleteCard
+  | UploadCard;

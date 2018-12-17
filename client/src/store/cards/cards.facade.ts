@@ -13,7 +13,9 @@ import {
   DeleteMyCardFromBattle,
   LoadCards,
   MoveEnemyCardsWithinArray,
-  MoveMyCardsWithinArray
+  MoveMyCardsWithinArray,
+  DeleteCard,
+  UploadCard
 } from './cards.action';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Card } from 'models';
@@ -60,5 +62,13 @@ export class CardsFacade {
 
   public deleteMyCardFromBattle(id: number): void {
     this.store.dispatch(new DeleteMyCardFromBattle({ id }));
+  }
+
+  public deleteCard(id: number): void {
+    this.store.dispatch(new DeleteCard({ id }));
+  }
+
+  public uploadCard(card: Card): void {
+    this.store.dispatch(new UploadCard({ card }));
   }
 }

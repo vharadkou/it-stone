@@ -12,3 +12,30 @@ app-card {
     cursor: pointer;
     user-select: none;
 }
+
+.btnNewCard__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 200px;
+    border-radius: 5px;
+    background-color: antiquewhite;
+    box-shadow: 0 2px 1px -1px black, 0 1px 1px 0 black, 0 1px 3px 0 black;
+    margin-left: 5px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    user-select: none;
+    .btnNewCard__icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px;
+        height: 60px;
+        border: 6px solid rgb(165, 163, 163);
+        border-radius: 50%;
+        font-size: 60px;
+        color: rgb(165, 163, 163);
+    }
+}

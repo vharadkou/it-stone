@@ -105,6 +105,24 @@ export const cardsReducer = (
         ...state
       };
 
+      case CardsActionTypes.DeleteCard:
+      console.log(state);
+      const prunedId = state.myCards.filter(item => {
+        return item.id !== action.payload.id;
+      });
+      return {
+        ...state,
+        myCards: prunedId
+      };
+
+      case CardsActionTypes.UploadCard:
+      console.log(state);
+      const newCard = action.payload.card;
+      return {
+        ...state,
+        myCards: [...state.myCards, newCard]
+      };
+
     default:
       return state;
   }
