@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -11,8 +11,11 @@ import { SkillsFacade, CardsFacade } from 'store';
   styleUrls: ['./card-detail.component.scss']
 })
 export class CardDetailComponent implements OnInit {
-  @Input() card: Card;
+  @Input() public card: Card;
   @Input() public isCreator: boolean;
+  @Input() public cardDetailTitle: string;
+  @Output() public wasRemovedCard: EventEmitter<void> = new EventEmitter();
+  @Output() public wasAddedCard: EventEmitter<void> = new EventEmitter();
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
@@ -21,17 +24,19 @@ export class CardDetailComponent implements OnInit {
     this.skillsFacade.loadSkills();
   }
 
-  public deleteCard(id) {
+  public deleteCard(id: number): void {
     this.cardsFacade.deleteCard(id);
+    this.wasRemovedCard.emit();
   }
 
-  public createCard(card) {
-    console.log(card);
-    this.cardsFacade.uploadCard(card);
+  public createCard(card: Card): void {
+    if (!this.isCreator) {
+      this.cardsFacade.uploadCard(card);
+      this.wasAddedCard.emit();
+    }
   }
 
   ngOnInit() {
-    console.log(this.isCreator);
   }
 
 }

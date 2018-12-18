@@ -1,12 +1,12 @@
 <div class="card-detail">
 
-  <h1 class="card-detail__title">Cards editor: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
+  <h1 class="card-detail__title">{{cardDetailTitle}} card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
 
   <div class="card-detail__field">
 
     <div class="card-detail__edit-side">
 
-      <mat-accordion class="mat-accordion" multi="true">
+      <mat-accordion class="mat-accordion" multi="true" (keyup.enter)="createCard(card)">
         <mat-expansion-panel class="mat-accordion__panel" expanded>
           <mat-expansion-panel-header class="mat-accordion__header">
             <mat-panel-title class="mat-accordion__title">

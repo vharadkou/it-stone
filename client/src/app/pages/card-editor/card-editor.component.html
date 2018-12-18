@@ -6,4 +6,11 @@
     </div>
   </div>
 </div>
-<app-card-detail *ngIf="selectedCard" [isCreator]="isItCreator" [card]="selectedCard"></app-card-detail>
+<app-card-detail 
+  *ngIf="selectedCard" 
+  [isCreator]="isItCreator" 
+  [card]="selectedCard" 
+  [cardDetailTitle] = "cardDetailTitle"
+  (wasRemovedCard)="changeSelectedToFirst()" 
+  (wasAddedCard)="setSelectedCard(templCard, true)" 
+></app-card-detail>
