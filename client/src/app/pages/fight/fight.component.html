@@ -4,7 +4,7 @@
       <div
         class="its-battlefield__players-hand"
         cdkDropList
-        orientation="horizontal"
+        cdkDropListOrientation="horizontal"
         #enemyCardList="cdkDropList"
         [cdkDropListData]="allCardsEnemy$"
         [cdkDropListConnectedTo]="[enemyActiveFieldList]"
@@ -17,7 +17,7 @@
         <div
           class="its-battlefield__active-card"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #enemyActiveFieldList="cdkDropList"
           [cdkDropListData]="enemyActiveCards$"
           [cdkDropListConnectedTo]="[]"
@@ -28,7 +28,7 @@
         <div
           class="its-battlefield__active-card"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #myActiveFieldList="cdkDropList"
           [cdkDropListData]="myActiveCards$"
           [cdkDropListConnectedTo]="[]"
@@ -41,7 +41,7 @@
         <div
           class="its-battlefield__players-hand"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #myCardList="cdkDropList"
           [cdkDropListData]="allCardsMy$"
           [cdkDropListConnectedTo]="[myActiveFieldList]"
