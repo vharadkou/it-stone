@@ -4,7 +4,7 @@
       <div
         class="its-battlefield__players-hand"
         cdkDropList
-        orientation="horizontal"
+        cdkDropListOrientation="horizontal"
         #enemyCardList="cdkDropList"
         [cdkDropListData]="allCardsEnemy$"
         [cdkDropListConnectedTo]="[enemyActiveFieldList]"
@@ -17,22 +17,22 @@
         <div
           class="its-battlefield__active-card"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #enemyActiveFieldList="cdkDropList"
           [cdkDropListData]="enemyActiveCards$"
           [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="enemyDrop($event)"
+          (cdkDropListDropped)="enemyActiveDrop($event)"
           >
             <app-card *ngFor="let card of enemyActiveCards$ | async" [card]="card" cdkDrag></app-card>
         </div>
         <div
           class="its-battlefield__active-card"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #myActiveFieldList="cdkDropList"
           [cdkDropListData]="myActiveCards$"
           [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="myDrop($event)"
+          (cdkDropListDropped)="myActiveDrop($event)"
           >
           <app-card *ngFor="let card of myActiveCards$ | async" [card]="card" cdkDrag></app-card>
         </div>
@@ -41,7 +41,7 @@
         <div
           class="its-battlefield__players-hand"
           cdkDropList
-          orientation="horizontal"
+          cdkDropListOrientation="horizontal"
           #myCardList="cdkDropList"
           [cdkDropListData]="allCardsMy$"
           [cdkDropListConnectedTo]="[myActiveFieldList]"
