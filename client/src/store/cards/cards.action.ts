@@ -105,7 +105,7 @@ export type CardsActions =
   | MoveMyCardsWithinArray
   | MoveEnemyCardsWithinArray
   | MoveMyActiveCardsWithinArray
-  | MoveEnemyCardsWithinArray
+  | MoveEnemyActiveCardsWithinArray
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
