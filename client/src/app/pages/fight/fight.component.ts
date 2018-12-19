@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, OnInit } from '@angular/core';
+
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { Card } from 'models';
 import { CardsFacade } from 'store';
