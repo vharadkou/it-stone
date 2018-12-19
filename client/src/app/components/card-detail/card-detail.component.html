@@ -48,8 +48,8 @@
           </mat-expansion-panel-header>
 
           <mat-form-field>
-            <mat-select placeholder="Skills" [formControl]="skills" multiple>
-              <mat-option *ngFor="let skill of skillsList$ | async" [value]="skill">{{skill.name}}</mat-option>
+            <mat-select placeholder="Skills" [formControl]="skills" [(ngModel)]="checkedSkills" multiple>
+              <mat-option *ngFor="let skill of skillsList$ | async" [value]="skill" (click)="addSkillsToCard(card)">{{skill.name}}</mat-option>
             </mat-select>
           </mat-form-field>
 

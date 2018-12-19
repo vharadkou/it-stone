@@ -10,7 +10,8 @@
   *ngIf="selectedCard" 
   [isCreator]="isItCreator" 
   [card]="selectedCard" 
-  [cardDetailTitle] = "cardDetailTitle"
+  [cardDetailTitle]="cardDetailTitle"
+  [checkedSkills]="checkedSkills"
   (wasRemovedCard)="changeSelectedToFirst()" 
   (wasAddedCard)="setSelectedCard(templCard, true)" 
 ></app-card-detail>

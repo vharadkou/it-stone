@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Card } from 'models';
-import { CardsFacade } from 'store';
+import { Card, Skill } from 'models';
+import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
   selector: 'app-card-editor',
@@ -9,11 +9,13 @@ import { CardsFacade } from 'store';
   styleUrls: ['./card-editor.component.scss']
 })
 export class CardEditorComponent implements OnInit {
+  [x: string]: any;
 
   public isItCreator: boolean;
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard: Card;
   public cardDetailTitle: string;
+  public checkedSkills: Skill[];
   public templCard: Card = {
     id: 10,
     name: "Name",
@@ -24,7 +26,7 @@ export class CardEditorComponent implements OnInit {
     damage: 0
   }
 
-  constructor(private cardsFacade: CardsFacade) {
+  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade) {
     this.cardsFacade.loadCards();
   }
 
@@ -32,13 +34,25 @@ export class CardEditorComponent implements OnInit {
     this.isItCreator = !isCreator;
     this.cardDetailTitle = this.isItCreator ? 'Edit' : 'Create new';
 
+    this.checkSkills(card);
+
     if (card === this.templCard) {
       this.selectedCard = JSON.parse(JSON.stringify(card));
       this.selectedCard.id = this.newCardID() + 1;
       return;
     }
-
     this.selectedCard = card;
+  }
+
+  public checkSkills(card) {
+    let cardSkills: string[] = card.skills;
+    let result: Skill[];
+    this.skillsFacade.allSkills$.subscribe((skills) => {
+      result = skills;
+      this.checkedSkills = result.filter((skill) => {
+        return cardSkills.indexOf(skill.name) !== -1;
+      });
+    });
   }
 
   private newCardID(): number {
@@ -51,8 +65,8 @@ export class CardEditorComponent implements OnInit {
     return maxId;
   }
 
-  private changeSelectedToFirst() {
-    let Obser = this.allCardsMy$.subscribe(
+  private changeSelectedToFirst(): void {
+    this.allCardsMy$.subscribe(
       (cards) => {
         if (cards.length === 0) {
           this.setSelectedCard(this.templCard, true);
@@ -60,10 +74,7 @@ export class CardEditorComponent implements OnInit {
         } else {
           this.setSelectedCard(cards[0], false);
         }
-      });
-      // setTimeout(()=>{
-      //   Obser.unsubscribe();
-      // }, 1000);
+      })
   }
 
   ngOnInit() {

@@ -14,13 +14,14 @@ export class CardDetailComponent implements OnInit {
   @Input() public card: Card;
   @Input() public isCreator: boolean;
   @Input() public cardDetailTitle: string;
+  @Input() public checkedSkills: Skill[];
   @Output() public wasRemovedCard: EventEmitter<void> = new EventEmitter();
   @Output() public wasAddedCard: EventEmitter<void> = new EventEmitter();
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
 
-  constructor( private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade) {
+  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade) {
     this.skillsFacade.loadSkills();
   }
 
@@ -31,8 +32,20 @@ export class CardDetailComponent implements OnInit {
 
   public createCard(card: Card): void {
     if (!this.isCreator) {
+      this.addSkillsToCard(card);
       this.cardsFacade.uploadCard(card);
       this.wasAddedCard.emit();
+    }
+  }
+
+  private addSkillsToCard(card: Card): void {
+    if (this.checkedSkills) {
+      card.skills = [];
+      this.checkedSkills.forEach((skillObj: Skill) => {
+        card.skills.push(skillObj.name);
+      })
+    } else {
+      card.skills = [];
     }
   }
 
