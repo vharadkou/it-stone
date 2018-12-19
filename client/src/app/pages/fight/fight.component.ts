@@ -21,7 +21,7 @@ export class FightPageComponent implements OnInit {
     this.cardsFacade.loadCards();
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void { }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
@@ -34,6 +34,22 @@ export class FightPageComponent implements OnInit {
   public enemyDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       this.cardsFacade.moveEnemyCardsWithinArray(event);
+    } else {
+      this.cardsFacade.getEnemyBattleCard(event);
+    }
+  }
+
+  public myActiveDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      this.cardsFacade.moveMyActiveCardsWithinArray(event);
+    } else {
+      this.cardsFacade.getMyBattleCard(event);
+    }
+  }
+
+  public enemyActiveDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      this.cardsFacade.moveEnemyActiveCardsWithinArray(event);
     } else {
       this.cardsFacade.getEnemyBattleCard(event);
     }
