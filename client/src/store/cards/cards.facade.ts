@@ -1,13 +1,10 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-
 import { Card } from 'models';
 
-import { CardsState } from './interfaces';
-
 import { cardsQuery } from './cards.selectors';
+import { CardsState } from './interfaces';
 
 import {
   DeleteMyCardFromBattle,
