@@ -9,9 +9,8 @@ import { CardsFacade, SkillsFacade } from 'store';
   styleUrls: ['./card-editor.component.scss']
 })
 export class CardEditorComponent implements OnInit {
-  [x: string]: any;
 
-  public isItCreator: boolean;
+  public isItEditor: boolean;
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard: Card;
   public cardDetailTitle: string;
@@ -31,8 +30,9 @@ export class CardEditorComponent implements OnInit {
   }
 
   public setSelectedCard(card: Card, isCreator: boolean): void {
-    this.isItCreator = !isCreator;
-    this.cardDetailTitle = this.isItCreator ? 'Edit' : 'Create new';
+
+    this.isItEditor = !isCreator;
+    this.cardDetailTitle = this.isItEditor ? 'Edit' : 'Create new';
 
     this.checkSkills(card);
 

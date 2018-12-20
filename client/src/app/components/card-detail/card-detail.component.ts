@@ -12,7 +12,7 @@ import { SkillsFacade, CardsFacade } from 'store';
 })
 export class CardDetailComponent implements OnInit {
   @Input() public card: Card;
-  @Input() public isCreator: boolean;
+  @Input() public isEditor: boolean;
   @Input() public cardDetailTitle: string;
   @Input() public checkedSkills: Skill[];
   @Output() public wasRemovedCard: EventEmitter<void> = new EventEmitter();
@@ -31,7 +31,7 @@ export class CardDetailComponent implements OnInit {
   }
 
   public createCard(card: Card): void {
-    if (!this.isCreator) {
+    if (!this.isEditor) {
       this.addSkillsToCard(card);
       this.cardsFacade.uploadCard(card);
       this.wasAddedCard.emit();

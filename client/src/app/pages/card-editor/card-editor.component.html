@@ -1,6 +1,6 @@
 <div class="cards-container">
   <app-card *ngFor="let card of allCardsMy$ | async" [card]="card" (click)="setSelectedCard(card, false)"></app-card>
-  <div class="btnNewCard" (click)="setSelectedCard(templCard, true); isItCreator = false;">
+  <div class="btnNewCard" (click)="setSelectedCard(templCard, true)">
     <div class="btnNewCard__container">
       <div class="btnNewCard__icon">+</div>
     </div>
@@ -8,7 +8,7 @@
 </div>
 <app-card-detail 
   *ngIf="selectedCard" 
-  [isCreator]="isItCreator" 
+  [isEditor]="isItEditor" 
   [card]="selectedCard" 
   [cardDetailTitle]="cardDetailTitle"
   [checkedSkills]="checkedSkills"
