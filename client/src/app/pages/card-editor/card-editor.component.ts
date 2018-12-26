@@ -31,9 +31,13 @@ export class CardEditorComponent implements OnInit {
 
   public setSelectedCard(card: Card, isCreator: boolean): void {
 
+    if (this.selectedCard && !isCreator && !this.isItEditor && this.objectsCompare(this.selectedCard, this.templCard)) {
+      if (!confirm('Карточка не сохранена. Точно не хочешь сохранить изменения?')) {
+        return;
+      }
+    }
     this.isItEditor = !isCreator;
     this.cardDetailTitle = this.isItEditor ? 'Edit' : 'Create new';
-
     this.checkSkills(card);
 
     if (card === this.templCard) {
@@ -66,7 +70,7 @@ export class CardEditorComponent implements OnInit {
   }
 
   private changeSelectedToFirst(): void {
-    this.allCardsMy$.subscribe(
+    let xxx = this.allCardsMy$.subscribe(
       (cards) => {
         if (cards.length === 0) {
           this.setSelectedCard(this.templCard, true);
@@ -74,7 +78,19 @@ export class CardEditorComponent implements OnInit {
         } else {
           this.setSelectedCard(cards[0], false);
         }
-      })
+      });
+    setTimeout(() => {
+      xxx.unsubscribe();
+    }, 500);
+  }
+
+  private objectsCompare(card1: Card, card2: Card): boolean {
+    return !(card1.name === card2.name
+      && card1.surname === card2.surname
+      && card1.image === card2.image
+      && JSON.stringify(card1.skills) === JSON.stringify(card2.skills)
+      && card1.hp === card2.hp
+      && card1.damage === card2.damage);
   }
 
   ngOnInit() {
