@@ -1,5 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
+export interface DialogData {
+  title: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-not-saved-dialog',
@@ -9,7 +14,8 @@ import { MatDialogRef } from '@angular/material';
 export class NotSavedDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<NotSavedDialogComponent>
+    public dialogRef: MatDialogRef<NotSavedDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
   onYesClick(): void {

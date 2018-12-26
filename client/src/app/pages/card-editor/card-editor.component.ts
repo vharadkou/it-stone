@@ -17,6 +17,8 @@ export class CardEditorComponent implements OnInit {
   public selectedCard: Card;
   public cardDetailTitle: string;
   public checkedSkills: Skill[];
+  public title = 'Данные не сохранены.';
+  public text = 'Новая карточка не сохранена. Введенные данные будут потеряны.';
   public templCard: Card = {
     id: 10,
     name: "Name",
@@ -27,7 +29,7 @@ export class CardEditorComponent implements OnInit {
     damage: 0
   }
 
-  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade,public dialog: MatDialog) {
+  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade, public dialog: MatDialog) {
     this.cardsFacade.loadCards();
   }
 
@@ -105,7 +107,8 @@ export class CardEditorComponent implements OnInit {
 
   private openDialog(card: Card, isCreator: boolean): void {
     const dialogRef = this.dialog.open(NotSavedDialogComponent, {
-      width: '500px'
+      width: '500px',
+      data: {title: this.title, text: this.text}
     });
 
     dialogRef.afterClosed().subscribe((result) => {

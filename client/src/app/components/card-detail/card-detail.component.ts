@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
+import { NotSavedDialogComponent } from 'app/components/not-saved-dialog/not-saved-dialog.component';
+import { MatDialog } from '@angular/material';
 import { Card, Skill } from 'models';
 import { SkillsFacade, CardsFacade } from 'store';
 
@@ -20,16 +22,16 @@ export class CardDetailComponent implements OnInit {
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
+  public title = 'Удаление карточки.';
+  public text = 'Карточка будет безвозвратно удалена. Вы уверены?';
 
-  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade) {
+  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade, public dialog: MatDialog) {
     this.skillsFacade.loadSkills();
   }
 
   public deleteCard(id: number): void {
-    if (confirm('Do you really want to remove this card?')) {
       this.cardsFacade.deleteCard(id);
       this.wasRemovedCard.emit();
-    }
   }
 
   public createCard(card: Card): void {
@@ -49,6 +51,19 @@ export class CardDetailComponent implements OnInit {
     } else {
       card.skills = [];
     }
+  }
+
+  private openDialog(id: number): void {
+    const dialogRef = this.dialog.open(NotSavedDialogComponent, {
+      width: '500px',
+      data: {title: this.title, text: this.text}
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteCard(id);
+      }
+    });
   }
 
   ngOnInit() {
