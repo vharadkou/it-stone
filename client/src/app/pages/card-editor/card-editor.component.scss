@@ -3,9 +3,10 @@
 .cards-container {
     height: 250px;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     background-color: #778ca3;
     align-items: center;
+    overflow-x: auto;
 }
 
 app-card {
@@ -16,6 +17,7 @@ app-card {
 .btnNewCard__container {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     width: 130px;
     height: 200px;
@@ -27,15 +29,8 @@ app-card {
     outline: none;
     border: none;
     user-select: none;
-    .btnNewCard__icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 60px;
-        height: 60px;
-        border: 6px solid rgb(165, 163, 163);
-        border-radius: 50%;
-        font-size: 60px;
-        color: rgb(165, 163, 163);
+    .btnNewCard__text {
+        font-size: 22px;
+        color: rgb(133, 131, 131);
     }
 }

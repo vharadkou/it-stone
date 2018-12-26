@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Card, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
+import { MatDialog } from '@angular/material';
+import { NotSavedDialogComponent } from 'app/components/not-saved-dialog/not-saved-dialog.component';
 
 @Component({
   selector: 'app-card-editor',
@@ -25,17 +27,20 @@ export class CardEditorComponent implements OnInit {
     damage: 0
   }
 
-  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade) {
+  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade,public dialog: MatDialog) {
     this.cardsFacade.loadCards();
   }
 
-  public setSelectedCard(card: Card, isCreator: boolean): void {
+  public setSelectedCard(card: Card, isCreator: boolean, isJustSaved: boolean): void {
 
-    if (this.selectedCard && !isCreator && !this.isItEditor && this.objectsCompare(this.selectedCard, this.templCard)) {
-      if (!confirm('Карточка не сохранена. Точно не хочешь сохранить изменения?')) {
-        return;
-      }
+    if (!isJustSaved && this.selectedCard && !isCreator && !this.isItEditor && this.objectsCompare(this.selectedCard, this.templCard)) {
+      this.openDialog(card, isCreator);
+    } else {
+      this.setSelectedCardBody(card, isCreator);
     }
+  }
+
+  public setSelectedCardBody(card: Card, isCreator: boolean) {
     this.isItEditor = !isCreator;
     this.cardDetailTitle = this.isItEditor ? 'Edit' : 'Create new';
     this.checkSkills(card);
@@ -69,14 +74,19 @@ export class CardEditorComponent implements OnInit {
     return maxId;
   }
 
-  private changeSelectedToFirst(): void {
+  private changeSelectedCard(whichCard: any, isJustSaved: boolean): void {
     let xxx = this.allCardsMy$.subscribe(
       (cards) => {
         if (cards.length === 0) {
-          this.setSelectedCard(this.templCard, true);
+          this.setSelectedCard(this.templCard, true, isJustSaved);
           return;
         } else {
-          this.setSelectedCard(cards[0], false);
+          if (whichCard === 'first') {
+            whichCard = 0;
+          } else if ( whichCard === 'last') {
+            whichCard = cards.length - 1;
+          }
+          this.setSelectedCard(cards[whichCard], false, isJustSaved);
         }
       });
     setTimeout(() => {
@@ -93,8 +103,20 @@ export class CardEditorComponent implements OnInit {
       && card1.damage === card2.damage);
   }
 
+  private openDialog(card: Card, isCreator: boolean): void {
+    const dialogRef = this.dialog.open(NotSavedDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.setSelectedCardBody(card, isCreator);
+      }
+    });
+  }
+
   ngOnInit() {
-    this.changeSelectedToFirst();
+    this.changeSelectedCard('first', false);
   };
 
 }

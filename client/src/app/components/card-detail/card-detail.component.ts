@@ -26,8 +26,10 @@ export class CardDetailComponent implements OnInit {
   }
 
   public deleteCard(id: number): void {
-    this.cardsFacade.deleteCard(id);
-    this.wasRemovedCard.emit();
+    if (confirm('Do you really want to remove this card?')) {
+      this.cardsFacade.deleteCard(id);
+      this.wasRemovedCard.emit();
+    }
   }
 
   public createCard(card: Card): void {

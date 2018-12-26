@@ -14,7 +14,7 @@ import * as cardActions from './cards.action';
 
 @Injectable()
 export class CardsEffects {
-  public baseUrl = 'http://www.mocky.io/v2/5bf699c63200009b005d1005';
+  public baseUrl = 'http://www.mocky.io/v2/5c232f8b2f00009100049446';
   public secondUrl = 'http://www.mocky.io/v2/5be983f82e00005f00f14631';
 
   @Effect() public getCards$: Observable<Action> = this.actions$.pipe(

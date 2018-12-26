@@ -6,6 +6,7 @@
 
   &__container {
     flex-grow: 1;
+    overflow-x: auto;
   }
 
   &__players-hand {
