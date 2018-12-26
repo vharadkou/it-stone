@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Card, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
 import { MatDialog } from '@angular/material';
-import { NotSavedDialogComponent } from 'app/components/not-saved-dialog/not-saved-dialog.component';
+import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 
 @Component({
   selector: 'app-card-editor',
@@ -106,7 +106,7 @@ export class CardEditorComponent implements OnInit {
   }
 
   private openDialog(card: Card, isCreator: boolean): void {
-    const dialogRef = this.dialog.open(NotSavedDialogComponent, {
+    const dialogRef = this.dialog.open(MaterialDialogComponent, {
       width: '500px',
       data: {title: this.title, text: this.text}
     });

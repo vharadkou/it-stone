@@ -7,14 +7,14 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-not-saved-dialog',
-  templateUrl: './not-saved-dialog.component.html',
-  styleUrls: ['./not-saved-dialog.component.css']
+  selector: 'app-material-dialog',
+  templateUrl: './material-dialog.component.html',
+  styleUrls: ['./material-dialog.component.scss']
 })
-export class NotSavedDialogComponent {
+export class MaterialDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<NotSavedDialogComponent>,
+    public dialogRef: MatDialogRef<MaterialDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 

@@ -64,7 +64,7 @@ import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import { CardEditorComponent } from './pages/card-editor/card-editor.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { SkillsService } from './services/skills.service';
-import { NotSavedDialogComponent } from './components/not-saved-dialog/not-saved-dialog.component';
+import { MaterialDialogComponent } from './components/material-dialog/material-dialog.component';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -137,10 +137,10 @@ const appRoutes: Routes = [
     InfobarComponent,
     CardEditorComponent,
     CardDetailComponent,
-    NotSavedDialogComponent
+    MaterialDialogComponent
   ],
   entryComponents: [
-    NotSavedDialogComponent
+    MaterialDialogComponent
   ],
   providers: [
     {

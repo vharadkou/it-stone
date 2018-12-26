@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { NotSavedDialogComponent } from 'app/components/not-saved-dialog/not-saved-dialog.component';
+import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { MatDialog } from '@angular/material';
 import { Card, Skill } from 'models';
 import { SkillsFacade, CardsFacade } from 'store';
@@ -54,7 +54,7 @@ export class CardDetailComponent implements OnInit {
   }
 
   private openDialog(id: number): void {
-    const dialogRef = this.dialog.open(NotSavedDialogComponent, {
+    const dialogRef = this.dialog.open(MaterialDialogComponent, {
       width: '500px',
       data: {title: this.title, text: this.text}
     });
