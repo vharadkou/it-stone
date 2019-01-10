@@ -1,6 +1,6 @@
 import { Status } from 'models';
 
-import {CardsActionTypes, CardsActions } from './cards.action';
+import { CardsActionTypes, CardsActions } from './cards.action';
 import { initialState } from './cards.initial';
 import { CardsState } from './interfaces';
 
@@ -47,15 +47,35 @@ export const cardsReducer = (
       };
 
     case CardsActionTypes.MoveMyCardsWithinArray:
-      state.myCards.splice(action.payload.currentIndex, 0, state.myCards.splice(action.payload.previousIndex, 1)[0]);
       return {
-        ...state
+        ...state,
+        myCards: [...state.myCards.splice(
+          action.payload.currentIndex, 0, state.myCards.splice(action.payload.previousIndex, 1)[0]
+        ), ...state.myCards]
       };
 
     case CardsActionTypes.MoveEnemyCardsWithinArray:
-      state.enemyCards.splice(action.payload.currentIndex, 0, state.enemyCards.splice(action.payload.previousIndex, 1)[0]);
       return {
-        ...state
+        ...state,
+        enemyCards: [...state.enemyCards.splice(
+          action.payload.currentIndex, 0, state.enemyCards.splice(action.payload.previousIndex, 1)[0]
+        ), ...state.enemyCards]
+      };
+
+    case CardsActionTypes.MoveMyActiveCardsWithinArray:
+      return {
+        ...state,
+        myActiveCards: [...state.myActiveCards.splice(
+          action.payload.currentIndex, 0, state.myActiveCards.splice(action.payload.previousIndex, 1)[0]
+        ), ...state.myActiveCards]
+      };
+
+    case CardsActionTypes.MoveEnemyActiveCardsWithinArray:
+      return {
+        ...state,
+        enemyActiveCards: [...state.enemyActiveCards.splice(
+          action.payload.currentIndex, 0, state.enemyActiveCards.splice(action.payload.previousIndex, 1)[0]
+        ), ...state.enemyActiveCards]
       };
 
     case CardsActionTypes.GetMyBattleCard:

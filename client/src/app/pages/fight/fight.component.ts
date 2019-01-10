@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, OnInit } from '@angular/core';
+
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { Card } from 'models';
 import { CardsFacade } from 'store';
@@ -26,12 +27,7 @@ export class FightPageComponent implements OnInit {
     this.socket = this.socketService.getSocket();
   }
 
-  public ngOnInit(): void {
-    this.socket.on('connect', () => console.log('Message from socket in front'));
-
-    this.socket.on('startOfBattle', data => console.log(data));
-    this.socket.emit('socketFromFront', { a: 'socket message from front to terminal' });
-  }
+  public ngOnInit(): void { }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
@@ -46,6 +42,22 @@ export class FightPageComponent implements OnInit {
   public enemyDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       this.cardsFacade.moveEnemyCardsWithinArray(event);
+    } else {
+      this.cardsFacade.getEnemyBattleCard(event);
+    }
+  }
+
+  public myActiveDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      this.cardsFacade.moveMyActiveCardsWithinArray(event);
+    } else {
+      this.cardsFacade.getMyBattleCard(event);
+    }
+  }
+
+  public enemyActiveDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      this.cardsFacade.moveEnemyActiveCardsWithinArray(event);
     } else {
       this.cardsFacade.getEnemyBattleCard(event);
     }
