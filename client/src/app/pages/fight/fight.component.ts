@@ -18,7 +18,8 @@ export class FightPageComponent implements OnInit {
   public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
   private socket: SocketIOClient.Socket;
 
-  constructor(private cardsFacade: CardsFacade,
+  constructor(
+    private cardsFacade: CardsFacade,
     private socketService: SocketService
   ) {
     this.cardsFacade.loadCards();
