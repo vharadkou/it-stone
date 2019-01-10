@@ -19,7 +19,7 @@ export class FightPageComponent implements OnInit {
   private socket: SocketIOClient.Socket;
 
   constructor(private cardsFacade: CardsFacade,
-      private socketService: SocketService
+    private socketService: SocketService
   ) {
     this.cardsFacade.loadCards();
     this.socket = this.socketService.getSocket();
@@ -28,17 +28,17 @@ export class FightPageComponent implements OnInit {
   public ngOnInit(): void {
     this.socket.on('connect', () => console.log('Message from socket in front'));
 
-    this.socket.on('test', data => console.log(data));
-    this.socket.emit('socketFromFront', {a: 'socket message from front'});
+    this.socket.on('startOfBattle', data => console.log(data));
+    this.socket.emit('socketFromFront', { a: 'socket message from front to terminal' });
   }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       this.cardsFacade.moveMyCardsWithinArray(event);
-      this.socket.emit('onTrip', {data: 'str'});
+      this.socket.emit('onStep', { message: 'not moved' });
     } else {
       this.cardsFacade.getMyBattleCard(event);
-      this.socket.emit('onStep');
+      this.socket.emit('onStep', { message: 'making a step' });
     }
   }
 
