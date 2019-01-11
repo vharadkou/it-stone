@@ -94,7 +94,7 @@ const appRoutes: Routes = [
     MatDialogModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true }
+      { enableTracing: false }
     ),
     StoreModule.forRoot({}),
     StoreModule.forFeature('cardsState', reducers.cards, {

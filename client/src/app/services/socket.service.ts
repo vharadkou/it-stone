@@ -4,7 +4,7 @@ export class SocketService {
 
     private socket: SocketIOClient.Socket;
 
-    public constructor () {}
+    public constructor() { }
 
     getSocket() {
         if (!this.socket) {

@@ -54,6 +54,8 @@ export class SocketService {
       client.on('disconnect', () => this.onDisconnect(client));      
       client.emit('test', {message: 'message from back'});
       client.on('socketFromFront', (data) => console.log(data.a));
+      client.on('onStep', (data) => console.log(data.message));
+      client.on('moveToBattle', (data) => console.log(data.message));
     });
   }
 
