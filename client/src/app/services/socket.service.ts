@@ -51,11 +51,4 @@ export class SocketService {
       return () => this.socket.off(event);
     });
   }
-
-  //    public getSocket(): SocketIOClient.Socket {
-  //         if (!this.socket) {
-  //             this.socket = openSocket('http://localhost:9669');
-  //         }
-  //         return this.socket;
-  //     }
 }

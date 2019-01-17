@@ -16,7 +16,6 @@ export class FightPageComponent implements OnInit {
   public allCardsEnemy$ = this.cardsFacade.enemyCards$;
   public myActiveCards$ = this.cardsFacade.myActiveCards$;
   public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
-  private socket: SocketIOClient.Socket;
 
   constructor(
     private cardsFacade: CardsFacade,
