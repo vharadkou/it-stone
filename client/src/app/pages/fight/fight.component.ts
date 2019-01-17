@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { Card } from 'models';
-import { CardsFacade } from 'store';
-import { SocketService } from 'app/services';
+import { CardsFacade, SocketFacade } from 'store';
 
 @Component({
   selector: 'app-fight',
@@ -21,20 +20,17 @@ export class FightPageComponent implements OnInit {
 
   constructor(
     private cardsFacade: CardsFacade,
-    private socketService: SocketService
+    private socketFacade: SocketFacade,
   ) {
     this.cardsFacade.loadCards();
-    this.socket = this.socketService.getSocket();
+    this.socketFacade.readyForSocketConnection();
   }
 
-  public ngOnInit(): void {
-    this.socket.on('onReady', (data) => console.log(data));
-  }
+  public ngOnInit(): void { }
 
   public myDrop(event: CdkDragDrop<Card[]>): void {
     if (event.previousContainer === event.container) {
       this.cardsFacade.moveMyCardsWithinArray(event);
-      this.socket.emit('onStep', { message: 'not moved' });
     } else {
       this.cardsFacade.getMyBattleCard(event);
     }
@@ -53,7 +49,6 @@ export class FightPageComponent implements OnInit {
       this.cardsFacade.moveMyActiveCardsWithinArray(event);
     } else {
       this.cardsFacade.getMyBattleCard(event);
-      this.socket.emit('moveToBattle', { message: 'making a step' });
     }
   }
 

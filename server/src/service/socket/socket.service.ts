@@ -2,6 +2,7 @@ import { injectable, inject } from 'inversify';
 import SocketIO from 'socket.io';
 import { CardRepository } from '../card';
 import { Card } from './../../models';
+import { CardsActionTypes } from './actions';
 
 interface DataFromFront {
   myCards: number[];
@@ -24,7 +25,7 @@ interface User {
 @injectable()
 export class SocketService {
   private static instance: SocketService;
-  private clients: SocketIO.Socket[] = [];  
+  private clients: SocketIO.Socket[] = [];
 
   private constructor(
     @inject(CardRepository) private cardRepository: CardRepository
@@ -41,21 +42,18 @@ export class SocketService {
     return SocketService.instance;
   }
 
-  public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {    
-    socketIO.on('connection', async (client: SocketIO.Socket) => {
+  public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
+    socketIO.on('join', async (client: SocketIO.Socket) => {
       this.clients.push(client);
       if (this.clients.length === 2) {
-        const states = await this.createDefaultState(15, 5);        
+        const states = await this.createDefaultState(15, 5);
         this.clients.forEach((c, index) => {
           c.emit('onReady', states[index]);
         });
-      };      
+      };
 
-      client.on('disconnect', () => this.onDisconnect(client));      
-      client.emit('test', {message: 'message from back'});
-      client.on('socketFromFront', (data) => console.log(data.a));
-      client.on('onStep', (data) => console.log(data.message));
-      client.on('moveToBattle', (data) => console.log(data.message));
+      client.on('disconnect', () => this.onDisconnect(client));
+      client.emit('test', { message: 'message from back' });
     });
   }
 

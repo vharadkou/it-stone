@@ -5,6 +5,12 @@ export enum Status {
   Error
 }
 
+export enum SocketStatus {
+  Disconnected,
+  Connected,
+  Error
+}
+
 export interface Player {
   firstName: string;
   lastName: string;

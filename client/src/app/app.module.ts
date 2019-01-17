@@ -55,6 +55,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { PipesModule } from './pipes/pipes.module';
 import { InfobarComponent } from './components/infobar/infobar.component';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
+import { SocketEffect, SocketFacade } from 'store/socket';
 
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -101,7 +102,8 @@ const appRoutes: Routes = [
       initialState
     }),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects]),
+    StoreModule.forFeature('socketState', reducers.socket, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -135,7 +137,8 @@ const appRoutes: Routes = [
     FightService,
     UserService,
     CardsFacade,
-    PlayersHPFacade
+    PlayersHPFacade,
+    SocketFacade
   ],
   bootstrap: [AppComponent]
 })
