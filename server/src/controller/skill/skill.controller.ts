@@ -13,7 +13,6 @@ export class SkillController{
 
     @httpPost('/save-skill/')
     public async saveSkill(request: Request, response: Response){
-        console.log('---------------POST-------------------'); 
         const skill = request.body;
 
         try {
@@ -31,7 +30,6 @@ export class SkillController{
 
     @httpGet('/get-skills/')
     public async getSkills(request: Request, response: Response){ 
-        console.log('---------------GET-------------------');      
         try {
             return this.skillService.getSkills();
           } catch (error) {
@@ -42,7 +40,6 @@ export class SkillController{
     @httpDelete('/delete-skill/')
     public async deleteSkill(request: Request, response: Response): Promise<void | Response>{
         let requestName = request.body.name
-        console.log('---------------DELETE-------------------');
         try {
             this.skillService.deleteSkill(requestName);
           } catch (error) {
