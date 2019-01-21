@@ -117,10 +117,11 @@ export class CardEditorComponent implements OnInit {
       data: {title: this.title, text: this.text}
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    let dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.setSelectedCardBody(card, isCreator);
       }
+      dialogSubscribtion.unsubscribe();
     });
   }
 
