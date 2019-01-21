@@ -25,8 +25,8 @@ export class SocketService {
     this.connected$.next(false);
   }
 
-  public emit(event: string, data?: any): void {
-
+  public emit(event: string, data: any): void {
+    // temporary solution
     console.group();
     console.log('----- SOCKET OUTGOING -----');
     console.log('Action: ', event);
@@ -39,7 +39,7 @@ export class SocketService {
   public listen(event: string): Observable<any> {
     return new Observable(observer => {
       this.socket.emit(event, data => {
-
+        // temporary solution
         console.group();
         console.log('----- SOCKET INBOUND -----');
         console.log('Action: ', event);
