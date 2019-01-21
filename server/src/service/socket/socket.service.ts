@@ -2,7 +2,6 @@ import { injectable, inject } from 'inversify';
 import SocketIO from 'socket.io';
 import { CardRepository } from '../card';
 import { Card } from './../../models';
-import { CardsActionTypes } from './actions';
 
 interface DataFromFront {
   myCards: number[];
