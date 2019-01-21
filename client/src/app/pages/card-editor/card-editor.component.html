@@ -7,11 +7,11 @@
   </div>
 </div>
 <app-card-detail 
-  *ngIf="selectedCard" 
+  *ngIf="selectedCard$ | async" 
   [isEditor]="isItEditor" 
-  [card]="selectedCard" 
+  [card]="selectedCard$ | async" 
   [cardDetailTitle]="cardDetailTitle"
   [checkedSkills]="checkedSkills"
-  (wasRemovedCard)="changeSelectedCard('first', false)" 
-  (wasAddedCard)="changeSelectedCard('last', true)"
+  (wasRemovedCard)="wasChangedSelectedCard('first', false)" 
+  (wasAddedCard)="wasChangedSelectedCard('last', true)"
 ></app-card-detail>

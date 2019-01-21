@@ -15,7 +15,8 @@ import {
   MoveEnemyCardsWithinArray,
   MoveMyCardsWithinArray,
   DeleteCard,
-  UploadCard
+  UploadCard,
+  ChangeSelectedCard
 } from './cards.action';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Card } from 'models';
@@ -29,6 +30,7 @@ export class CardsFacade {
   public enemyCardCount$ = this.store.select(cardsQuery.getEnemyCardCount);
   public myActiveCards$ = this.store.select(cardsQuery.getMyActiveCards);
   public enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
+  public selectedCard$ = this.store.select(cardsQuery.getSelectedCard);
 
   public constructor(private store: Store<CardsState>) {}
 
@@ -70,5 +72,9 @@ export class CardsFacade {
 
   public uploadCard(card: Card): void {
     this.store.dispatch(new UploadCard({ card }));
+  }
+
+  public changeSelectedCard(card: Card): void {
+    this.store.dispatch(new ChangeSelectedCard({ card }));
   }
 }

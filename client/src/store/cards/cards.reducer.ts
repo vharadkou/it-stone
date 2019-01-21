@@ -111,14 +111,23 @@ export const cardsReducer = (
       });
       return {
         ...state,
-        myCards: prunedId
+        myCards: prunedId,
+        selectedCard: state.myCards[0]
       };
 
       case CardsActionTypes.UploadCard:
       const newCard = action.payload.card;
       return {
         ...state,
-        myCards: [...state.myCards, newCard]
+        myCards: [...state.myCards, newCard],
+        selectedCard: newCard
+      };
+      
+      case CardsActionTypes.ChangeSelectedCard:
+      const newSelectedCard = action.payload.card;
+      return {
+        ...state,
+        selectedCard: newSelectedCard
       };
 
     default:

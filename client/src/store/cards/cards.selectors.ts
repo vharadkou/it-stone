@@ -11,6 +11,7 @@ const GetEnemyCards = (state: CardsState) => state.enemyCards;
 const GetMyActiveCards = (state: CardsState) => state.myActiveCards;
 const GetEnemyActiveCards = (state: CardsState) => state.enemyActiveCards;
 const GetEnemyCardCount = (state: CardsState) => state.enemyCardCount;
+const GetSelectedCard = (state: CardsState) => state.selectedCard;
 
 const getCards = createSelector(
   getCardState,
@@ -70,6 +71,11 @@ const getMyActiveCards = createSelector(
   GetMyActiveCards
 );
 
+const getSelectedCard = createSelector(
+  getCardState,
+  GetSelectedCard
+);
+
 export const cardsQuery = {
   getCards,
   getCardState,
@@ -82,5 +88,6 @@ export const cardsQuery = {
   getMyActiveCards,
   getMyActiveCardsId,
   getMyCards,
-  getMyCardsId
+  getMyCardsId,
+  getSelectedCard
 };

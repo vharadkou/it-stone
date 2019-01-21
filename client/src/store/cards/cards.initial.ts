@@ -10,4 +10,13 @@ export const initialState: CardsState = {
   enemyActiveCards: [],
   enemyCardCount: 0,
   myActiveCards: [],
+  selectedCard: {
+    id: undefined,
+    name: undefined,
+    surname: undefined,
+    image: undefined,
+    skills: undefined,
+    hp: undefined,
+    damage: undefined
+  }
 };
