@@ -4,11 +4,11 @@ import { SocketState } from './interfaces';
 
 const getSocketState = createFeatureSelector<SocketState>('socketState');
 
-const GetSocketStatus = (state: SocketState): string => state.connectedRoom;
+const GetConnectedRoom = (state: SocketState): string => state.connectedRoom;
 
 const getSocketStatus = createSelector(
   getSocketState,
-  GetSocketStatus
+  GetConnectedRoom
 );
 
 export const socketQuery = {
