@@ -18,12 +18,7 @@ export const socketReducer = (
       return {
         ...state,
         socketStatus: SocketStatus.Connected,
-        socketConnected: action.payload
-      };
-    case SocketActionTypes.FailedSocketConnection:
-      return {
-        ...state,
-        socketStatus: SocketStatus.Error
+        connectedRoom: action.payload
       };
     default:
       return state;
