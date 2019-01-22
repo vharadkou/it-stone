@@ -8,7 +8,6 @@ export enum Status {
 export enum SocketStatus {
   Disconnected,
   Connected,
-  Error
 }
 
 export interface Player {
