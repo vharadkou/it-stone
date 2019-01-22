@@ -62,6 +62,6 @@ export class AppTokenRepositoryImplementation implements AppTokenRepository  {
                 }
             });
         });
-    }
+    }    
 
 }

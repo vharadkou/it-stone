@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { Card } from 'models';
-import { CardsFacade } from 'store';
+import { CardsFacade, SocketFacade } from 'store';
 
 @Component({
   selector: 'app-fight',
@@ -17,8 +17,12 @@ export class FightPageComponent implements OnInit {
   public myActiveCards$ = this.cardsFacade.myActiveCards$;
   public enemyActiveCards$ = this.cardsFacade.enemyActiveCards$;
 
-  constructor(private cardsFacade: CardsFacade) {
+  constructor(
+    private cardsFacade: CardsFacade,
+    private socketFacade: SocketFacade,
+  ) {
     this.cardsFacade.loadCards();
+    this.socketFacade.joinRoom();
   }
 
   public ngOnInit(): void { }
