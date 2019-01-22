@@ -13,11 +13,11 @@ import * as socketActions from './socket.action';
 export class SocketEffect {
   public room: string = 'battle';
 
-  @Effect() public setSocketConnection$: Observable<Action> = this.actions$.pipe(
-    ofType<socketActions.ReadyForSocketConnection>(socketActions.SocketActionTypes.ReadyForSocketConnection),
-    switchMap((action: socketActions.ReadyForSocketConnection) =>
+  @Effect() public joinRoom$: Observable<Action> = this.actions$.pipe(
+    ofType<socketActions.JoinRoom>(socketActions.SocketActionTypes.JoinRoom),
+    switchMap((action: socketActions.JoinRoom) =>
       this.socketService.join(this.room).pipe(
-        map((room: string) => new socketActions.SetSocketConnection(room))
+        map((room: string) => new socketActions.JoinRoomSuccess(room))
       )
     )
   );

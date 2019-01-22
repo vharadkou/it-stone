@@ -1,20 +1,20 @@
 import { Action } from '@ngrx/store';
 
 export enum SocketActionTypes {
-  ReadyForSocketConnection = '[socket Ready For Socket Connection]',
-  SetSocketConnection = '[socket] Set Socket Connection'
+  JoinRoom = '[socket] Join Room',
+  JoinRoomSuccess = '[socket] Join Room Success'
 }
 
-export class ReadyForSocketConnection implements Action {
-  public readonly type = SocketActionTypes.ReadyForSocketConnection;
+export class JoinRoom implements Action {
+  public readonly type = SocketActionTypes.JoinRoom;
 }
 
-export class SetSocketConnection implements Action {
-  public readonly type = SocketActionTypes.SetSocketConnection;
+export class JoinRoomSuccess implements Action {
+  public readonly type = SocketActionTypes.JoinRoomSuccess;
 
   constructor(public payload: string) { }
 }
 
 export type SocketAction =
-  | ReadyForSocketConnection
-  | SetSocketConnection;
+  | JoinRoom
+  | JoinRoomSuccess;

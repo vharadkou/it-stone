@@ -9,12 +9,12 @@ export const socketReducer = (
   action: SocketAction
 ): SocketState => {
   switch (action.type) {
-    case SocketActionTypes.ReadyForSocketConnection:
+    case SocketActionTypes.JoinRoom:
       return {
         ...state,
         socketStatus: SocketStatus.Disconnected
       };
-    case SocketActionTypes.SetSocketConnection:
+    case SocketActionTypes.JoinRoomSuccess:
       return {
         ...state,
         socketStatus: SocketStatus.Connected,

@@ -5,8 +5,8 @@ import { SocketState } from './interfaces';
 import { socketQuery } from './socket.selectors';
 
 import {
-  ReadyForSocketConnection,
-  SetSocketConnection
+  JoinRoom,
+  JoinRoomSuccess
 } from './socket.action';
 
 @Injectable()
@@ -15,11 +15,11 @@ export class SocketFacade {
 
   public constructor(private store: Store<SocketState>) { }
 
-  public readyForSocketConnection(): void {
-    this.store.dispatch(new ReadyForSocketConnection());
+  public joinRoom(): void {
+    this.store.dispatch(new JoinRoom());
   }
 
-  public setSocketConnection(room: string): void {
-    this.store.dispatch(new SetSocketConnection(room));
+  public joinRoomSuccess(room: string): void {
+    this.store.dispatch(new JoinRoomSuccess(room));
   }
 }

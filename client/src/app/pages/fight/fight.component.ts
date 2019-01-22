@@ -22,7 +22,7 @@ export class FightPageComponent implements OnInit {
     private socketFacade: SocketFacade,
   ) {
     this.cardsFacade.loadCards();
-    this.socketFacade.readyForSocketConnection();
+    this.socketFacade.joinRoom();
   }
 
   public ngOnInit(): void { }
