@@ -42,7 +42,7 @@ export class SocketService {
   }
 
   public async setSocket(socketIO: SocketIO.Server): Promise<void | Response> {
-    socketIO.on('join', async (client: SocketIO.Socket) => {
+    socketIO.on('connection', async (client: SocketIO.Socket) => {
       this.clients.push(client);
       if (this.clients.length === 2) {
         const states = await this.createDefaultState(15, 5);
@@ -50,6 +50,9 @@ export class SocketService {
           c.emit('onReady', states[index]);
         });
       };
+      client.on('join', (room) => {
+        client.join(room);
+      })
 
       client.on('disconnect', () => this.onDisconnect(client));
       client.emit('test', { message: 'message from back' });
