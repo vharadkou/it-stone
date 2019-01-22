@@ -5,7 +5,6 @@ import { SocketState } from './interfaces';
 import { socketQuery } from './socket.selectors';
 
 import {
-  FailedSocketConnection,
   ReadyForSocketConnection,
   SetSocketConnection
 } from './socket.action';
@@ -20,7 +19,7 @@ export class SocketFacade {
     this.store.dispatch(new ReadyForSocketConnection());
   }
 
-  public setSocketConnection(connected: boolean): void {
-    this.store.dispatch(new SetSocketConnection(connected));
+  public setSocketConnection(room: string): void {
+    this.store.dispatch(new SetSocketConnection(room));
   }
 }

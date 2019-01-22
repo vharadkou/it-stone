@@ -4,5 +4,5 @@ import {SocketState} from './interfaces';
 
 export const socketInitial: SocketState = {
   socketStatus: SocketStatus.Disconnected,
-  socketConnected: false
+  connectedRoom: ''
 };
