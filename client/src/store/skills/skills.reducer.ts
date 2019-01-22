@@ -1,4 +1,4 @@
-import { Status } from 'models';
+import { Status, Skill } from 'models';
 
 import { SkillsActionTypes, SkillsActions } from './skills.action';
 import { skillsInitialState } from './skills.initial';
@@ -26,6 +26,16 @@ export const skillsReducer = (
       return {
         ...state,
         status: Status.Error
+      };
+
+    case SkillsActionTypes.CheckSkills:
+      const cardSkills: string[] = action.payload.card.skills;
+      const checkedSkills: Skill[] = state.skills.filter((skill) => {
+        return cardSkills.indexOf(skill.name) !== -1;
+      });
+      return {
+        ...state,
+        checkedSkills
       };
 
     default:

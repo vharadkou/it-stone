@@ -11,7 +11,7 @@
   [isEditor]="isItEditor" 
   [card]="selectedCard$ | async" 
   [cardDetailTitle]="cardDetailTitle"
-  [checkedSkills]="checkedSkills"
+  [checkedSkills]="checkedSkills$ | async"
   (wasRemovedCard)="wasChangedSelectedCard('first', false)" 
   (wasAddedCard)="wasChangedSelectedCard('last', true)"
 ></app-card-detail>

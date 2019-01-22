@@ -16,7 +16,7 @@ export class CardEditorComponent implements OnInit {
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard$ = this.cardsFacade.selectedCard$;
   public cardDetailTitle: string;
-  public checkedSkills: Skill[];
+  public checkedSkills$ = this.skillsFacade.checkedSkills$;
   public title = 'Данные не сохранены.';
   public text = 'Новая карточка не сохранена. Введенные данные будут потеряны.';
   public templCard: Card = {
@@ -50,7 +50,7 @@ export class CardEditorComponent implements OnInit {
   public setSelectedCardBody(card: Card, isCreator: boolean) {
     this.isItEditor = !isCreator;
     this.cardDetailTitle = this.isItEditor ? 'Edit' : 'Create new';
-    this.checkSkills(card);
+    this.skillsFacade.checkSkills(card);
 
     if (card === this.templCard) {
       card.id = this.newCardID() + 1;
@@ -58,17 +58,6 @@ export class CardEditorComponent implements OnInit {
       return;
     }
     this.cardsFacade.changeSelectedCard(card);
-  }
-
-  public checkSkills(card) {
-    let cardSkills: string[] = card.skills;
-    let result: Skill[];
-    this.skillsFacade.allSkills$.subscribe((skills) => {
-      result = skills;
-      this.checkedSkills = result.filter((skill) => {
-        return cardSkills.indexOf(skill.name) !== -1;
-      });
-    }).unsubscribe();
   }
 
   private newCardID(): number {

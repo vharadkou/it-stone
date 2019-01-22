@@ -1,11 +1,12 @@
 import { Action } from '@ngrx/store';
 
-import { Skill } from 'models';
+import { Skill, Card } from 'models';
 
 export enum SkillsActionTypes {
     LoadSkills = '[skills] Load skills',
     LoadSkillsSuccess = '[skills] Load skills (Success)',
     LoadSkillsError = '[skills] Load skills (Error)',
+    CheckSkills = '[skills] Check skills'
 }
 
 export class LoadSkills implements Action {
@@ -24,7 +25,14 @@ export class LoadSkillsError implements Action {
     constructor(public payload: Error) { }
 }
 
+export class CheckSkills implements Action {
+    public readonly type = SkillsActionTypes.CheckSkills;
+
+    constructor(public payload: {card: Card}) {}
+}
+
 export type SkillsActions =
     | LoadSkills
     | LoadSkillsSuccess
-    | LoadSkillsError;
+    | LoadSkillsError
+    | CheckSkills;
