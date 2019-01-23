@@ -1,25 +1,26 @@
+
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Card } from 'models';
 
 import { CardsState } from './interfaces';
 
 import { cardsQuery } from './cards.selectors';
 
 import {
-  GetMyNewCards,
+  ChangeSelectedCard,
+  DeleteCard,
+  DeleteMyCardFromBattle,
+  GetEnemyBattleCard,
   GetEnemyNewCards,
   GetMyBattleCard,
-  GetEnemyBattleCard,
-  DeleteMyCardFromBattle,
+  GetMyNewCards,
   LoadCards,
   MoveEnemyCardsWithinArray,
   MoveMyCardsWithinArray,
-  DeleteCard,
-  UploadCard,
-  ChangeSelectedCard
+  UploadCard
 } from './cards.action';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Card } from 'models';
 
 @Injectable()
 export class CardsFacade {

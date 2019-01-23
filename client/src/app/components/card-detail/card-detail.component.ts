@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { MatDialog } from '@angular/material';
+import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { Card, Skill } from 'models';
-import { SkillsFacade, CardsFacade } from 'store';
+import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
   selector: 'app-card-detail',
@@ -47,7 +47,7 @@ export class CardDetailComponent implements OnInit {
       card.skills = [];
       this.checkedSkills.forEach((skillObj: Skill) => {
         card.skills.push(skillObj.name);
-      })
+      });
     } else {
       card.skills = [];
     }
@@ -59,7 +59,7 @@ export class CardDetailComponent implements OnInit {
       data: {title: this.title, text: this.text}
     });
 
-    let dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {
+    const dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.deleteCard(id);
       }
@@ -67,7 +67,6 @@ export class CardDetailComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit(): void {}
 
 }

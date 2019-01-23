@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Skill, Card } from 'models';
+import { Card, Skill } from 'models';
 
 export enum SkillsActionTypes {
     LoadSkills = '[skills] Load skills',

@@ -1,11 +1,12 @@
+
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { SkillsState } from './interfaces';
-import { skillsQuery } from './skills.selectors';
-
-import { LoadSkills, CheckSkills } from './skills.action';
 import { Card } from '../../models';
+
+import { SkillsState } from './interfaces';
+import { CheckSkills, LoadSkills } from './skills.action';
+import { skillsQuery } from './skills.selectors';
 
 @Injectable()
 export class SkillsFacade {

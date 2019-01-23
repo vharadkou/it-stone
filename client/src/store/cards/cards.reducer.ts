@@ -122,7 +122,7 @@ export const cardsReducer = (
         myCards: [...state.myCards, newCard],
         selectedCard: newCard
       };
-      
+
       case CardsActionTypes.ChangeSelectedCard:
       const newSelectedCard = action.payload.card;
       return {
