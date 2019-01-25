@@ -109,10 +109,20 @@ export const cardsReducer = (
       const prunedId = state.myCards.filter(item => {
         return item.id !== action.payload.id;
       });
+      let id: number;
+      if (state.myCards[0].id === action.payload.id) {
+        if (!state.myCards[1]) {
+          id = 100;
+        } else {
+          id = state.myCards[1].id;
+        }
+      } else {
+        id = state.myCards[0].id;
+      }
       return {
         ...state,
         myCards: prunedId,
-        selectedCard: state.myCards[0]
+        selectedCardId: id
       };
 
       case CardsActionTypes.UploadCard:
@@ -120,14 +130,14 @@ export const cardsReducer = (
       return {
         ...state,
         myCards: [...state.myCards, newCard],
-        selectedCard: newCard
+        selectedCardId: newCard.id
       };
 
-      case CardsActionTypes.ChangeSelectedCard:
-      const newSelectedCard = action.payload.card;
+      case CardsActionTypes.ChangeSelectedCardId:
+      const newSelectedCardId = action.payload.id;
       return {
         ...state,
-        selectedCard: newSelectedCard
+        selectedCardId: newSelectedCardId
       };
 
     default:

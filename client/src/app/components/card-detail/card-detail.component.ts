@@ -13,17 +13,17 @@ import { CardsFacade, SkillsFacade } from 'store';
   styleUrls: ['./card-detail.component.scss']
 })
 export class CardDetailComponent implements OnInit {
-  @Input() public card: Card;
-  @Input() public isEditor: boolean;
-  @Input() public cardDetailTitle: string;
   @Input() public checkedSkills: Skill[];
-  @Output() public wasRemovedCard: EventEmitter<void> = new EventEmitter();
-  @Output() public wasAddedCard: EventEmitter<void> = new EventEmitter();
+  @Input() public card: Card;
+  @Input() public isCreator: boolean;
+  @Output() public changedIsCreator: EventEmitter<boolean> = new EventEmitter();
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
-  public title = 'Удаление карточки.';
-  public text = 'Карточка будет безвозвратно удалена. Вы уверены?';
+  public allCardsMy$ = this.cardsFacade.myCards$;
+
+  public popupTitle = 'Удаление карточки.';
+  public popupText = 'Карточка будет безвозвратно удалена. Вы уверены?';
 
   constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade, public dialog: MatDialog) {
     this.skillsFacade.loadSkills();
@@ -31,32 +31,34 @@ export class CardDetailComponent implements OnInit {
 
   public deleteCard(id: number): void {
       this.cardsFacade.deleteCard(id);
-      this.wasRemovedCard.emit();
+      this.allCardsMy$.subscribe((cards) => {
+        if (!cards[0]) {
+          this.changedIsCreator.emit(true);
+        }
+      }).unsubscribe();
   }
 
   public createCard(card: Card): void {
-    if (!this.isEditor) {
-      this.addSkillsToCard(card);
+      // this.addSkillsToCard(card);
       this.cardsFacade.uploadCard(card);
-      this.wasAddedCard.emit();
-    }
+      this.changedIsCreator.emit(false);
   }
 
-  private addSkillsToCard(card: Card): void {
-    if (this.checkedSkills) {
-      card.skills = [];
-      this.checkedSkills.forEach((skillObj: Skill) => {
-        card.skills.push(skillObj.name);
-      });
-    } else {
-      card.skills = [];
-    }
-  }
+  // private addSkillsToCard(card: Card): void {
+  //   if (this.checkedSkills) {
+  //     card.skills = [];
+  //     this.checkedSkills.forEach((skillObj: Skill) => {
+  //       card.skills.push(skillObj.name);
+  //     });
+  //   } else {
+  //     card.skills = [];
+  //   }
+  // }
 
   private openDialog(id: number): void {
     const dialogRef = this.dialog.open(MaterialDialogComponent, {
       width: '500px',
-      data: {title: this.title, text: this.text}
+      data: {title: this.popupTitle, text: this.popupText}
     });
 
     const dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {

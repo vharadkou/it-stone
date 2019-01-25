@@ -10,13 +10,14 @@ export const initialState: CardsState = {
   enemyActiveCards: [],
   enemyCardCount: 0,
   myActiveCards: [],
-  selectedCard: {
-    id: undefined,
-    name: undefined,
-    surname: undefined,
-    image: undefined,
-    skills: undefined,
-    hp: undefined,
-    damage: undefined
+  selectedCardId: 1,
+  templCard: {
+    id: 10,
+    name: 'Name',
+    surname: 'Surname',
+    image: 'http://simpleicon.com/wp-content/uploads/user1.png',
+    skills: ['JS'],
+    hp: 0,
+    damage: 0
   }
 };

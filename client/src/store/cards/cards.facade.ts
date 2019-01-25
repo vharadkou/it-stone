@@ -9,7 +9,7 @@ import { CardsState } from './interfaces';
 import { cardsQuery } from './cards.selectors';
 
 import {
-  ChangeSelectedCard,
+  ChangeSelectedCardId,
   DeleteCard,
   DeleteMyCardFromBattle,
   GetEnemyBattleCard,
@@ -32,6 +32,7 @@ export class CardsFacade {
   public myActiveCards$ = this.store.select(cardsQuery.getMyActiveCards);
   public enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
   public selectedCard$ = this.store.select(cardsQuery.getSelectedCard);
+  public selectedCardId$ = this.store.select(cardsQuery.getSelectedCardId);
 
   public constructor(private store: Store<CardsState>) {}
 
@@ -75,7 +76,7 @@ export class CardsFacade {
     this.store.dispatch(new UploadCard({ card }));
   }
 
-  public changeSelectedCard(card: Card): void {
-    this.store.dispatch(new ChangeSelectedCard({ card }));
+  public changeSelectedCardId(id: number): void {
+    this.store.dispatch(new ChangeSelectedCardId({ id }));
   }
 }

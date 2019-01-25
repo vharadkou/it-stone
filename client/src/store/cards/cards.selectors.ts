@@ -1,4 +1,7 @@
+
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
+import { Card } from '../../models';
 
 import { CardsState } from './interfaces';
 
@@ -11,7 +14,8 @@ const GetEnemyCards = (state: CardsState) => state.enemyCards;
 const GetMyActiveCards = (state: CardsState) => state.myActiveCards;
 const GetEnemyActiveCards = (state: CardsState) => state.enemyActiveCards;
 const GetEnemyCardCount = (state: CardsState) => state.enemyCardCount;
-const GetSelectedCard = (state: CardsState) => state.selectedCard;
+const GetSelectedCard = (state: CardsState) => state.selectedCardId;
+const GetTemplCard = (state: CardsState) => state.templCard;
 
 const getCards = createSelector(
   getCardState,
@@ -71,9 +75,45 @@ const getMyActiveCards = createSelector(
   GetMyActiveCards
 );
 
-const getSelectedCard = createSelector(
+const getTemplCard = createSelector(
+  getCardState,
+  GetTemplCard
+);
+
+const getSelectedCardId = createSelector(
   getCardState,
   GetSelectedCard
+);
+
+const getSelectedCard = createSelector(
+  getSelectedCardId,
+  getMyCards,
+  getTemplCard,
+  (id, myCards, templCard) => {
+    let result: Card;
+
+    if (id === 100) {
+      result = JSON.parse(JSON.stringify(templCard));
+
+      let maxId: number = 0;
+      myCards.forEach((card, i) => {
+          maxId = card.id > maxId ? card.id : maxId;
+      });
+      result.id = maxId + 1;
+
+    } else {
+      result = myCards.find(card => id === card.id);
+
+      if (!result) {
+        result = myCards[0];
+        if (!result) {
+          result = templCard;
+        }
+      }
+    }
+
+    return result;
+  }
 );
 
 export const cardsQuery = {
@@ -89,5 +129,6 @@ export const cardsQuery = {
   getMyActiveCardsId,
   getMyCards,
   getMyCardsId,
-  getSelectedCard
+  getSelectedCard,
+  getSelectedCardId
 };
