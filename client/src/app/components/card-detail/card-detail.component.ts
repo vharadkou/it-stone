@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { MatDialog } from '@angular/material';
-import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
+// import { MatDialog } from '@angular/material';
+// import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { Card, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
+import { PopupsService } from 'app/services/popups.service';
 
 @Component({
   selector: 'app-card-detail',
@@ -25,7 +26,7 @@ export class CardDetailComponent implements OnInit {
   public popupTitle = 'Удаление карточки.';
   public popupText = 'Карточка будет безвозвратно удалена. Вы уверены?';
 
-  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade, public dialog: MatDialog) {
+  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade, private popupService: PopupsService) {
     this.skillsFacade.loadSkills();
   }
 
@@ -44,6 +45,13 @@ export class CardDetailComponent implements OnInit {
       this.changedIsCreator.emit(false);
   }
 
+  // private popupDeleteCard(id, popupTitle, popupText) {
+  //   this.popupService.openDialog(popupTitle, popupText);
+  //   if (this.popupService.isAccept) {
+  //     this.deleteCard(id);
+  //   }
+  // }
+
   // private addSkillsToCard(card: Card): void {
   //   if (this.checkedSkills) {
   //     card.skills = [];
@@ -54,20 +62,6 @@ export class CardDetailComponent implements OnInit {
   //     card.skills = [];
   //   }
   // }
-
-  private openDialog(id: number): void {
-    const dialogRef = this.dialog.open(MaterialDialogComponent, {
-      width: '500px',
-      data: {title: this.popupTitle, text: this.popupText}
-    });
-
-    const dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.deleteCard(id);
-      }
-      dialogSubscribtion.unsubscribe();
-    });
-  }
 
   ngOnInit(): void {}
 

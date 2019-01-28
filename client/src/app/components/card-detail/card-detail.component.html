@@ -68,7 +68,7 @@
     <div class="card-detail__visual-side">
       <app-card [card]="card" [isEditor]="true"></app-card>
 
-      <button *ngIf="!isCreator" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="openDialog(card.id)">+</button>
+      <button *ngIf="!isCreator" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="this.popupService.openDialog(popupTitle, popupText)">+</button>
       <button *ngIf="isCreator" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">+</button>
     </div>
 

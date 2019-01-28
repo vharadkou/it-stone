@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material';
 import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { Observable } from 'rxjs';
 import { select } from '@ngrx/store';
+import { PopupsService } from 'app/services/popups.service';
 
 @Component({
   selector: 'app-card-editor',
@@ -22,7 +23,11 @@ export class CardEditorComponent implements OnInit {
   public popupTitle = 'Данные не сохранены.';
   public popupText = 'Новая карточка не сохранена. Введенные данные будут потеряны.';
 
-  constructor(private cardsFacade: CardsFacade, private skillsFacade: SkillsFacade, public dialog: MatDialog) {
+  constructor(
+    private cardsFacade: CardsFacade,
+    private skillsFacade: SkillsFacade,
+    public dialog: MatDialog,
+    private popupService: PopupsService) {
     this.cardsFacade.loadCards();
   }
 
