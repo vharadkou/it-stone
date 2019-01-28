@@ -52,17 +52,22 @@ export class CardDetailComponent implements OnInit {
   //   }
   // }
 
-  // private addSkillsToCard(card: Card): void {
-  //   if (this.checkedSkills) {
-  //     card.skills = [];
-  //     this.checkedSkills.forEach((skillObj: Skill) => {
-  //       card.skills.push(skillObj.name);
-  //     });
-  //   } else {
-  //     card.skills = [];
-  //   }
-  // }
+  private addSkillsToCard(card: Card): void {
+    if (this.checkedSkills) {
+      card.skills = [];
+      this.checkedSkills.forEach((skillObj: Skill) => {
+        card.skills.push(skillObj.name);
+      });
+    } 
+    // else if (card.skills.length !== 0) {
+    //   this.skillsFacade.checkSkills(card);
+    // } 
+    else {
+      card.skills = [];
+    }
+  }
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void {
+  }
+  
 }

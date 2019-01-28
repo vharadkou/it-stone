@@ -29,10 +29,15 @@ export const skillsReducer = (
       };
 
     case SkillsActionTypes.CheckSkills:
-      const cardSkills: string[] = action.payload.card.skills;
-      const checkedSkills: Skill[] = state.skills.filter((skill) => {
-        return cardSkills.indexOf(skill.name) !== -1;
-      });
+      let checkedSkills: Skill[];
+      if (action.payload.card) {
+        const cardSkills: string[] = action.payload.card.skills;
+        checkedSkills = state.skills.filter((skill) => {
+          return cardSkills.indexOf(skill.name) !== -1;
+        });
+      } else {
+        checkedSkills = [];
+      }
       return {
         ...state,
         checkedSkills

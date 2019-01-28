@@ -19,7 +19,7 @@ export class SkillsFacade {
     this.store.dispatch(new LoadSkills());
   }
 
-  public checkSkills(card: Card): void {
+  public checkSkills(card?: Card): void {
     this.store.dispatch(new CheckSkills({ card }));
   }
 }

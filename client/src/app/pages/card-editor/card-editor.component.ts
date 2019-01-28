@@ -35,6 +35,8 @@ export class CardEditorComponent implements OnInit {
     this.cardsFacade.changeSelectedCardId(id);
     if (id !== 100) {
       this.skillsFacade.checkSkills(card);
+    } else {
+      this.skillsFacade.checkSkills();
     }
     this.isCreator = id === 100;
   }

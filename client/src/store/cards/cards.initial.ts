@@ -16,7 +16,7 @@ export const initialState: CardsState = {
     name: 'Name',
     surname: 'Surname',
     image: 'http://simpleicon.com/wp-content/uploads/user1.png',
-    skills: ['JS'],
+    skills: [],
     hp: 0,
     damage: 0
   }
