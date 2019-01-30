@@ -46,13 +46,12 @@ export class CardDetailComponent implements OnInit {
       this.checkedSkills.forEach((skillObj: Skill) => {
         card.skills.push(skillObj.name);
       });
+    } else {
+      card.skills = [];
     }
     // else if (card.skills.length !== 0) {
     //   this.skillsFacade.checkSkills(card);
-    // } 
-    else {
-      card.skills = [];
-    }
+    // }
   }
 
   ngOnInit(): void {

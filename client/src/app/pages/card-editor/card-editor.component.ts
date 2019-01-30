@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Card, Skill } from 'models';
+import { Card } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
