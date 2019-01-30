@@ -1,12 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-// import { MatDialog } from '@angular/material';
-// import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
 import { Card, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
-import { PopupsService } from 'app/services/popups.service';
 
 @Component({
   selector: 'app-card-detail',
@@ -16,41 +13,32 @@ import { PopupsService } from 'app/services/popups.service';
 export class CardDetailComponent implements OnInit {
   @Input() public checkedSkills: Skill[];
   @Input() public card: Card;
-  @Input() public isCreator: boolean;
-  @Output() public changedIsCreator: EventEmitter<boolean> = new EventEmitter();
+  @Input() public selectedCardId: number;
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
-  public allCardsMy$ = this.cardsFacade.myCards$;
 
   public popupTitle = 'Удаление карточки.';
   public popupText = 'Карточка будет безвозвратно удалена. Вы уверены?';
 
-  constructor(private skillsFacade: SkillsFacade, private cardsFacade: CardsFacade, private popupService: PopupsService) {
+  constructor(
+    private skillsFacade: SkillsFacade,
+    private cardsFacade: CardsFacade
+  ) {
     this.skillsFacade.loadSkills();
   }
 
   public deleteCard(id: number): void {
-      this.cardsFacade.deleteCard(id);
-      this.allCardsMy$.subscribe((cards) => {
-        if (!cards[0]) {
-          this.changedIsCreator.emit(true);
-        }
-      }).unsubscribe();
+    this.cardsFacade.deleteCard(id);
   }
 
   public createCard(card: Card): void {
-      // this.addSkillsToCard(card);
-      this.cardsFacade.uploadCard(card);
-      this.changedIsCreator.emit(false);
+    this.cardsFacade.uploadCard(card);
   }
 
-  // private popupDeleteCard(id, popupTitle, popupText) {
-  //   this.popupService.openDialog(popupTitle, popupText);
-  //   if (this.popupService.isAccept) {
-  //     this.deleteCard(id);
-  //   }
-  // }
+  private showPopup(): void {
+    this.cardsFacade.showPopup(this.popupTitle, this.popupText, this.card.id);
+  }
 
   private addSkillsToCard(card: Card): void {
     if (this.checkedSkills) {
@@ -58,7 +46,7 @@ export class CardDetailComponent implements OnInit {
       this.checkedSkills.forEach((skillObj: Skill) => {
         card.skills.push(skillObj.name);
       });
-    } 
+    }
     // else if (card.skills.length !== 0) {
     //   this.skillsFacade.checkSkills(card);
     // } 
@@ -69,5 +57,5 @@ export class CardDetailComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  
+
 }

@@ -1,14 +1,11 @@
-import { Action } from '@ngrx/store';
-import { Card } from 'models';
-
-import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-
-import { catchError, map, switchMap } from 'rxjs/operators';
-
-import {Observable, of } from 'rxjs';
+import { Action } from '@ngrx/store';
+import { PopupsService } from 'app/services/popups.service';
+import { Card } from 'models';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
 
 import * as cardActions from './cards.action';
 
@@ -27,5 +24,20 @@ export class CardsEffects {
     )
   );
 
-  public constructor(private http: HttpClient, private actions$: Actions) { }
+  @Effect() public showPopup$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.ShowPopup>(cardActions.CardsActionTypes.ShowPopup),
+    switchMap((action: cardActions.ShowPopup) => {
+      return this.popupsService
+        .openDialog(action.payload.title, action.payload.text).pipe(
+          filter(result => result)
+        ).pipe(map(() => new cardActions.DeleteCard(action.payload)
+        ));
+    })
+  );
+
+  public constructor(
+    private http: HttpClient,
+    private actions$: Actions,
+    private popupsService: PopupsService
+  ) { }
 }

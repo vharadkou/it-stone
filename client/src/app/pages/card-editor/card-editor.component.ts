@@ -3,12 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Card, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
 
-import { MatDialog } from '@angular/material';
-import { MaterialDialogComponent } from 'app/components/material-dialog/material-dialog.component';
-import { Observable } from 'rxjs';
-import { select } from '@ngrx/store';
-import { PopupsService } from 'app/services/popups.service';
-
 @Component({
   selector: 'app-card-editor',
   templateUrl: './card-editor.component.html',
@@ -18,16 +12,15 @@ export class CardEditorComponent implements OnInit {
 
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard$ = this.cardsFacade.selectedCard$;
+  public selectedCardId$ = this.cardsFacade.selectedCardId$;
   public checkedSkills$ = this.skillsFacade.checkedSkills$;
-  public isCreator: boolean;
   public popupTitle = 'Данные не сохранены.';
   public popupText = 'Новая карточка не сохранена. Введенные данные будут потеряны.';
 
   constructor(
     private cardsFacade: CardsFacade,
-    private skillsFacade: SkillsFacade,
-    public dialog: MatDialog,
-    private popupService: PopupsService) {
+    private skillsFacade: SkillsFacade
+  ) {
     this.cardsFacade.loadCards();
   }
 
@@ -38,7 +31,6 @@ export class CardEditorComponent implements OnInit {
     } else {
       this.skillsFacade.checkSkills();
     }
-    this.isCreator = id === 100;
   }
 
   // public setSelectedCard(card: Card, isCreator: boolean, isJustSaved: boolean): void {
@@ -55,38 +47,6 @@ export class CardEditorComponent implements OnInit {
   //   // }
   // }
 
-  // public setSelectedCardBody(card: Card, isCreator: boolean): void {
-  //   // this.isItEditor = !isCreator;
-  //   // this.cardDetailTitle = this.isItEditor ? 'Edit' : 'Create new';
-  //   // this.skillsFacade.checkSkills(card);
-
-  //   // if (card === this.templCard) {
-  //   //   card.id = this.newCardID() + 1;
-  //   //   // this.cardsFacade.changeSelectedCard(JSON.parse(JSON.stringify(card)));
-  //   //   return;
-  //   // }
-  //   // this.cardsFacade.changeSelectedCard(card);
-  // }
-
-
-  // private wasChangedSelectedCard(whichCard: string, isJustSaved: boolean): void {
-  //   this.allCardsMy$.subscribe(
-  //     (cards) => {
-  //       let cardNumber: number;
-  //       if (cards.length === 0) {
-  //         this.setSelectedCard(this.templCard, true, isJustSaved);
-  //         return;
-  //       } else {
-  //         if (whichCard === 'first') {
-  //           cardNumber = 0;
-  //         } else if ( whichCard === 'last') {
-  //           cardNumber = cards.length - 1;
-  //         }
-  //         this.setSelectedCard(cards[cardNumber], false, isJustSaved);
-  //       }
-  //     }).unsubscribe();
-  // }
-
   // private objectsCompare(obsCard: Observable<Card>, card2: Card): boolean {
   //   let result: boolean;
   //   obsCard.subscribe((card1) => {
@@ -100,21 +60,5 @@ export class CardEditorComponent implements OnInit {
   //   return !result;
   // }
 
-  // private openDialog(card: Card, isCreator: boolean): void {
-  //   const dialogRef = this.dialog.open(MaterialDialogComponent, {
-  //     width: '500px',
-  //     data: {title: this.title, text: this.text}
-  //   });
-
-  //   const dialogSubscribtion = dialogRef.afterClosed().subscribe((result) => {
-  //     if (result) {
-  //       this.setSelectedCardBody(card, isCreator);
-  //     }
-  //     dialogSubscribtion.unsubscribe();
-  //   });
-  // }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit() { }
 }

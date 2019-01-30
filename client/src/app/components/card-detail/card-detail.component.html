@@ -1,6 +1,6 @@
 <div class="card-detail">
 
-  <h1 *ngIf="isCreator;else Editor" class="card-detail__title">Create card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
+  <h1 *ngIf="selectedCardId === 100;else Editor" class="card-detail__title">Create card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
   <ng-template #Editor>  
     <h1 class="card-detail__title">Edit card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
   </ng-template> 
@@ -68,8 +68,8 @@
     <div class="card-detail__visual-side">
       <app-card [card]="card" [isEditor]="true"></app-card>
 
-      <button *ngIf="!isCreator" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="this.popupService.openDialog(popupTitle, popupText)">+</button>
-      <button *ngIf="isCreator" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">+</button>
+      <button *ngIf="selectedCardId !== 100" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="showPopup()">+</button>
+      <button *ngIf="selectedCardId === 100" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">+</button>
     </div>
 
   </div>

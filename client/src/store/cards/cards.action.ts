@@ -18,7 +18,8 @@ export enum CardsActionTypes {
   DecrementEnemyCardCount = '[cards] decrement enemy number of cards',
   DeleteCard = '[cards] Delete card from Cards list',
   UploadCard = '[cards] Upload new card to Cards list',
-  ChangeSelectedCardId = '[cards] Change selected card id'
+  ChangeSelectedCardId = '[cards] Change selected card id',
+  ShowPopup = '[cards] Show popup'
 }
 
 export class LoadCards implements Action {
@@ -103,6 +104,12 @@ export class ChangeSelectedCardId implements Action {
   constructor(public payload: { id: number }) {}
 }
 
+export class ShowPopup implements Action {
+  public readonly type = CardsActionTypes.ShowPopup;
+
+  constructor(public payload: { title: string, text: string, id: number }) {}
+}
+
 export type CardsActions =
   | LoadCards
   | LoadCardsSuccess
@@ -117,4 +124,5 @@ export type CardsActions =
   | DecrementEnemyCardCount
   | DeleteCard
   | UploadCard
-  | ChangeSelectedCardId;
+  | ChangeSelectedCardId
+  | ShowPopup;

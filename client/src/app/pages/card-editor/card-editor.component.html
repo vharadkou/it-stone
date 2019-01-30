@@ -10,6 +10,5 @@
   *ngIf="selectedCard$ | async" 
   [card]="selectedCard$ | async"
   [checkedSkills]="checkedSkills$ | async"
-  [isCreator]="isCreator"
-  (changedIsCreator)="isCreator = $event"
+  [selectedCardId]="selectedCardId$ | async"
 ></app-card-detail>

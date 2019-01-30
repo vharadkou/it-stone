@@ -19,6 +19,7 @@ import {
   LoadCards,
   MoveEnemyCardsWithinArray,
   MoveMyCardsWithinArray,
+  ShowPopup,
   UploadCard
 } from './cards.action';
 
@@ -78,5 +79,9 @@ export class CardsFacade {
 
   public changeSelectedCardId(id: number): void {
     this.store.dispatch(new ChangeSelectedCardId({ id }));
+  }
+
+  public showPopup(title: string, text: string, id: number): void {
+    this.store.dispatch(new ShowPopup({ title, text, id }));
   }
 }
