@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Card } from 'models';
+import { Subscription, zip } from 'rxjs';
 import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
@@ -8,14 +9,16 @@ import { CardsFacade, SkillsFacade } from 'store';
   templateUrl: './card-editor.component.html',
   styleUrls: ['./card-editor.component.scss']
 })
-export class CardEditorComponent implements OnInit {
+export class CardEditorComponent implements OnInit, OnDestroy {
 
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard$ = this.cardsFacade.selectedCard$;
   public selectedCardId$ = this.cardsFacade.selectedCardId$;
   public checkedSkills$ = this.skillsFacade.checkedSkills$;
-  public popupTitle = 'Данные не сохранены.';
-  public popupText = 'Новая карточка не сохранена. Введенные данные будут потеряны.';
+  public skillsList$ = this.skillsFacade.allSkills$;
+  public popupTitle = 'Data is not saved.';
+  public popupText = 'The new card is not saved. The entered data will be permanently deleted';
+  public subscription: Subscription;
 
   constructor(
     private cardsFacade: CardsFacade,
@@ -60,5 +63,14 @@ export class CardEditorComponent implements OnInit {
   //   return !result;
   // }
 
-  ngOnInit() { }
+  ngOnInit(): void {
+    this.subscription = zip(this.allCardsMy$, this.skillsList$).subscribe((result) => {
+      this.skillsFacade.checkSkills(result[0][0]);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
 }

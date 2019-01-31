@@ -18,8 +18,8 @@ export class CardDetailComponent implements OnInit {
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
 
-  public popupTitle = 'Удаление карточки.';
-  public popupText = 'Карточка будет безвозвратно удалена. Вы уверены?';
+  public popupTitle = 'Delete card.';
+  public popupText = 'Card will be permanently deleted. Are you sure?';
 
   constructor(
     private skillsFacade: SkillsFacade,
