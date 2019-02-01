@@ -19,7 +19,8 @@ export enum CardsActionTypes {
   DeleteCard = '[cards] Delete card from Cards list',
   UploadCard = '[cards] Upload new card to Cards list',
   ChangeSelectedCardId = '[cards] Change selected card id',
-  ShowPopup = '[cards] Show popup'
+  ShowDeleteCardPopup = '[cards] Show delete card popup',
+  ShowNewCardPopup = '[cards] Show new card popup'
 }
 
 export class LoadCards implements Action {
@@ -104,8 +105,14 @@ export class ChangeSelectedCardId implements Action {
   constructor(public payload: { id: number }) {}
 }
 
-export class ShowPopup implements Action {
-  public readonly type = CardsActionTypes.ShowPopup;
+export class ShowDeleteCardPopup implements Action {
+  public readonly type = CardsActionTypes.ShowDeleteCardPopup;
+
+  constructor(public payload: { title: string, text: string, id: number }) {}
+}
+
+export class ShowNewCardPopup implements Action {
+  public readonly type = CardsActionTypes.ShowNewCardPopup;
 
   constructor(public payload: { title: string, text: string, id: number }) {}
 }
@@ -125,4 +132,5 @@ export type CardsActions =
   | DeleteCard
   | UploadCard
   | ChangeSelectedCardId
-  | ShowPopup;
+  | ShowDeleteCardPopup
+  | ShowNewCardPopup;

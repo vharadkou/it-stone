@@ -24,9 +24,9 @@ export class CardsEffects {
     )
   );
 
-  @Effect() public showPopup$: Observable<Action> = this.actions$.pipe(
-    ofType<cardActions.ShowPopup>(cardActions.CardsActionTypes.ShowPopup),
-    switchMap((action: cardActions.ShowPopup) => {
+  @Effect() public ShowDeleteCardPopup$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.ShowDeleteCardPopup>(cardActions.CardsActionTypes.ShowDeleteCardPopup),
+    switchMap((action: cardActions.ShowDeleteCardPopup) => {
       return this.popupsService
         .openDialog(action.payload.title, action.payload.text).pipe(
           filter(result => result)
@@ -34,6 +34,27 @@ export class CardsEffects {
         ));
     })
   );
+
+  @Effect() public ShowNewCardPopup$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.ShowNewCardPopup>(cardActions.CardsActionTypes.ShowNewCardPopup),
+    switchMap((action: cardActions.ShowNewCardPopup) => {
+      return this.popupsService
+        .openDialog(action.payload.title, action.payload.text).pipe(
+          filter(result => result)
+        ).pipe(map(() => new cardActions.ChangeSelectedCardId(action.payload)
+        ));
+    })
+  );
+
+  // @Effect() public changeSelectedCardId$: Observable<Action> = this.actions$.pipe(
+  //   ofType<cardActions.ChangeSelectedCardId>(cardActions.CardsActionTypes.ChangeSelectedCardId),
+  //   switchMap((action: cardActions.ChangeSelectedCardId) =>
+  //     this.http.get(this.baseUrl).pipe(
+  //       map((data: Card[]) => new cardActions.LoadCardsSuccess(data)),
+  //       catchError(error => of(new cardActions.LoadCardsError(error)))
+  //     )
+  //   )
+  // );
 
   public constructor(
     private http: HttpClient,

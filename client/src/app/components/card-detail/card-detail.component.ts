@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import {NgForm} from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { Card, Skill } from 'models';
@@ -14,6 +15,7 @@ export class CardDetailComponent implements OnInit {
   @Input() public checkedSkills: Skill[];
   @Input() public card: Card;
   @Input() public selectedCardId: number;
+  @ViewChild('form') public form: NgForm;
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
@@ -28,16 +30,12 @@ export class CardDetailComponent implements OnInit {
     this.skillsFacade.loadSkills();
   }
 
-  public deleteCard(id: number): void {
-    this.cardsFacade.deleteCard(id);
-  }
-
   public createCard(card: Card): void {
     this.cardsFacade.uploadCard(card);
   }
 
-  private showPopup(): void {
-    this.cardsFacade.showPopup(this.popupTitle, this.popupText, this.card.id);
+  private showDeleteCardPopup(): void {
+    this.cardsFacade.ShowDeleteCardPopup(this.popupTitle, this.popupText, this.card.id);
   }
 
   private addSkillsToCard(card: Card): void {
@@ -49,9 +47,6 @@ export class CardDetailComponent implements OnInit {
     } else {
       card.skills = [];
     }
-    // else if (card.skills.length !== 0) {
-    //   this.skillsFacade.checkSkills(card);
-    // }
   }
 
   ngOnInit(): void {

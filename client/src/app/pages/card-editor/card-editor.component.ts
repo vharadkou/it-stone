@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
+import { NgForm } from '@angular/forms';
 import { Card } from 'models';
 import { Subscription, zip } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { CardsFacade, SkillsFacade } from 'store';
+import * as cardActions from '../../../store/cards/cards.action';
 
 @Component({
   selector: 'app-card-editor',
@@ -10,6 +13,8 @@ import { CardsFacade, SkillsFacade } from 'store';
   styleUrls: ['./card-editor.component.scss']
 })
 export class CardEditorComponent implements OnInit, OnDestroy {
+
+  @ViewChild('cardDetail') public cardDetail: Component;
 
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard$ = this.cardsFacade.selectedCard$;
@@ -19,6 +24,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
   public popupTitle = 'Data is not saved.';
   public popupText = 'The new card is not saved. The entered data will be permanently deleted';
   public subscription: Subscription;
+  public subscr;
 
   constructor(
     private cardsFacade: CardsFacade,
@@ -27,13 +33,36 @@ export class CardEditorComponent implements OnInit, OnDestroy {
     this.cardsFacade.loadCards();
   }
 
-  public changeSelectedCardId(id: number, card: Card): void {
-    this.cardsFacade.changeSelectedCardId(id);
-    if (id !== 100) {
-      this.skillsFacade.checkSkills(card);
+  public changeSelectedCardId(id: number, form: NgForm, card?: Card): void {
+    if (form.dirty) {
+      const subscr = this.subscr = this.selectedCardId$.subscribe((result: number) => {
+        if (result === 100) {
+          this.cardsFacade.ShowNewCardPopup(this.popupTitle, this.popupText, id);
+          console.log('Потеря!!!!!!');
+          // console.log(form);
+          // form.reset(card);
+          console.log(form);
+        } else {
+          this.cardsFacade.changeSelectedCardId(id);
+          if (id !== 100) {
+            this.skillsFacade.checkSkills(card);
+          } else {
+            this.skillsFacade.checkSkills();
+          }
+        }
+      });
+      subscr.unsubscribe();
     } else {
-      this.skillsFacade.checkSkills();
+      this.cardsFacade.changeSelectedCardId(id);
+      if (id !== 100) {
+        this.skillsFacade.checkSkills(card);
+      } else {
+        this.skillsFacade.checkSkills();
+      }
     }
+
+
+
   }
 
   // public setSelectedCard(card: Card, isCreator: boolean, isJustSaved: boolean): void {
