@@ -28,7 +28,7 @@ export class LoadSkillsError implements Action {
 export class CheckSkills implements Action {
     public readonly type = SkillsActionTypes.CheckSkills;
 
-    constructor(public payload: {card: Card}) {}
+    constructor(public payload: {card?: Card}) {}
 }
 
 export type SkillsActions =

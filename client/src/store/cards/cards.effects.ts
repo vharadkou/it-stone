@@ -7,6 +7,8 @@ import { Card } from 'models';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map, switchMap } from 'rxjs/operators';
 
+import * as skillsActions from '../skills/skills.action';
+
 import * as cardActions from './cards.action';
 
 @Injectable()
@@ -46,15 +48,16 @@ export class CardsEffects {
     })
   );
 
-  // @Effect() public changeSelectedCardId$: Observable<Action> = this.actions$.pipe(
-  //   ofType<cardActions.ChangeSelectedCardId>(cardActions.CardsActionTypes.ChangeSelectedCardId),
-  //   switchMap((action: cardActions.ChangeSelectedCardId) =>
-  //     this.http.get(this.baseUrl).pipe(
-  //       map((data: Card[]) => new cardActions.LoadCardsSuccess(data)),
-  //       catchError(error => of(new cardActions.LoadCardsError(error)))
-  //     )
-  //   )
-  // );
+  @Effect() public changeSelectedCardId$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.ChangeSelectedCardId>(cardActions.CardsActionTypes.ChangeSelectedCardId),
+    map(action => {
+      if (action.payload.id !== 100) {
+        return new skillsActions.CheckSkills(action.payload);
+      } else {
+        return new skillsActions.CheckSkills({});
+      }
+    })
+  );
 
   public constructor(
     private http: HttpClient,

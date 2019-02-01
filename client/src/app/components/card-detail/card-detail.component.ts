@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {NgForm} from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { CardsFacade, SkillsFacade } from 'store';
   templateUrl: './card-detail.component.html',
   styleUrls: ['./card-detail.component.scss']
 })
-export class CardDetailComponent implements OnInit {
+export class CardDetailComponent implements OnInit, OnChanges {
   @Input() public checkedSkills: Skill[];
   @Input() public card: Card;
   @Input() public selectedCardId: number;
@@ -50,6 +50,10 @@ export class CardDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(): void {
+    this.form.reset(this.card);
   }
 
 }

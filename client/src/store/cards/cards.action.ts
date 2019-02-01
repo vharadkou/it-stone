@@ -102,7 +102,7 @@ export class UploadCard implements Action {
 export class ChangeSelectedCardId implements Action {
   public readonly type = CardsActionTypes.ChangeSelectedCardId;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: number, card?: Card }) {}
 }
 
 export class ShowDeleteCardPopup implements Action {
@@ -114,7 +114,7 @@ export class ShowDeleteCardPopup implements Action {
 export class ShowNewCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowNewCardPopup;
 
-  constructor(public payload: { title: string, text: string, id: number }) {}
+  constructor(public payload: { title: string, text: string, id: number, card: Card }) {}
 }
 
 export type CardsActions =

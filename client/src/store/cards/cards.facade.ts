@@ -78,15 +78,15 @@ export class CardsFacade {
     this.store.dispatch(new UploadCard({ card }));
   }
 
-  public changeSelectedCardId(id: number): void {
-    this.store.dispatch(new ChangeSelectedCardId({ id }));
+  public changeSelectedCardId(id: number, card?: Card): void {
+    this.store.dispatch(new ChangeSelectedCardId({ id, card }));
   }
 
   public ShowDeleteCardPopup(title: string, text: string, id: number): void {
     this.store.dispatch(new ShowDeleteCardPopup({ title, text, id }));
   }
 
-  public ShowNewCardPopup(title: string, text: string, id: number): void {
-    this.store.dispatch(new ShowNewCardPopup({ title, text, id }));
+  public ShowNewCardPopup(title: string, text: string, id: number, card: Card): void {
+    this.store.dispatch(new ShowNewCardPopup({ title, text, id, card }));
   }
 }
