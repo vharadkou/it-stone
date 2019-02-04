@@ -39,6 +39,7 @@ export class CardDetailComponent implements OnInit, OnChanges {
   }
 
   private addSkillsToCard(card: Card): void {
+    this.form.form.markAsDirty();
     if (this.checkedSkills) {
       card.skills = [];
       this.checkedSkills.forEach((skillObj: Skill) => {
@@ -53,7 +54,7 @@ export class CardDetailComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.form.reset(this.card);
+    this.form.form.markAsPristine();
   }
 
 }

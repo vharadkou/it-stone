@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Card } from 'models';
 import { Subscription, zip } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
@@ -32,14 +33,13 @@ export class CardEditorComponent implements OnInit, OnDestroy {
 
   public changeSelectedCardId(id: number, form: NgForm, card?: Card): void {
     if (form.dirty) {
-      const subscr = this.selectedCardId$.subscribe((result: number) => {
+      this.selectedCardId$.pipe(take(1)).subscribe((result: number) => {
         if (result === 100) {
           this.cardsFacade.ShowNewCardPopup(this.popupTitle, this.popupText, id, card);
         } else {
           this.cardsFacade.changeSelectedCardId(id, card);
         }
       });
-      subscr.unsubscribe();
     } else {
       this.cardsFacade.changeSelectedCardId(id, card);
     }
