@@ -1,72 +1,62 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 import { MatNativeDateModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatDialogModule, MatGridListModule, MatIconModule, MatMenuModule } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { MatDialogModule, MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
 import {
   AuthServiceConfig,
   GoogleLoginProvider,
   SocialLoginModule,
 } from 'angular-6-social-login';
-
-import { AppComponent } from './app.component';
 import {
   CardComponent,
   DialogOverviewExampleDialogComponent,
 } from 'components';
-
 import {
   FightPageComponent,
   NotFoundPageComponent,
   WelcomePageComponent,
 } from 'pages';
-
 import {
   FightService,
   SocketService,
   TimerService,
   UserService,
 } from 'services';
-
 import { reducers } from 'store';
-
 import {
   CardsEffects,
   CardsFacade,
   initialState,
 } from 'store/cards';
-
+import { PlayersHPEffects } from 'store/players-hp';
+import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import {
   SkillsEffects,
   SkillsFacade,
   skillsInitialState
 } from 'store/skills';
+import { SocketEffect, SocketFacade } from 'store/socket';
 
-import { PlayersHPEffects } from 'store/players-hp';
-
-import { DemoMaterialModule } from './material-module';
-
-import { LayoutModule } from '@angular/cdk/layout';
-import { PipesModule } from './pipes/pipes.module';
-import { InfobarComponent } from './components/infobar/infobar.component';
-import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
-import { CardEditorComponent } from './pages/card-editor/card-editor.component';
+import { AppComponent } from './app.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
-import { SkillsService } from './services/skills.service';
+import { InfobarComponent } from './components/infobar/infobar.component';
 import { MaterialDialogComponent } from './components/material-dialog/material-dialog.component';
+import { DemoMaterialModule } from './material-module';
+import { CardEditorComponent } from './pages/card-editor/card-editor.component';
+import { PipesModule } from './pipes/pipes.module';
+import { SkillsService } from './services/skills.service';
 
-export function getAuthServiceConfigs() {
+export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig(
     [
       {
@@ -88,7 +78,7 @@ const appRoutes: Routes = [
     redirectTo: '/battle',
     pathMatch: 'full'
   },
-  { path: '**', component: NotFoundPageComponent }
+  { path: '**', component: FightPageComponent }
 ];
 
 @NgModule({
@@ -106,7 +96,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true }
+      { enableTracing: false }
     ),
     StoreModule.forRoot({}),
     StoreModule.forFeature('cardsState', reducers.cards, {
@@ -114,7 +104,8 @@ const appRoutes: Routes = [
     }),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SkillsEffects]),
+    StoreModule.forFeature('socketState', reducers.socket, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -154,7 +145,8 @@ const appRoutes: Routes = [
     SkillsService,
     CardsFacade,
     SkillsFacade,
-    PlayersHPFacade
+    PlayersHPFacade,
+    SocketFacade
   ],
   bootstrap: [AppComponent]
 })

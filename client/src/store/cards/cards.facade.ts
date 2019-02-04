@@ -1,12 +1,10 @@
-
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Card } from 'models';
 
-import { CardsState } from './interfaces';
-
 import { cardsQuery } from './cards.selectors';
+import { CardsState } from './interfaces';
 
 import {
   ChangeSelectedCardId,
@@ -17,11 +15,13 @@ import {
   GetMyBattleCard,
   GetMyNewCards,
   LoadCards,
+  MoveEnemyActiveCardsWithinArray,
   MoveEnemyCardsWithinArray,
+  MoveMyActiveCardsWithinArray,
   MoveMyCardsWithinArray,
   ShowDeleteCardPopup,
   ShowNewCardPopup,
-  UploadCard
+  UploadCard,
 } from './cards.action';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class CardsFacade {
   public selectedCard$ = this.store.select(cardsQuery.getSelectedCard);
   public selectedCardId$ = this.store.select(cardsQuery.getSelectedCardId);
 
-  public constructor(private store: Store<CardsState>) {}
+  public constructor(private store: Store<CardsState>) { }
 
   public loadCards(): void {
     this.store.dispatch(new LoadCards());
@@ -56,6 +56,14 @@ export class CardsFacade {
 
   public moveEnemyCardsWithinArray(event: CdkDragDrop<Card[]>): void {
     this.store.dispatch(new MoveEnemyCardsWithinArray(event));
+  }
+
+  public moveMyActiveCardsWithinArray(event: CdkDragDrop<Card[]>): void {
+    this.store.dispatch(new MoveMyActiveCardsWithinArray(event));
+  }
+
+  public moveEnemyActiveCardsWithinArray(event: CdkDragDrop<Card[]>): void {
+    this.store.dispatch(new MoveEnemyActiveCardsWithinArray(event));
   }
 
   public getMyBattleCard(event: CdkDragDrop<Card[]>): void {

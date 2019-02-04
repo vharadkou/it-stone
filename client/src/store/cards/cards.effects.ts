@@ -64,4 +64,8 @@ export class CardsEffects {
     private actions$: Actions,
     private popupsService: PopupsService
   ) { }
+
+  // @Effect() public loadStateFromSocket$: Observable<Action> = this.actions$.pipe(
+  //   ofType<cardActions>
+  // )
 }

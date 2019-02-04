@@ -1,4 +1,5 @@
 import { Status } from 'models';
+
 import { CardsState } from './interfaces';
 
 export const initialState: CardsState = {

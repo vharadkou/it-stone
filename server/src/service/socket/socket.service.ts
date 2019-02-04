@@ -49,10 +49,13 @@ export class SocketService {
         this.clients.forEach((c, index) => {
           c.emit('onReady', states[index]);
         });
-      }
+      };
+      client.on('join', (room) => {
+        client.join(room);
+      })
 
       client.on('disconnect', () => this.onDisconnect(client));
-      client.on('onStep', (data: DataFromFront) => this.notifyOtherUser(client, data));
+      client.emit('test', { message: 'message from back' });
     });
   }
 

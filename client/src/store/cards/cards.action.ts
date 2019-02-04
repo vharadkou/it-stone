@@ -12,6 +12,8 @@ export enum CardsActionTypes {
   GetEnemyNewCards = '[cards] Move cards to enemy from deck',
   MoveMyCardsWithinArray = '[card] Move My Cards Within Array',
   MoveEnemyCardsWithinArray = '[card] Move Enemy Cards Within Array',
+  MoveMyActiveCardsWithinArray = '[card] Move My Active Cards Within Array',
+  MoveEnemyActiveCardsWithinArray = '[card] Move Enemy Active Cards Within Array',
   GetMyBattleCard = '[cards] Move my card to battle',
   GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
@@ -30,61 +32,73 @@ export class LoadCards implements Action {
 export class LoadCardsSuccess implements Action {
   public readonly type = CardsActionTypes.LoadCardsSuccess;
 
-  constructor(public payload: Card[]) {}
+  constructor(public payload: Card[]) { }
 }
 
 export class LoadCardsError implements Action {
   public readonly type = CardsActionTypes.LoadCardsError;
 
-  constructor(public payload: Error) {}
+  constructor(public payload: Error) { }
 }
 
 export class GetMyNewCards implements Action {
   public readonly type = CardsActionTypes.GetMyNewCards;
 
-  constructor(public payload: { amount: number }) {}
+  constructor(public payload: { amount: number }) { }
 }
 
 export class GetEnemyNewCards implements Action {
   public readonly type = CardsActionTypes.GetEnemyNewCards;
 
-  constructor(public payload: { amount: number }) {}
+  constructor(public payload: { amount: number }) { }
 }
 
 export class MoveMyCardsWithinArray implements Action {
   public readonly type = CardsActionTypes.MoveMyCardsWithinArray;
 
-  constructor(public payload: CdkDragDrop<Card[]>) {}
+  constructor(public payload: CdkDragDrop<Card[]>) { }
 }
 
 export class MoveEnemyCardsWithinArray implements Action {
   public readonly type = CardsActionTypes.MoveEnemyCardsWithinArray;
 
-  constructor(public payload: CdkDragDrop<Card[]>) {}
+  constructor(public payload: CdkDragDrop<Card[]>) { }
+}
+
+export class MoveMyActiveCardsWithinArray implements Action {
+  public readonly type = CardsActionTypes.MoveMyActiveCardsWithinArray;
+
+  constructor(public payload: CdkDragDrop<Card[]>) { }
+}
+
+export class MoveEnemyActiveCardsWithinArray implements Action {
+  public readonly type = CardsActionTypes.MoveEnemyActiveCardsWithinArray;
+
+  constructor(public payload: CdkDragDrop<Card[]>) { }
 }
 
 export class GetMyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetMyBattleCard;
 
-  constructor(public payload: CdkDragDrop<Card[]>) {}
+  constructor(public payload: CdkDragDrop<Card[]>) { }
 }
 
 export class GetEnemyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetEnemyBattleCard;
 
-  constructor(public payload: CdkDragDrop<Card[]>) {}
+  constructor(public payload: CdkDragDrop<Card[]>) { }
 }
 
 export class DeleteMyCardFromBattle implements Action {
   public readonly type = CardsActionTypes.DeleteMyCardFromBattle;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: number }) { }
 }
 
 export class DecrementEnemyCardCount implements Action {
   public readonly type = CardsActionTypes.DecrementEnemyCardCount;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: number }) { }
 }
 
 export class DeleteCard implements Action {
@@ -125,6 +139,8 @@ export type CardsActions =
   | GetEnemyNewCards
   | MoveMyCardsWithinArray
   | MoveEnemyCardsWithinArray
+  | MoveMyActiveCardsWithinArray
+  | MoveEnemyActiveCardsWithinArray
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
