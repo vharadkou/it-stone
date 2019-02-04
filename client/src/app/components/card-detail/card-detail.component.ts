@@ -11,7 +11,7 @@ import { CardsFacade, SkillsFacade } from 'store';
   templateUrl: './card-detail.component.html',
   styleUrls: ['./card-detail.component.scss']
 })
-export class CardDetailComponent implements OnInit, OnChanges {
+export class CardDetailComponent implements OnChanges {
   @Input() public checkedSkills: Skill[];
   @Input() public card: Card;
   @Input() public selectedCardId: number;
@@ -35,7 +35,7 @@ export class CardDetailComponent implements OnInit, OnChanges {
   }
 
   private showDeleteCardPopup(): void {
-    this.cardsFacade.ShowDeleteCardPopup(this.popupTitle, this.popupText, this.card.id);
+    this.cardsFacade.showDeleteCardPopup(this.popupTitle, this.popupText, this.card.id);
   }
 
   private addSkillsToCard(card: Card): void {
@@ -48,9 +48,6 @@ export class CardDetailComponent implements OnInit, OnChanges {
     } else {
       card.skills = [];
     }
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnChanges(): void {

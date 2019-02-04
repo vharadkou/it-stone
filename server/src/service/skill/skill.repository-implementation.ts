@@ -44,7 +44,6 @@ export class SkillRepositoryImplementation implements SkillRepository  {
             name,
             description
         });
-        console.log('Функция создала новый скилл и постарается его сохранить');
 
         return new Promise<Skill>((resolve, reject) => {
             newSkill.save((error, data: Skill) => {
@@ -62,7 +61,6 @@ export class SkillRepositoryImplementation implements SkillRepository  {
     public deleteSkill(
         requestName: string
         ): Promise<boolean> {
-        console.log('Получил данные для удаления - ' + requestName);
         return new Promise<boolean>((resolve, reject) => {
             this.skillModel.deleteOne({ name: requestName }, (error) => {
                 if (error) {

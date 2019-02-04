@@ -35,7 +35,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
     if (form.dirty) {
       this.selectedCardId$.pipe(take(1)).subscribe((result: number) => {
         if (result === 100) {
-          this.cardsFacade.ShowNewCardPopup(this.popupTitle, this.popupText, id, card);
+          this.cardsFacade.showNewCardPopup(this.popupTitle, this.popupText, id, card);
         } else {
           this.cardsFacade.changeSelectedCardId(id, card);
         }

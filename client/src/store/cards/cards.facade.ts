@@ -90,11 +90,11 @@ export class CardsFacade {
     this.store.dispatch(new ChangeSelectedCardId({ id, card }));
   }
 
-  public ShowDeleteCardPopup(title: string, text: string, id: number): void {
+  public showDeleteCardPopup(title: string, text: string, id: number): void {
     this.store.dispatch(new ShowDeleteCardPopup({ title, text, id }));
   }
 
-  public ShowNewCardPopup(title: string, text: string, id: number, card: Card): void {
+  public showNewCardPopup(title: string, text: string, id: number, card: Card): void {
     this.store.dispatch(new ShowNewCardPopup({ title, text, id, card }));
   }
 }
