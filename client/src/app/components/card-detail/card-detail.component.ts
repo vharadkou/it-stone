@@ -34,11 +34,11 @@ export class CardDetailComponent implements OnChanges {
     this.cardsFacade.uploadCard(card);
   }
 
-  private showDeleteCardPopup(): void {
+  public showDeleteCardPopup(): void {
     this.cardsFacade.showDeleteCardPopup(this.popupTitle, this.popupText, this.card.id);
   }
 
-  private addSkillsToCard(card: Card): void {
+  public addSkillsToCard(card: Card): void {
     this.form.form.markAsDirty();
     if (this.checkedSkills) {
       card.skills = [];

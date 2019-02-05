@@ -1,13 +1,12 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Card } from 'models';
 
-import { cardsQuery } from './cards.selectors';
-import { CardsState } from './interfaces';
-
 import {
   ChangeSelectedCardId,
+  CheckNewCardDataLoss,
   DeleteCard,
   DeleteMyCardFromBattle,
   GetEnemyBattleCard,
@@ -21,8 +20,10 @@ import {
   MoveMyCardsWithinArray,
   ShowDeleteCardPopup,
   ShowNewCardPopup,
-  UploadCard,
+  UploadCard
 } from './cards.action';
+import { cardsQuery } from './cards.selectors';
+import { CardsState } from './interfaces';
 
 @Injectable()
 export class CardsFacade {
@@ -96,5 +97,9 @@ export class CardsFacade {
 
   public showNewCardPopup(title: string, text: string, id: number, card: Card): void {
     this.store.dispatch(new ShowNewCardPopup({ title, text, id, card }));
+  }
+
+  public checkNewCardDataLoss(title: string, text: string, id: number, form: NgForm, card?: Card): void {
+    this.store.dispatch(new CheckNewCardDataLoss({ title, text, id, card, form }));
   }
 }

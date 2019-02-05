@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
+import { NgForm } from '@angular/forms';
 import { Card } from 'models';
 
 export enum CardsActionTypes {
@@ -22,7 +23,8 @@ export enum CardsActionTypes {
   UploadCard = '[cards] Upload new card to Cards list',
   ChangeSelectedCardId = '[cards] Change selected card id',
   ShowDeleteCardPopup = '[cards] Show delete card popup',
-  ShowNewCardPopup = '[cards] Show new card popup'
+  ShowNewCardPopup = '[cards] Show new card popup',
+  CheckNewCardDataLoss = '[cards] Check if NewCard data will loss'
 }
 
 export class LoadCards implements Action {
@@ -128,7 +130,13 @@ export class ShowDeleteCardPopup implements Action {
 export class ShowNewCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowNewCardPopup;
 
-  constructor(public payload: { title: string, text: string, id: number, card: Card }) {}
+  constructor(public payload: { title: string, text: string, id: number, card?: Card }) {}
+}
+
+export class CheckNewCardDataLoss implements Action {
+  public readonly type = CardsActionTypes.CheckNewCardDataLoss;
+
+  constructor(public payload: { title: string, text: string, id: number, form: NgForm, card?: Card }) {}
 }
 
 export type CardsActions =
@@ -149,4 +157,5 @@ export type CardsActions =
   | UploadCard
   | ChangeSelectedCardId
   | ShowDeleteCardPopup
-  | ShowNewCardPopup;
+  | ShowNewCardPopup
+  | CheckNewCardDataLoss;
