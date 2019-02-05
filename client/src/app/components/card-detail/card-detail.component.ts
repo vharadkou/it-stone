@@ -40,17 +40,10 @@ export class CardDetailComponent implements OnChanges {
 
   public addSkillsToCard(card: Card): void {
     this.form.form.markAsDirty();
-    if (this.checkedSkills) {
-      card.skills = [];
-      this.checkedSkills.forEach((skillObj: Skill) => {
-        card.skills.push(skillObj.name);
-      });
-    } else {
-      card.skills = [];
-    }
+    card.skills = this.checkedSkills.map(skillObj => skillObj.name);
   }
 
-  ngOnChanges(): void {
+  public ngOnChanges(): void {
     this.form.form.markAsPristine();
   }
 
