@@ -35,13 +35,13 @@ export class CardEditorComponent implements OnInit, OnDestroy {
     this.cardsFacade.checkNewCardDataLoss(this.popupTitle, this.popupText, id, form, card);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.subscription = zip(this.allCardsMy$, this.skillsList$).subscribe((result) => {
       this.skillsFacade.checkSkills(result[0][0]);
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
