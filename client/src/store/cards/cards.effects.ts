@@ -85,8 +85,4 @@ export class CardsEffects {
     private popupsService: PopupsService,
     private cardsFacade: CardsFacade
   ) { }
-
-  // @Effect() public loadStateFromSocket$: Observable<Action> = this.actions$.pipe(
-  //   ofType<cardActions>
-  // )
 }
