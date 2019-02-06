@@ -39,6 +39,12 @@ export interface Player {
     resultStatus: ResultStatus;
 }
 
+export interface Skill {
+    id: number;
+    name: string;
+    description: string;
+}
+
 export interface User {
     userToken: string;
 }

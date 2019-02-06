@@ -1,4 +1,4 @@
-import { Status, Card } from 'models';
+import { Card, Status } from 'models';
 
 export interface CardsState {
   status: Status;
@@ -9,4 +9,6 @@ export interface CardsState {
   myActiveCards: Card[];
   enemyActiveCards: Card[];
   enemyCardCount: number;
+  selectedCardId: number;
+  templCard: Card;
 }

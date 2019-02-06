@@ -1,0 +1,15 @@
+<div class="cards-container">
+  <app-card *ngFor="let card of allCardsMy$ | async" [card]="card" (click)="checkNewCardDataLoss(card.id, cardDetail.form, card)"></app-card>
+  <div class="btnNewCard" (click)="checkNewCardDataLoss(100, cardDetail.form)">
+    <div class="btnNewCard__container">
+      <div class="btnNewCard__text">New Card</div>
+    </div>
+  </div>
+</div>
+<app-card-detail 
+  *ngIf="selectedCard$ | async" 
+  [card]="selectedCard$ | async"
+  [checkedSkills]="checkedSkills$ | async"
+  [selectedCardId]="selectedCardId$ | async"
+  #cardDetail
+></app-card-detail>

@@ -1,0 +1,80 @@
+@import '../../settings';
+
+.card-detail {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: #596275;
+    padding: 30px;
+
+    .card-detail__title {
+        margin-bottom: 53px;
+        color: $antiquewhite;
+        font-weight: 300;
+    }
+
+    .card-detail__field {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        .card-detail__edit-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 50px;
+            .mat-accordion {
+                .mat-accordion__panel {
+                    background-color: $antiquewhite;
+                    .mat-accordion__header {
+                        text-align: center;
+                        .mat-accordion__title {
+                            font-size: $big-size;
+                        }
+                    }
+                    .mat-form-field {
+                        margin: 13px 10px 0;
+                        width: 270px;
+                        font-size: $default-bigger;
+                        .mat-form-field_number-input {
+                            padding-left: 7px;
+                        }
+                    }
+                }
+            }
+            
+        }
+    
+        .card-detail__visual-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 50px;
+            position: relative;
+            
+            .card-detail__btn {
+                position: absolute;
+                right: -14px;
+                top: -10px;
+                font-size: 60px;
+                font-weight: normal;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: -4px;
+                    left: -4px;
+                    width: 100%;
+                    height: 100%;
+                    border: 4px solid #fff;
+                    border-radius: 50%;
+                }
+            }
+            .card-detail__btn_delete {
+                transform: rotate(45deg);
+            }
+            .card-detail__btn_create {
+                background-color: #007bff;
+                color: #fff;
+            }
+        }
+    }
+}

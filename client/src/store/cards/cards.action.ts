@@ -2,6 +2,7 @@ import { Action } from '@ngrx/store';
 
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
+import { NgForm } from '@angular/forms';
 import { Card } from 'models';
 
 export enum CardsActionTypes {
@@ -17,7 +18,13 @@ export enum CardsActionTypes {
   GetMyBattleCard = '[cards] Move my card to battle',
   GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
-  DecrementEnemyCardCount = '[cards] decrement enemy number of cards'
+  DecrementEnemyCardCount = '[cards] decrement enemy number of cards',
+  DeleteCard = '[cards] Delete card from Cards list',
+  UploadCard = '[cards] Upload new card to Cards list',
+  ChangeSelectedCardId = '[cards] Change selected card id',
+  ShowDeleteCardPopup = '[cards] Show delete card popup',
+  ShowNewCardPopup = '[cards] Show new card popup',
+  CheckNewCardDataLoss = '[cards] Check if NewCard data will loss'
 }
 
 export class LoadCards implements Action {
@@ -96,6 +103,42 @@ export class DecrementEnemyCardCount implements Action {
   constructor(public payload: { id: number }) { }
 }
 
+export class DeleteCard implements Action {
+  public readonly type = CardsActionTypes.DeleteCard;
+
+  constructor(public payload: { id: number }) {}
+}
+
+export class UploadCard implements Action {
+  public readonly type = CardsActionTypes.UploadCard;
+
+  constructor(public payload: { card: Card }) {}
+}
+
+export class ChangeSelectedCardId implements Action {
+  public readonly type = CardsActionTypes.ChangeSelectedCardId;
+
+  constructor(public payload: { id: number, card?: Card }) {}
+}
+
+export class ShowDeleteCardPopup implements Action {
+  public readonly type = CardsActionTypes.ShowDeleteCardPopup;
+
+  constructor(public payload: { title: string, text: string, id: number }) {}
+}
+
+export class ShowNewCardPopup implements Action {
+  public readonly type = CardsActionTypes.ShowNewCardPopup;
+
+  constructor(public payload: { title: string, text: string, id: number, card?: Card }) {}
+}
+
+export class CheckNewCardDataLoss implements Action {
+  public readonly type = CardsActionTypes.CheckNewCardDataLoss;
+
+  constructor(public payload: { title: string, text: string, id: number, form: NgForm, card?: Card }) {}
+}
+
 export type CardsActions =
   | LoadCards
   | LoadCardsSuccess
@@ -109,4 +152,10 @@ export type CardsActions =
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
-  | DecrementEnemyCardCount;
+  | DecrementEnemyCardCount
+  | DeleteCard
+  | UploadCard
+  | ChangeSelectedCardId
+  | ShowDeleteCardPopup
+  | ShowNewCardPopup
+  | CheckNewCardDataLoss;

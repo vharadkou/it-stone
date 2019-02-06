@@ -1,12 +1,13 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Card } from 'models';
 
-import { cardsQuery } from './cards.selectors';
-import { CardsState } from './interfaces';
-
 import {
+  ChangeSelectedCardId,
+  CheckNewCardDataLoss,
+  DeleteCard,
   DeleteMyCardFromBattle,
   GetEnemyBattleCard,
   GetEnemyNewCards,
@@ -17,7 +18,12 @@ import {
   MoveEnemyCardsWithinArray,
   MoveMyActiveCardsWithinArray,
   MoveMyCardsWithinArray,
+  ShowDeleteCardPopup,
+  ShowNewCardPopup,
+  UploadCard
 } from './cards.action';
+import { cardsQuery } from './cards.selectors';
+import { CardsState } from './interfaces';
 
 @Injectable()
 export class CardsFacade {
@@ -28,6 +34,8 @@ export class CardsFacade {
   public enemyCardCount$ = this.store.select(cardsQuery.getEnemyCardCount);
   public myActiveCards$ = this.store.select(cardsQuery.getMyActiveCards);
   public enemyActiveCards$ = this.store.select(cardsQuery.getEnemyActiveCards);
+  public selectedCard$ = this.store.select(cardsQuery.getSelectedCard);
+  public selectedCardId$ = this.store.select(cardsQuery.getSelectedCardId);
 
   public constructor(private store: Store<CardsState>) { }
 
@@ -69,5 +77,29 @@ export class CardsFacade {
 
   public deleteMyCardFromBattle(id: number): void {
     this.store.dispatch(new DeleteMyCardFromBattle({ id }));
+  }
+
+  public deleteCard(id: number): void {
+    this.store.dispatch(new DeleteCard({ id }));
+  }
+
+  public uploadCard(card: Card): void {
+    this.store.dispatch(new UploadCard({ card }));
+  }
+
+  public changeSelectedCardId(id: number, card?: Card): void {
+    this.store.dispatch(new ChangeSelectedCardId({ id, card }));
+  }
+
+  public showDeleteCardPopup(title: string, text: string, id: number): void {
+    this.store.dispatch(new ShowDeleteCardPopup({ title, text, id }));
+  }
+
+  public showNewCardPopup(title: string, text: string, id: number, card: Card): void {
+    this.store.dispatch(new ShowNewCardPopup({ title, text, id, card }));
+  }
+
+  public checkNewCardDataLoss(title: string, text: string, id: number, form: NgForm, card?: Card): void {
+    this.store.dispatch(new CheckNewCardDataLoss({ title, text, id, card, form }));
   }
 }
