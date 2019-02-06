@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { of, Observable } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
 import { Action } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
-import * as playersHPActions from './players-hp.action';
 import { PlayersHPState } from './interfaces';
+import * as playersHPActions from './players-hp.action';
 
 @Injectable()
 export class PlayersHPEffects {

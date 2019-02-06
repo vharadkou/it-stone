@@ -1,4 +1,4 @@
-<div *ngIf="isFront" class="its-card">
+<div *ngIf="isFront" [class.edit-version]="isEditor" class="its-card">
     <div class="its-card__container">
         <div class="its-card__title">Programmer</div>
         <div class="its-card__subtitle">
@@ -18,7 +18,7 @@
                     <fa-icon [icon]="faShieldAlt" size="lg"></fa-icon>
                 </div>
                 <div class="its-card__stat-value">
-                    50
+                    {{card.hp}}
                 </div>
             </div>
             <div class="its-card__stat">
@@ -26,7 +26,7 @@
                     <fa-icon [icon]="faUsb" size="lg" rotate="270"></fa-icon>
                 </div>
                 <div class="its-card__stat-value">
-                    60
+                    {{card.damage}}
                 </div>
             </div>
         </div>

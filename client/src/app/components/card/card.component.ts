@@ -12,6 +12,7 @@ import { Card } from 'models';
 
 export class CardComponent {
   @Input() public card: Card;
+  @Input() public isEditor: boolean;
 
   public isFront = true;
   public faUsb = faUsb;

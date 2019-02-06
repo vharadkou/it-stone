@@ -5,3 +5,4 @@ export const CARD_COLLECTION: string = 'card';
 export const DECK_COLLECTION: string = 'deck';
 export const APPTOKEN_COLLECTION: string = 'appToken';
 export const ROOM_COLLECTION: string = 'room';
+export const SKILL_COLLECTION: string = 'skill';
