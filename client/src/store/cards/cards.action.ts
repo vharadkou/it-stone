@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { NgForm } from '@angular/forms';
-import { Card } from 'models';
+import { Card, PopupTextContent } from 'models';
 
 export enum CardsActionTypes {
   LoadCards = '[cards] Load Cards',
@@ -124,19 +124,19 @@ export class ChangeSelectedCardId implements Action {
 export class ShowDeleteCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowDeleteCardPopup;
 
-  constructor(public payload: { title: string, text: string, id: number }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: number }) {}
 }
 
 export class ShowNewCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowNewCardPopup;
 
-  constructor(public payload: { title: string, text: string, id: number, card?: Card }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: number, card?: Card }) {}
 }
 
 export class CheckNewCardDataLoss implements Action {
   public readonly type = CardsActionTypes.CheckNewCardDataLoss;
 
-  constructor(public payload: { title: string, text: string, id: number, form: NgForm, card?: Card }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: number, form: NgForm, card?: Card }) {}
 }
 
 export type CardsActions =

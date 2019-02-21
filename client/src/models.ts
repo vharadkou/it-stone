@@ -31,3 +31,12 @@ export interface Skill {
   name: string;
   description: string;
 }
+
+export interface PopupTextContent {
+  title: string;
+  text: string;
+  buttonText: {
+    cancel: string,
+    confirm: string
+  };
+}

@@ -1,10 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-export interface DialogData {
-  title: string;
-  text: string;
-}
+import { PopupTextContent } from 'models';
 
 @Component({
   selector: 'app-material-dialog',
@@ -15,14 +12,14 @@ export class MaterialDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<MaterialDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: PopupTextContent
   ) { }
 
-  onYesClick(): void {
+  public onYesClick(): void {
     this.dialogRef.close(true);
   }
 
-  onNoClick(): void {
+  public onNoClick(): void {
     this.dialogRef.close(false);
   }
 }

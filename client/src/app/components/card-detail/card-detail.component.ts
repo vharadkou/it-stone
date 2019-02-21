@@ -1,9 +1,9 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {NgForm} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 
-import { Card, Skill } from 'models';
+import { Card, PopupTextContent, Skill } from 'models';
 import { CardsFacade, SkillsFacade } from 'store';
 
 @Component({
@@ -20,8 +20,14 @@ export class CardDetailComponent implements OnChanges {
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
 
-  public popupTitle = 'Delete card.';
-  public popupText = 'Card will be permanently deleted. Are you sure?';
+  public popupTextContent: PopupTextContent = {
+    title: 'Delete card.',
+    text: 'Card will be permanently deleted. Are you sure?',
+    buttonText: {
+      cancel: 'Cancel',
+      confirm: 'Delete card'
+    }
+  };
 
   constructor(
     private skillsFacade: SkillsFacade,
@@ -35,7 +41,7 @@ export class CardDetailComponent implements OnChanges {
   }
 
   public showDeleteCardPopup(): void {
-    this.cardsFacade.showDeleteCardPopup(this.popupTitle, this.popupText, this.card.id);
+    this.cardsFacade.showDeleteCardPopup(this.popupTextContent, this.card.id);
   }
 
   public addSkillsToCard(card: Card): void {
