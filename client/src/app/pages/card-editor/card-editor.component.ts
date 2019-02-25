@@ -20,7 +20,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
   public checkedSkills$ = this.skillsFacade.checkedSkills$;
   public skillsList$ = this.skillsFacade.allSkills$;
 
-  public popupTextContent: PopupTextContent = {
+  private popupTextContent: PopupTextContent = {
     title: 'Data is not saved.',
     text: 'The new card is not saved. The entered data will be permanently deleted',
     buttonText: {
@@ -29,7 +29,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
     }
   };
 
-  public subscription: Subscription;
+  private subscription: Subscription;
 
   constructor(
     private cardsFacade: CardsFacade,

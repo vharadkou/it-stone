@@ -20,7 +20,7 @@ export class CardDetailComponent implements OnChanges {
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;
 
-  public popupTextContent: PopupTextContent = {
+  private popupTextContent: PopupTextContent = {
     title: 'Delete card.',
     text: 'Card will be permanently deleted. Are you sure?',
     buttonText: {
