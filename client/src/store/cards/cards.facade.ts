@@ -2,7 +2,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Card } from 'models';
+import { Card, PopupTextContent } from 'models';
 
 import {
   ChangeSelectedCardId,
@@ -91,15 +91,15 @@ export class CardsFacade {
     this.store.dispatch(new ChangeSelectedCardId({ id, card }));
   }
 
-  public showDeleteCardPopup(title: string, text: string, id: number): void {
-    this.store.dispatch(new ShowDeleteCardPopup({ title, text, id }));
+  public showDeleteCardPopup(textContent: PopupTextContent, id: number): void {
+    this.store.dispatch(new ShowDeleteCardPopup({ textContent, id }));
   }
 
-  public showNewCardPopup(title: string, text: string, id: number, card: Card): void {
-    this.store.dispatch(new ShowNewCardPopup({ title, text, id, card }));
+  public showNewCardPopup(textContent: PopupTextContent, id: number, card: Card): void {
+    this.store.dispatch(new ShowNewCardPopup({ textContent, id, card }));
   }
 
-  public checkNewCardDataLoss(title: string, text: string, id: number, form: NgForm, card?: Card): void {
-    this.store.dispatch(new CheckNewCardDataLoss({ title, text, id, card, form }));
+  public checkNewCardDataLoss(textContent: PopupTextContent, id: number, form: NgForm, card?: Card): void {
+    this.store.dispatch(new CheckNewCardDataLoss({ textContent, id, card, form }));
   }
 }

@@ -32,7 +32,7 @@ export class CardsEffects {
     ofType<cardActions.ShowDeleteCardPopup>(cardActions.CardsActionTypes.ShowDeleteCardPopup),
     switchMap((action: cardActions.ShowDeleteCardPopup) => {
       return this.popupsService
-        .openDialog(action.payload.title, action.payload.text).pipe(
+        .openDialog(action.payload.textContent).pipe(
           filter(result => result)
         ).pipe(map(() => new cardActions.DeleteCard(action.payload)
         ));
@@ -43,7 +43,7 @@ export class CardsEffects {
     ofType<cardActions.ShowNewCardPopup>(cardActions.CardsActionTypes.ShowNewCardPopup),
     switchMap((action: cardActions.ShowNewCardPopup) => {
       return this.popupsService
-        .openDialog(action.payload.title, action.payload.text).pipe(
+        .openDialog(action.payload.textContent).pipe(
           filter(result => result)
         ).pipe(map(() => new cardActions.ChangeSelectedCardId(action.payload)
         ));
