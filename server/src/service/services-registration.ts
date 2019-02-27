@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
 
 import { UserAuthenticationRepository } from './user-authentication';
-import { CardRepository } from './card';
+import { CardRepository, CardService, CardRepositoryImplementation } from './card';
 import { DeskRepository } from './desk';
 import { LinkedinInfoParserService } from './linkedinInfoParser';
 import { ParserService } from './parser';
@@ -19,7 +19,7 @@ import { SkillService, SkillRepository, SkillRepositoryImplementation } from './
 export const CONTAINER = new Container();
 
 CONTAINER.bind<AppTokenRepository>(AppTokenRepository).to(AppTokenRepositoryImplementation);
-CONTAINER.bind<CardRepository>(CardRepository).to(CardRepository);
+CONTAINER.bind<CardRepository>(CardRepository).to(CardRepositoryImplementation);
 CONTAINER.bind<DeskRepository>(DeskRepository).to(DeskRepository);
 CONTAINER.bind<PlayerBindRepository>(PlayerBindRepository).to(PlayersBindRepositoryImplementation);
 CONTAINER.bind<RoomRepository>(RoomRepository).to(RoomRepositoryImplementation);
@@ -28,6 +28,7 @@ CONTAINER.bind<UserAuthenticationRepository>(UserAuthenticationRepository).to(Us
 CONTAINER.bind<UserRepository>(UserRepository).to(UserRepositoryImplementation);
 
 CONTAINER.bind<AppTokenService>(AppTokenService).to(AppTokenService);
+CONTAINER.bind<CardService>(CardService).to(CardService);
 CONTAINER.bind<LinkedinInfoParserService>(LinkedinInfoParserService).to(LinkedinInfoParserService);
 CONTAINER.bind<LoggerService>(LoggerService).to(LoggerServiceImplementation);
 CONTAINER.bind<ParserService>(ParserService).to(ParserService);
