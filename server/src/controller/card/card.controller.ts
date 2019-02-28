@@ -1,19 +1,18 @@
 import { controller, httpGet, httpPost, httpDelete } from 'inversify-express-utils';
 import { Request, Response } from 'express';
 import { inject } from 'inversify';
-
-import { CardService } from 'service/card';
+import { CardRepository } from './../../service/card/card.repository';
 
 @controller('/api')
 export class CardController {
     public constructor(
-        @inject(CardService) private cardService: CardService
+        @inject(CardRepository) private cardRepository: CardRepository
     ) { }
 
     @httpGet('/get-cards/')
     public async getSkills(request: Request, response: Response){ 
         try {
-            return this.cardService.getCards();
+            return await this.cardRepository.getCards();
           } catch (error) {
             return response.status(500).json(error);
         }
@@ -24,11 +23,10 @@ export class CardController {
         const card = request.body;
 
         try {
-            const isSave = await this.cardService.saveCard(card.id, card.name, card.surname, card.image, card.skills, card.hp, card.damage);            
-            if (isSave) {                
-                response.status(200).send({status: 'Saved'});
-            } else {
-                response.status(400).send({status: 'Error'});
+            await this.cardRepository.saveCard(card.id, card.name, card.surname, card.image, card.skills, card.hp, card.damage);
+
+            if (response.statusCode == 200) {    
+                response.status(200).send({status: 'Successful'});            
             }
 
         } catch (error){
@@ -38,9 +36,14 @@ export class CardController {
 
     @httpDelete('/delete-card/')
     public async deleteCard(request: Request, response: Response): Promise<void | Response>{
-        let requestId = request.body.id;
+        const requestId = request.body.id;
         try {
-            this.cardService.deleteCard(requestId);
+            await this.cardRepository.deleteCard(requestId);
+
+            if (response.statusCode == 200) {    
+                response.status(200).send({status: 'Successful'});            
+            }
+
           } catch (error) {
             return response.status(500).json(error);
         }
