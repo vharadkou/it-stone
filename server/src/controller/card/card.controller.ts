@@ -14,7 +14,7 @@ export class CardController {
         try {
             return await this.cardRepository.getCards();
           } catch (error) {
-            return response.status(500).json(error);
+            return response.json(error);
         }
     }
 
@@ -24,13 +24,11 @@ export class CardController {
 
         try {
             await this.cardRepository.saveCard(card.id, card.name, card.surname, card.image, card.skills, card.hp, card.damage);
-
-            if (response.statusCode == 200) {    
-                response.status(200).send({status: 'Successful'});            
-            }
+  
+            response.send({status: 'Successful'});            
 
         } catch (error){
-            return response.status(500).json(error);
+            return response.json(error);
         }
     }
 
@@ -40,12 +38,10 @@ export class CardController {
         try {
             await this.cardRepository.deleteCard(requestId);
 
-            if (response.statusCode == 200) {    
-                response.status(200).send({status: 'Successful'});            
-            }
+            response.send({status: 'Successful'});            
 
           } catch (error) {
-            return response.status(500).json(error);
+            return response.json(error);
         }
     } 
 }
