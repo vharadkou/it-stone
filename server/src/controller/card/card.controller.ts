@@ -24,7 +24,7 @@ export class CardController {
         const card = request.body;
 
         try {
-            this.cardRepository.saveCard(card.id, card.name, card.surname, card.image, card.skills, card.hp, card.damage);
+            await this.cardRepository.saveCard(card.id, card.name, card.surname, card.image, card.skills, card.hp, card.damage);
   
             response.send({status: 'Successful'});            
 
@@ -37,7 +37,7 @@ export class CardController {
     public async deleteCard(request: Request, response: Response): Promise<void | Response>{
         const requestId = request.body.id;
         try {
-            this.cardRepository.deleteCard(requestId);
+            await this.cardRepository.deleteCard(requestId);
 
             response.send({status: 'Successful'});            
 
