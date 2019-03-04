@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
 
 import { UserAuthenticationRepository } from './user-authentication';
-import { CardRepository } from './card';
+import { CardRepository, CardRepositoryImplementation } from './card';
 import { DeskRepository } from './desk';
 import { LinkedinInfoParserService } from './linkedinInfoParser';
 import { ParserService } from './parser';
@@ -19,7 +19,7 @@ import { SkillService, SkillRepository, SkillRepositoryImplementation } from './
 export const CONTAINER = new Container();
 
 CONTAINER.bind<AppTokenRepository>(AppTokenRepository).to(AppTokenRepositoryImplementation);
-CONTAINER.bind<CardRepository>(CardRepository).to(CardRepository);
+CONTAINER.bind<CardRepository>(CardRepository).to(CardRepositoryImplementation);
 CONTAINER.bind<DeskRepository>(DeskRepository).to(DeskRepository);
 CONTAINER.bind<PlayerBindRepository>(PlayerBindRepository).to(PlayersBindRepositoryImplementation);
 CONTAINER.bind<RoomRepository>(RoomRepository).to(RoomRepositoryImplementation);
