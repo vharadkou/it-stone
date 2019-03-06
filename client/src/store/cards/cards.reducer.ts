@@ -125,7 +125,7 @@ export const cardsReducer = (
         ...state
       };
 
-      case CardsActionTypes.DeleteCard:
+      case CardsActionTypes.DeleteCardSuccess:
       const prunedId = state.myCards.filter(item => {
         return item.id !== action.payload.id;
       });
