@@ -23,6 +23,8 @@ export enum CardsActionTypes {
   DeleteCardSuccess = '[cards] Delete card from Cards list (Success)',
   DeleteCardError = '[cards] Delete card from Cards list (Error)',
   UploadCard = '[cards] Upload new card to Cards list',
+  UploadCardSuccess = '[cards] Upload new card to Cards list (Success)',
+  UploadCardError = '[cards] Upload new card to Cards list (Error)',
   ChangeSelectedCardId = '[cards] Change selected card id',
   ShowDeleteCardPopup = '[cards] Show delete card popup',
   ShowNewCardPopup = '[cards] Show new card popup',
@@ -129,6 +131,18 @@ export class UploadCard implements Action {
   constructor(public payload: { card: Card }) {}
 }
 
+export class UploadCardSuccess implements Action {
+  public readonly type = CardsActionTypes.UploadCardSuccess;
+
+  constructor(public payload: { card: Card }) {}
+}
+
+export class UploadCardError implements Action {
+  public readonly type = CardsActionTypes.UploadCardError;
+
+  constructor(public payload: Error) {}
+}
+
 export class ChangeSelectedCardId implements Action {
   public readonly type = CardsActionTypes.ChangeSelectedCardId;
 
@@ -171,6 +185,8 @@ export type CardsActions =
   | DeleteCardSuccess
   | DeleteCardError
   | UploadCard
+  | UploadCardSuccess
+  | UploadCardError
   | ChangeSelectedCardId
   | ShowDeleteCardPopup
   | ShowNewCardPopup

@@ -51,6 +51,16 @@ export class CardsEffects {
     })
   );
 
+  @Effect() public uploadCard$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.UploadCard>(cardActions.CardsActionTypes.UploadCard),
+    switchMap((action: cardActions.UploadCard) => {
+      return this.http.post(`${baseUrl}/api/save-card/`, action.payload.card).pipe(
+        map(() => new cardActions.UploadCardSuccess(action.payload)),
+        catchError(error => of(new cardActions.UploadCardError(error)))
+      );
+    })
+  );
+
   @Effect() public ShowNewCardPopup$: Observable<Action> = this.actions$.pipe(
     ofType<cardActions.ShowNewCardPopup>(cardActions.CardsActionTypes.ShowNewCardPopup),
     switchMap((action: cardActions.ShowNewCardPopup) => {

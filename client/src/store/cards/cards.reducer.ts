@@ -145,7 +145,7 @@ export const cardsReducer = (
         selectedCardId: id
       };
 
-      case CardsActionTypes.UploadCard:
+      case CardsActionTypes.UploadCardSuccess:
       const newCard = action.payload.card;
       return {
         ...state,
