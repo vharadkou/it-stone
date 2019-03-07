@@ -153,6 +153,12 @@ export const cardsReducer = (
         selectedCardId: newCard.id
       };
 
+      case CardsActionTypes.UpdateCardSuccess:
+      return {
+        ...state,
+        status: Status.Success,
+      };
+
       case CardsActionTypes.ChangeSelectedCardId:
       const newSelectedCardId = action.payload.id;
       return {

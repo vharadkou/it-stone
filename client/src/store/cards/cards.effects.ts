@@ -61,6 +61,16 @@ export class CardsEffects {
     })
   );
 
+  @Effect() public updateCard$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.UpdateCard>(cardActions.CardsActionTypes.UpdateCard),
+    switchMap((action: cardActions.UpdateCard) => {
+      return this.http.put(`${baseUrl}/api/update-card/`, action.payload.card).pipe(
+        map(() => new cardActions.UpdateCardSuccess()),
+        catchError(error => of(new cardActions.UpdateCardError(error)))
+      );
+    })
+  );
+
   @Effect() public ShowNewCardPopup$: Observable<Action> = this.actions$.pipe(
     ofType<cardActions.ShowNewCardPopup>(cardActions.CardsActionTypes.ShowNewCardPopup),
     switchMap((action: cardActions.ShowNewCardPopup) => {

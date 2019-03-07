@@ -25,6 +25,9 @@ export enum CardsActionTypes {
   UploadCard = '[cards] Upload new card to Cards list',
   UploadCardSuccess = '[cards] Upload new card to Cards list (Success)',
   UploadCardError = '[cards] Upload new card to Cards list (Error)',
+  UpdateCard = '[cards] Update card in cards list',
+  UpdateCardSuccess = '[cards] Update card in cards list (Success)',
+  UpdateCardError = '[cards] Update card in cards list (Error)',
   ChangeSelectedCardId = '[cards] Change selected card id',
   ShowDeleteCardPopup = '[cards] Show delete card popup',
   ShowNewCardPopup = '[cards] Show new card popup',
@@ -143,6 +146,22 @@ export class UploadCardError implements Action {
   constructor(public payload: Error) {}
 }
 
+export class UpdateCard implements Action {
+  public readonly type = CardsActionTypes.UpdateCard;
+
+  constructor(public payload: { card: Card }) {}
+}
+
+export class UpdateCardSuccess implements Action {
+  public readonly type = CardsActionTypes.UpdateCardSuccess;
+}
+
+export class UpdateCardError implements Action {
+  public readonly type = CardsActionTypes.UpdateCardError;
+
+  constructor(public payload: Error) {}
+}
+
 export class ChangeSelectedCardId implements Action {
   public readonly type = CardsActionTypes.ChangeSelectedCardId;
 
@@ -187,6 +206,9 @@ export type CardsActions =
   | UploadCard
   | UploadCardSuccess
   | UploadCardError
+  | UpdateCard
+  | UpdateCardSuccess
+  | UpdateCardError
   | ChangeSelectedCardId
   | ShowDeleteCardPopup
   | ShowNewCardPopup
