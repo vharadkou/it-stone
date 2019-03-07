@@ -1,0 +1,6 @@
+<div class="about-component__container">
+    <div class="about-component__container-center" *ngIf = "(developers$ | async).length">
+        <h1 class="about-component__title">Game Developers</h1>
+        <app-card-carousel [people] = "developers$ | async"></app-card-carousel>
+    </div>
+</div>

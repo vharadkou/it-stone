@@ -1,0 +1,62 @@
+<mat-card class="example-card">
+  <mat-card-content class="about-card-content">
+      <div class="about-card-avatar__container">
+        <div mat-card-avatar class="example-header-image" [ngStyle] = "{'background-image': imageSrc}"></div>
+      </div>
+      <div class="about-card-description">
+        <div class="about-card-description__title-container">
+          <p>{{title}}</p>
+        </div>
+        <mat-list dense>
+          <mat-list-item>
+            <p>
+              <span class="about-card-description__field-title">
+                Name
+              </span>
+              <span class="about-card-description__field-text">
+                {{name}}
+              </span>
+            </p>
+          </mat-list-item>
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-list-item>
+              <p>
+                <span class="about-card-description__field-title">
+                    Surname
+                </span>
+                <span class="about-card-description__field-text">
+                    {{surname}}
+                </span>
+              </p>
+            </mat-list-item>
+            <mat-divider [inset]="true"></mat-divider>
+            <mat-list-item class="about-card-description__field">
+                <p>
+                  <span class="about-card-description__field-title">
+                      Skills
+                  </span>
+                  <span class="about-card-description__field-text">
+                    <div *ngFor = "let skill of skills" class = "about-card-description__field-skill">
+                      {{skill}}
+                    </div>
+                  </span>
+                </p>
+              </mat-list-item>
+              <mat-divider [inset]="true"></mat-divider>
+              <mat-list-item>
+                  <p>
+                    <span class="about-card-description__field-title">
+                        Email
+                    </span>
+                    <span class="about-card-description__field-text">
+                        <a href="{{email}}" class="about-card-description__field-link">
+                          {{email}}
+                        </a>
+                    </span>
+                  </p>
+                </mat-list-item>
+                <mat-divider [inset]="true"></mat-divider>
+         </mat-list>
+      </div>
+  </mat-card-content>
+</mat-card>

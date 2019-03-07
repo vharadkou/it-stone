@@ -40,3 +40,12 @@ export interface PopupTextContent {
     confirm: string
   };
 }
+
+export interface AboutCard {
+  title: string;
+  name:string;
+  surname:string;
+  imageSrc:string;
+  skills:string[];
+  email:string;
+}
