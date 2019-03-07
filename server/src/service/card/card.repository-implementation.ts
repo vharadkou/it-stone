@@ -80,4 +80,18 @@ export class CardRepositoryImplementation implements CardRepository {
             });
         });
     }
+
+    public updateCard(updatedCard: Card): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.cardModel.updateOne({ id: updatedCard.id }, updatedCard, error => {
+                if(error) {
+                    reject(error);
+                    this.loggerService.errorLog(error);
+                } else {
+                    resolve(true);
+                    this.loggerService.infoLog('Successful updating card');
+                }
+            });
+        });
+    }
 }

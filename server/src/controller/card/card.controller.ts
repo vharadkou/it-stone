@@ -1,4 +1,4 @@
-import { controller, httpGet, httpPost, httpDelete } from 'inversify-express-utils';
+import { controller, httpGet, httpPost, httpDelete, httpPut } from 'inversify-express-utils';
 import { Request, Response } from 'express';
 import { inject } from 'inversify';
 import { CardRepository } from './../../service/card/card.repository';
@@ -44,5 +44,18 @@ export class CardController {
           } catch (error) {
             response.json(error);
         }
-    } 
+    }
+    
+    @httpPut('/update-card/')
+    public async updateCard(request: Request, response: Response): Promise<void | Response>{
+        const updatedCard = request.body;
+        try {
+            await this.cardRepository.updateCard(updatedCard);
+
+            response.send({status: 'Successful'});
+            
+        } catch (error) {
+            response.json(error);
+        }
+    }
 }
