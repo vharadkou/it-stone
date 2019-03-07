@@ -1,4 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { baseUrl } from 'constants/baseUrl';
+
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -11,8 +13,6 @@ import { CardsFacade } from 'store/cards/cards.facade';
 import * as skillsActions from '../skills/skills.action';
 
 import * as cardActions from './cards.action';
-
-import { baseUrl } from './../../constants/baseUrl';
 
 @Injectable()
 export class CardsEffects {
