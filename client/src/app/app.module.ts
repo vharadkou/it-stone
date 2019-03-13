@@ -39,7 +39,7 @@ import {
   initialState,
 } from 'store/cards';
 import { PlayersHPEffects } from 'store/players-hp';
-import { AboutPageEffects, AboutPageFacade  } from '../store/about-page';
+import { AboutPageEffects, AboutPageFacade  } from 'store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import {
   SkillsEffects,
