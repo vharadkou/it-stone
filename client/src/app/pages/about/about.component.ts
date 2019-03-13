@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AboutCard } from '../../../models';
+import { AboutCard } from 'models';
 import { AboutPageFacade } from 'store';
 import { Observable } from 'rxjs';
 
@@ -11,12 +11,14 @@ import { Observable } from 'rxjs';
 
 export class AboutPageComponent implements OnInit {
 
-  constructor (private aboutPageFacade:AboutPageFacade) {
-  }
-
   public developers$:Observable<AboutCard[]> = this.aboutPageFacade.allAboutCards$;
 
-  ngOnInit() {
+  public constructor (private aboutPageFacade: AboutPageFacade) { }
+
+  public ngOnInit() {
+
     this.aboutPageFacade.loadAboutCards();
+
   }
+
 }

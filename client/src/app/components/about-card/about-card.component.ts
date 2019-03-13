@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-about-card',
   templateUrl: './about-card.component.html',
-  styleUrls: ['./about-card.component.scss']
+  styleUrls: ['./about-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutCardComponent {
   @Input() title:string;

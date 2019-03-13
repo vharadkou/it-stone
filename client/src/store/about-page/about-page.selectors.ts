@@ -1,7 +1,4 @@
-
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-
-import { AboutCard } from '../../models';
 
 import { AboutPageState } from './interfaces';
 

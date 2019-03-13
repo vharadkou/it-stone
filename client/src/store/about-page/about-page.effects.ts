@@ -5,11 +5,11 @@ import { Action } from '@ngrx/store';
 import { AboutCard} from 'models';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
-import { AboutPageFacade } from 'store/about-page/about-page.facade';
+import { AboutPageFacade } from './about-page.facade';
 
 import * as aboutPageActions from './about-page.action';
 
-import { baseUrl } from './../../constants/baseUrl'
+import { baseUrl } from 'constants/baseUrl'
 
 @Injectable()
 export class AboutPageEffects {

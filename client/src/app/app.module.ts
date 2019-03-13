@@ -39,14 +39,13 @@ import {
   initialState,
 } from 'store/cards';
 import { PlayersHPEffects } from 'store/players-hp';
-import { AboutPageEffects } from '../store/about-page/about-page.effects';
+import { AboutPageEffects, AboutPageFacade  } from '../store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import {
   SkillsEffects,
   SkillsFacade,
   skillsInitialState
 } from 'store/skills';
-import { AboutPageFacade } from 'store/about-page/about-page.facade'
 import { SocketEffect, SocketFacade } from 'store/socket';
 
 import { AppComponent } from './app.component';

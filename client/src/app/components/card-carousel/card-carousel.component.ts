@@ -1,13 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AboutCard } from '../../../models';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { AboutCard } from 'models';
+import { pipe, of } from 'rxjs';
+import { delay, tap, mapTo } from 'rxjs/operators';
+import { CdkRow } from '@angular/cdk/table';
+
 
 @Component({
   selector: 'app-card-carousel',
   templateUrl: './card-carousel.component.html',
-  styleUrls: ['./card-carousel.component.scss']
+  styleUrls: ['./card-carousel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class CardCarouselComponent implements OnInit {
+
+  constructor(private cdr: ChangeDetectorRef) {
+
+  }
 
   @Input() people:AboutCard[];
   
@@ -21,6 +30,7 @@ export class CardCarouselComponent implements OnInit {
     this.user = this.people[this.currentCardIndex];
   }
 
+  
   setCurrentCardData():void {
     this.user = this.people[this.currentCardIndex];
   }
@@ -41,9 +51,13 @@ export class CardCarouselComponent implements OnInit {
     }
     this.disableForward = false;
     this.styleForFading = "visible fadeOutBackward";
-    setTimeout(() => { this.setPreviousCardIndex();
-      this.styleForFading = "visible fadeInBackward"
-    }, 500);
+    of(null).pipe(delay(500), tap(
+      ()=>{
+            this.setPreviousCardIndex();
+            this.styleForFading = "visible fadeInBackward";
+            this.cdr.detectChanges()
+          },
+      )).subscribe();
   }
 
   getImageUrl():string {
@@ -55,9 +69,14 @@ export class CardCarouselComponent implements OnInit {
       this.disableForward = true;
     }
     this.disableBackward = false;
-    this.styleForFading = "visible fadeOutForward"
-    setTimeout(() => { this.setNextCardIndex();
-      this.styleForFading = "visible fadeInForward"
-    }, 500);
+    this.styleForFading = "visible fadeOutForward";
+    of(null).pipe(delay(500), tap(
+      ()=>{
+            this.setNextCardIndex();
+            this.styleForFading = "visible fadeInForward";
+            this.cdr.detectChanges()
+          },
+      )).subscribe();
+    
   }
 }
