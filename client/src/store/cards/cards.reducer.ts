@@ -125,7 +125,7 @@ export const cardsReducer = (
         ...state
       };
 
-      case CardsActionTypes.DeleteCard:
+      case CardsActionTypes.DeleteCardSuccess:
       const prunedId = state.myCards.filter(item => {
         return item.id !== action.payload.id;
       });
@@ -145,12 +145,18 @@ export const cardsReducer = (
         selectedCardId: id
       };
 
-      case CardsActionTypes.UploadCard:
+      case CardsActionTypes.UploadCardSuccess:
       const newCard = action.payload.card;
       return {
         ...state,
         myCards: [...state.myCards, newCard],
         selectedCardId: newCard.id
+      };
+
+      case CardsActionTypes.UpdateCardSuccess:
+      return {
+        ...state,
+        status: Status.Success,
       };
 
       case CardsActionTypes.ChangeSelectedCardId:

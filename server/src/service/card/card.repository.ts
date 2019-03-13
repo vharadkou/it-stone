@@ -12,4 +12,5 @@ export abstract class CardRepository {
         hp: number,
         damage: number
     ): Promise<Card>
+    abstract updateCard(card: Card): Promise<boolean>
 }

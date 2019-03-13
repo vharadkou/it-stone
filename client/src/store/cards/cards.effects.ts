@@ -1,3 +1,5 @@
+import { baseUrl } from 'constants/baseUrl';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -14,18 +16,28 @@ import * as cardActions from './cards.action';
 
 @Injectable()
 export class CardsEffects {
-  public baseUrl = 'http://www.mocky.io/v2/5c52bf29320000a72a855cbf';
-  public secondUrl = 'http://www.mocky.io/v2/5be983f82e00005f00f14631';
   public resultAction: Action;
 
   @Effect() public getCards$: Observable<Action> = this.actions$.pipe(
     ofType<cardActions.LoadCards>(cardActions.CardsActionTypes.LoadCards),
     switchMap((action: cardActions.LoadCards) =>
-      this.http.get(this.baseUrl).pipe(
+      this.http.get(`${baseUrl}/api/get-cards/`).pipe(
         map((data: Card[]) => new cardActions.LoadCardsSuccess(data)),
         catchError(error => of(new cardActions.LoadCardsError(error)))
       )
     )
+  );
+
+  @Effect() public deleteCard$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.DeleteCard>(cardActions.CardsActionTypes.DeleteCard),
+    switchMap((action: cardActions.DeleteCard) => {
+      return this.http.request('delete', `${baseUrl}/api/delete-card/`, {
+        body: action.payload
+      }).pipe(
+          map(() => new cardActions.DeleteCardSuccess(action.payload)),
+          catchError(error => of(new cardActions.DeleteCardError(error)))
+        );
+    })
   );
 
   @Effect() public ShowDeleteCardPopup$: Observable<Action> = this.actions$.pipe(
@@ -34,8 +46,28 @@ export class CardsEffects {
       return this.popupsService
         .openDialog(action.payload.textContent).pipe(
           filter(result => result)
-        ).pipe(map(() => new cardActions.DeleteCard(action.payload)
+        ).pipe(map(() => new cardActions.DeleteCard(action.payload),
         ));
+    })
+  );
+
+  @Effect() public uploadCard$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.UploadCard>(cardActions.CardsActionTypes.UploadCard),
+    switchMap((action: cardActions.UploadCard) => {
+      return this.http.post(`${baseUrl}/api/save-card/`, action.payload.card).pipe(
+        map(() => new cardActions.UploadCardSuccess(action.payload)),
+        catchError(error => of(new cardActions.UploadCardError(error)))
+      );
+    })
+  );
+
+  @Effect() public updateCard$: Observable<Action> = this.actions$.pipe(
+    ofType<cardActions.UpdateCard>(cardActions.CardsActionTypes.UpdateCard),
+    switchMap((action: cardActions.UpdateCard) => {
+      return this.http.put(`${baseUrl}/api/update-card/`, action.payload.card).pipe(
+        map(() => new cardActions.UpdateCardSuccess()),
+        catchError(error => of(new cardActions.UpdateCardError(error)))
+      );
     })
   );
 
