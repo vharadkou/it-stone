@@ -68,8 +68,15 @@
     <div class="card-detail__visual-side">
       <app-card [card]="card" [isEditor]="true"></app-card>
 
-      <button *ngIf="selectedCardId !== 100" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="showDeleteCardPopup()">+</button>
-      <button *ngIf="selectedCardId === 100" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">+</button>
+      <button *ngIf="selectedCardId !== 100" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="showDeleteCardPopup()">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_delete">delete</i>
+      </button>
+      <button *ngIf="selectedCardId !== 100 && form.dirty" mat-fab class="card-detail__btn card-detail__btn_update" (click)="updateCard(card)">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_update">how_to_reg</i>
+      </button>
+      <button *ngIf="selectedCardId === 100" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_create">add</i>
+      </button>
     </div>
 
   </div>

@@ -40,6 +40,11 @@ export class CardDetailComponent implements OnChanges {
     this.cardsFacade.uploadCard(card);
   }
 
+  public updateCard(card: Card): void {
+    this.cardsFacade.updateCard(card);
+    this.form.form.markAsPristine();
+  }
+
   public showDeleteCardPopup(): void {
     this.cardsFacade.showDeleteCardPopup(this.popupTextContent, this.card.id);
   }
