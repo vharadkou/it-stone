@@ -41,11 +41,11 @@ export class CardRepositoryImplementation implements CardRepository {
         return new Promise<Card>((resolve, reject) => {
             newCard.save((error, data: Card) => {
                 if (error) {
-                    reject(error);
                     this.loggerService.errorLog(error);
+                    reject(error);
                 } else {
-                    resolve(data);
                     this.loggerService.infoLog(`Successful saving card with id=${data.id}`);
+                    resolve(data);
                 }
             });
         });
@@ -55,11 +55,11 @@ export class CardRepositoryImplementation implements CardRepository {
         return new Promise<Card[]>((resolve, reject) => {
             this.cardModel.find({}, (error, data: Card[]) => {
                 if (error) {
-                    reject(error);
                     this.loggerService.errorLog(error);
+                    reject(error);
                 } else {
-                    resolve(data);
                     this.loggerService.infoLog('Successful getting cards');
+                    resolve(data);
                 }
             });
         });
@@ -71,11 +71,25 @@ export class CardRepositoryImplementation implements CardRepository {
         return new Promise<boolean>((resolve, reject) => {
             this.cardModel.deleteOne({ id: requestId }, (error) => {
                 if (error) {
-                    reject(error);
                     this.loggerService.errorLog(error);
+                    reject(error);
                 } else {
-                    resolve(true);
                     this.loggerService.infoLog('Successful removing card');
+                    resolve(true);
+                }
+            });
+        });
+    }
+
+    public updateCard(updatedCard: Card): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.cardModel.updateOne({ id: updatedCard.id }, updatedCard, error => {
+                if(error) {
+                    this.loggerService.errorLog(error);
+                    reject(error);
+                } else {
+                    this.loggerService.infoLog('Successful updating card');
+                    resolve(true);
                 }
             });
         });

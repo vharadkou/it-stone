@@ -20,6 +20,7 @@ import {
   MoveMyCardsWithinArray,
   ShowDeleteCardPopup,
   ShowNewCardPopup,
+  UpdateCard,
   UploadCard
 } from './cards.action';
 import { cardsQuery } from './cards.selectors';
@@ -85,6 +86,10 @@ export class CardsFacade {
 
   public uploadCard(card: Card): void {
     this.store.dispatch(new UploadCard({ card }));
+  }
+
+  public updateCard(card: Card): void {
+    this.store.dispatch(new UpdateCard({ card }));
   }
 
   public changeSelectedCardId(id: number, card?: Card): void {

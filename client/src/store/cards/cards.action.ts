@@ -20,7 +20,14 @@ export enum CardsActionTypes {
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
   DecrementEnemyCardCount = '[cards] decrement enemy number of cards',
   DeleteCard = '[cards] Delete card from Cards list',
+  DeleteCardSuccess = '[cards] Delete card from Cards list (Success)',
+  DeleteCardError = '[cards] Delete card from Cards list (Error)',
   UploadCard = '[cards] Upload new card to Cards list',
+  UploadCardSuccess = '[cards] Upload new card to Cards list (Success)',
+  UploadCardError = '[cards] Upload new card to Cards list (Error)',
+  UpdateCard = '[cards] Update card in cards list',
+  UpdateCardSuccess = '[cards] Update card in cards list (Success)',
+  UpdateCardError = '[cards] Update card in cards list (Error)',
   ChangeSelectedCardId = '[cards] Change selected card id',
   ShowDeleteCardPopup = '[cards] Show delete card popup',
   ShowNewCardPopup = '[cards] Show new card popup',
@@ -109,10 +116,50 @@ export class DeleteCard implements Action {
   constructor(public payload: { id: number }) {}
 }
 
+export class DeleteCardSuccess implements Action {
+  public readonly type = CardsActionTypes.DeleteCardSuccess;
+
+  constructor(public payload: { id: number }) {}
+}
+
+export class DeleteCardError implements Action {
+  public readonly type = CardsActionTypes.DeleteCardError;
+
+  constructor(public payload: Error) {}
+}
+
 export class UploadCard implements Action {
   public readonly type = CardsActionTypes.UploadCard;
 
   constructor(public payload: { card: Card }) {}
+}
+
+export class UploadCardSuccess implements Action {
+  public readonly type = CardsActionTypes.UploadCardSuccess;
+
+  constructor(public payload: { card: Card }) {}
+}
+
+export class UploadCardError implements Action {
+  public readonly type = CardsActionTypes.UploadCardError;
+
+  constructor(public payload: Error) {}
+}
+
+export class UpdateCard implements Action {
+  public readonly type = CardsActionTypes.UpdateCard;
+
+  constructor(public payload: { card: Card }) {}
+}
+
+export class UpdateCardSuccess implements Action {
+  public readonly type = CardsActionTypes.UpdateCardSuccess;
+}
+
+export class UpdateCardError implements Action {
+  public readonly type = CardsActionTypes.UpdateCardError;
+
+  constructor(public payload: Error) {}
 }
 
 export class ChangeSelectedCardId implements Action {
@@ -154,7 +201,14 @@ export type CardsActions =
   | DeleteMyCardFromBattle
   | DecrementEnemyCardCount
   | DeleteCard
+  | DeleteCardSuccess
+  | DeleteCardError
   | UploadCard
+  | UploadCardSuccess
+  | UploadCardError
+  | UpdateCard
+  | UpdateCardSuccess
+  | UpdateCardError
   | ChangeSelectedCardId
   | ShowDeleteCardPopup
   | ShowNewCardPopup
