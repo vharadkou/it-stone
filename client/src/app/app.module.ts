@@ -39,6 +39,7 @@ import {
   initialState,
 } from 'store/cards';
 import { PlayersHPEffects } from 'store/players-hp';
+import { AboutPageEffects, AboutPageFacade  } from 'store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import {
   SkillsEffects,
@@ -51,10 +52,13 @@ import { AppComponent } from './app.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
 import { MaterialDialogComponent } from './components/material-dialog/material-dialog.component';
+import { AboutPageComponent } from './pages/about/about.component';
+import { AboutCardComponent } from './components/about-card/about-card.component';
 import { DemoMaterialModule } from './material-module';
 import { CardEditorComponent } from './pages/card-editor/card-editor.component';
 import { PipesModule } from './pipes/pipes.module';
 import { SkillsService } from './services/skills.service';
+import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig(
@@ -73,6 +77,7 @@ const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
+  { path: 'about', component: AboutPageComponent},
   {
     path: '',
     redirectTo: '/battle',
@@ -102,10 +107,11 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
+    StoreModule.forFeature('aboutPageState', reducers.aboutCards, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
     StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects]),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -116,10 +122,12 @@ const appRoutes: Routes = [
     MatButtonModule,
     LayoutModule,
     FontAwesomeModule,
-    PipesModule,
+    PipesModule
   ],
   declarations: [
     AppComponent,
+    AboutPageComponent,
+    AboutCardComponent,
     CardComponent,
     DialogOverviewExampleDialogComponent,
     WelcomePageComponent,
@@ -128,7 +136,8 @@ const appRoutes: Routes = [
     InfobarComponent,
     CardEditorComponent,
     CardDetailComponent,
-    MaterialDialogComponent
+    MaterialDialogComponent,
+    CardCarouselComponent
   ],
   entryComponents: [
     MaterialDialogComponent
@@ -145,6 +154,7 @@ const appRoutes: Routes = [
     SkillsService,
     CardsFacade,
     SkillsFacade,
+    AboutPageFacade,
     PlayersHPFacade,
     SocketFacade
   ],
