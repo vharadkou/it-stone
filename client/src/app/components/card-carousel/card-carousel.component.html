@@ -1,0 +1,27 @@
+<div class="card-courusel__container">
+    <button mat-fab 
+            class="card-courusel__button card-courusel__button-backward"
+            (click)='setPreviousCard()'
+            [disabled] = "disableBackward">
+        <mat-icon>
+            arrow_back_ios
+        </mat-icon>
+    </button>
+    <app-about-card [ngClass]="styleForFading"
+                    [title]="user.title"
+                    [name]="user.name"
+                    [surname]="user.surname"
+                    [imageSrc]='getImageUrl()'
+                    [skills]="user.skills"
+                    [email]="user.email"
+                    >
+    </app-about-card>
+    <button mat-fab 
+            class="card-courusel__button card-courusel__button-forward"
+            (click)="setNextCard()"
+            [disabled] = "disableForward">
+        <mat-icon>
+            arrow_forward_ios
+        </mat-icon>
+    </button>
+</div>

@@ -1,0 +1,30 @@
+@import '../../settings';
+
+.about-page__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    background-color: #778ca3;
+}
+
+.about-page__title{ 
+    color: antiquewhite;
+    font-family: Roboto, Arial, sans-serif;
+    font-weight: 300;
+    margin-bottom: 1em;
+    font-size: 3em;
+}
+
+.about-page__container-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #596275;
+    width: 100%;
+    padding: 2em 0 7em;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
