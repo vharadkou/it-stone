@@ -7,4 +7,4 @@ export * from './user/user.controller';
 export * from './skill/skill.controller';
 export * from './card/card.controller';
 export * from './about-card/about-card.controller';
-
+export * from './deck/deck.controller';
