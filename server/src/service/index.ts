@@ -8,3 +8,4 @@ export * from './send-result';
 export * from '../model';
 export * from './logger';
 export * from './about-card';
+export * from './deck';
