@@ -48,3 +48,8 @@ export interface Skill {
 export interface User {
     userToken: string;
 }
+
+export interface Statistics {
+    gamesPlayed: number;
+    gamesWon: number;
+}
