@@ -9,7 +9,7 @@ import { DeskRepository } from './desk';
 import { LinkedinInfoParserService } from './linkedinInfoParser';
 import { ParserService } from './parser';
 import { AppTokenRepository } from './app-token';
-import { UserService, UserRepository, UserRepositoryImplementation } from './user';
+import { UserRepository, UserRepositoryImplementation } from './user';
 import { RoomService, RoomRepository, RoomRepositoryImplementation } from './room';
 import { PlayerBindRepository, PlayersBindRepositoryImplementation, PlayersBindService} from './player-bind';
 import { SendResultService } from './send-result';
@@ -39,7 +39,6 @@ CONTAINER.bind<PlayersBindService>(PlayersBindService).to(PlayersBindService);
 CONTAINER.bind<RoomService>(RoomService).to(RoomService);
 CONTAINER.bind<SendResultService>(SendResultService).to(SendResultService);
 CONTAINER.bind<SkillService>(SkillService).to(SkillService);
-CONTAINER.bind<UserService>(UserService).to(UserService);
 
 
 export const inject = getDecorators(CONTAINER).lazyInject;

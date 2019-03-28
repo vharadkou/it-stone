@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { CommunityLayer, GameResult, ResultStatus, ParticipationStatus } from 'community-layer';
 import { AppTokenRepository } from 'service/app-token';
-import { UserService } from '../user/user.service';
 import { LoggerService } from 'service/logger';
 const communityLayer = new CommunityLayer();
 
@@ -9,7 +8,6 @@ const communityLayer = new CommunityLayer();
 export class SendResultService {
     constructor(
         @inject(AppTokenRepository) private appTokenRepository: AppTokenRepository,
-        @inject(UserService) private userService: UserService,
         @inject(LoggerService) private loggerService: LoggerService,
     ) { }
 

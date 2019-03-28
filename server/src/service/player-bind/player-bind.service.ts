@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { PlayersBind } from '../../model';
 import { RoomService } from 'service/room';
 import { PlayerBindRepository } from './player-bind.repository';
-import { UserService } from 'service/user';
+import { UserRepository } from 'service/user';
 import { LoggerService } from 'service/logger';
 
 @injectable()
@@ -12,7 +12,7 @@ export class PlayersBindService {
     constructor(
         @inject(PlayerBindRepository) private playerBindRepository: PlayerBindRepository,
         @inject(RoomService) private roomService: RoomService,
-        @inject(UserService) private userService: UserService,
+        @inject(UserRepository) private userRepository: UserRepository,
         @inject(LoggerService) private loggerService: LoggerService
     ) { }
 
@@ -32,20 +32,20 @@ export class PlayersBindService {
             throw new Error(error);
         } else if (!playersBind.players){
             const error = 'no players';
-            
+
             this.loggerService.errorLog(error);
             throw new Error(error);
-        } else if (playersBind.players.length <= 1) {            
+        } else if (playersBind.players.length <= 1) {
             const error = 'not enough players';
-                        
-            this.loggerService.errorLog(error);            
-            throw new Error(error);            
-        } else {
-            this.userService.addUserToDb(playersBind.players[0]);
-            this.userService.addUserToDb(playersBind.players[1]);
-            this.loggerService.infoLog('Room and players have been binded');
 
-            return true
+            this.loggerService.errorLog(error);
+            throw new Error(error);
+        } else {
+            this.userRepository.addUser(playersBind.players[0]);
+            this.userRepository.addUser(playersBind.players[1]);
+            this.loggerService.infoLog('Room and players have been bound');
+
+            return true;
         }
     }
 }
