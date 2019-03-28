@@ -1,8 +1,10 @@
-import { UserDB } from '../../models/user';
+import { User } from '../../models/user';
 
 export abstract class UserRepository {
-    public abstract getUser(userToken: string): Promise<UserDB>;
-    public abstract addUserToDb(userToken: string): Promise<UserDB>;
-    public abstract getAllUsersTokens(): Promise<UserDB[]>;
+    public abstract getUserByToken(userToken: string): Promise<User>;
+    public abstract addUser(userToken: string): Promise<User>;
+    public abstract getAllUsers(): Promise<User[]>;
     public abstract cleanUsersCollection(): Promise<boolean>;
+    public abstract updateUser(user: User): Promise<boolean>;
+    public abstract removeUser(userToken: string): Promise<boolean>;
 }

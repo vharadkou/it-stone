@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { UserRepository } from './user.repository'
-import { UserDB } from '../../models/user';
+import { User } from '../../models/user';
 import { Mongoose, Schema, Model } from 'mongoose';
 import { USER_COLLECTION, DB_URL } from '../../constants/db';
 import { USER_SCHEMA } from '../../models';
@@ -10,73 +10,102 @@ import { LoggerService } from "service/logger";
 export class UserRepositoryImplementation implements UserRepository {
 
     private mongoose: Mongoose = new Mongoose();
-    private userModel: Model<UserDB> = this.mongoose.model<UserDB>(USER_COLLECTION, new Schema(USER_SCHEMA));
+    private userModel: Model<User> = this.mongoose.model<User>(USER_COLLECTION, new Schema(USER_SCHEMA));
 
-    constructor (
+    constructor(
         @inject(LoggerService) private loggerService: LoggerService
     ) {
-        this.mongoose.connect(DB_URL);
+        this.mongoose.connect(DB_URL, { useNewUrlParser: true });
     }
-    
-    public async addUserToDb(userTokenString: string): Promise<UserDB>{
-        const newUser: UserDB = new this.userModel({userToken: userTokenString})
 
-        return new Promise<UserDB>((resolve, reject) => {
-            newUser.save((error: string, data: UserDB) => {
+    public async addUser(token: string): Promise<User> {
+        const newUser: User = new this.userModel({userToken: token});
+        const allUsers = await this.getAllUsers();
+
+        if (allUsers.map(user => user.userToken).indexOf(token) !== -1) {
+            this.loggerService.infoLog('User already exist in database');
+        } else {
+            return new Promise<User>((resolve, reject) => {
+                newUser.save((error, data: User) => {
+                    if(error){
+                        this.loggerService.errorLog(error);
+                        reject(error);
+                    } else {
+                        this.loggerService.infoLog(`Successful adding user to collection with token=${token}`);
+                        resolve(data)
+                    }
+                });
+            });
+        }
+    }
+
+    public async getUserByToken(token: string): Promise<User> {
+        return new Promise<User>((resolve, reject) => {
+            this.userModel.find({userToken: token}, (error, data: User) => {
                 if(error){
-                    reject(error);
                     this.loggerService.errorLog(error);
-                } else {
-                    resolve(data)
-                }
-            });
-        });
-    }      
-
-    public async getUser(token: string): Promise<UserDB>{
-        
-        return new Promise<any>((resolve, reject) => {
-            this.userModel.find({userToken: token}, (error, data: UserDB) => {
-                if(error){
                     reject(error);
                 } else {
-                    const newData: UserDB = data;
-                    resolve(newData);
-                    this.loggerService.infoLog(`Get user`);
+                    this.loggerService.infoLog(`Successful getting user with token=${token}`);
+                    resolve(data);
                 }
             });
         });
     }
 
-    public async getAllUsersTokens(): Promise<UserDB[]>{
-
-        return new Promise<any>((resolve, reject) => {
-            this.userModel.find({}, (error, data: UserDB[]) => {
+    public async getAllUsers(): Promise<User[]> {
+        return new Promise<User[]>((resolve, reject) => {
+            this.userModel.find({}, (error, data: User[]) => {
                 if(error){
+                    this.loggerService.errorLog(error);
                     reject(error);
                 } else {
-                    const newData: UserDB[] = data;
-                    resolve(newData);                    
-                    this.loggerService.infoLog(`Get all users tokens`);
+                    this.loggerService.infoLog(`Successful getting all users from collection`);
+                    resolve(data);
                 }
             });
         });
     }
 
-    public async cleanUsersCollection(): Promise<boolean>{
-        
+    public async cleanUsersCollection(): Promise<boolean> {
         return new Promise<boolean> ((resolve, reject) => {
-            
             this.userModel.remove({}, (error) => {
                 if (error) {
-                    reject(error);
                     this.loggerService.errorLog(error);
-                } else {                    
-                    resolve(true);
+                    reject(error);
+                } else {
                     this.loggerService.infoLog('Users collection in database has been cleaned');
+                    resolve(true);
                 }
             });
         });
     }
 
+    public updateUser(updatedUser: User): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userModel.updateOne({ userToken: updatedUser.userToken }, updatedUser, error => {
+                if(error) {
+                    this.loggerService.errorLog(error);
+                    reject(error);
+                } else {
+                    this.loggerService.infoLog(`Successful updating user with token=${updatedUser.userToken}`);
+                    resolve(true);
+                }
+            });
+        });
+    }
+
+    public async removeUser(token: string): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            this.userModel.deleteOne({userToken: token}, (error) => {
+                if(error){
+                    this.loggerService.errorLog(error);
+                    reject(error);
+                } else {
+                    this.loggerService.infoLog(`Successful removing user with token=${token}`);
+                    resolve(true);
+                }
+            });
+        });
+    }
 }
