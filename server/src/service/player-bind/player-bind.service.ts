@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { PlayersBind } from '../../model';
+import { PlayersBind } from 'service';
 import { RoomService } from 'service/room';
 import { PlayerBindRepository } from './player-bind.repository';
 import { UserRepository } from 'service/user';
