@@ -1,9 +1,8 @@
 import { injectable, inject } from "inversify";
 import { UserRepository } from './user.repository'
-import { User } from '../../models/user';
+import { User, USER_SCHEMA } from '../../models';
 import { Mongoose, Schema, Model } from 'mongoose';
 import { USER_COLLECTION, DB_URL } from '../../constants/db';
-import { USER_SCHEMA } from '../../models';
 import { LoggerService } from "service/logger";
 
 @injectable()

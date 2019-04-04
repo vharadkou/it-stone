@@ -1,4 +1,4 @@
-import { User } from '../../models/user';
+import { User } from 'service';
 
 export abstract class UserRepository {
     public abstract getUserByToken(userToken: string): Promise<User>;
