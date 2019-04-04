@@ -23,7 +23,7 @@ export class PlayersBindService {
         }
     }
 
-    public checkPlayersBind(playersBind: PlayersBind): boolean {
+    public async checkPlayersBind(playersBind: PlayersBind): Promise<boolean | void> {
         
         if(!playersBind.room){
             const error = 'no room';
@@ -41,11 +41,11 @@ export class PlayersBindService {
             this.loggerService.errorLog(error);
             throw new Error(error);
         } else {
-            this.userRepository.addUser(playersBind.players[0]);
-            this.userRepository.addUser(playersBind.players[1]);
+            await this.userRepository.addUser(playersBind.players[0]);
+            await this.userRepository.addUser(playersBind.players[1]);
             this.loggerService.infoLog('Room and players have been bound');
 
-            return true;
+            return Promise.resolve(true);
         }
     }
 }
