@@ -2,7 +2,7 @@ import { controller, httpPost, httpGet, httpPut, response, request, queryParam, 
 import { inject } from 'inversify';
 import * as express from 'express';
 import { UserRepository } from "service/user";
-import { User } from 'service';
+import { User } from 'models';
 
 @controller('/api')
 export class UserController {

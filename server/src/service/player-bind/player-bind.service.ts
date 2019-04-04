@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 
-import { PlayersBind } from 'service';
+import { PlayersBind } from 'models';
 import { RoomService } from 'service/room';
 import { PlayerBindRepository } from './player-bind.repository';
 import { UserRepository } from 'service/user';
@@ -45,7 +45,7 @@ export class PlayersBindService {
             await this.userRepository.addUser(playersBind.players[1]);
             this.loggerService.infoLog('Room and players have been bound');
 
-            return Promise.resolve(true);
+            return true;
         }
     }
 }
