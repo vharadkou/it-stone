@@ -45,6 +45,19 @@ export interface Skill {
     description: string;
 }
 
+export interface Deck {
+    id: number;
+    title: string;
+    cardIds: number[];
+}
+
 export interface User {
     userToken: string;
+    decks: Deck[];
+    statistics: Statistics;
+}
+
+export interface Statistics {
+    gamesPlayed: number;
+    gamesWon: number;
 }

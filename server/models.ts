@@ -39,3 +39,20 @@ export interface Room {
     players: Player[];
     status: RoomStatus;
 }
+
+export interface Deck {
+    id: number;
+    title: string;
+    cardIds: number[];
+}
+
+export interface Statistics {
+    gamesPlayed: number;
+    gamesWon: number;
+}
+
+export interface User {
+    userToken: string;
+    decks: Deck[];
+    statistics: Statistics;
+}

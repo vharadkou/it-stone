@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { PlayersBind } from '../../model';
+import { PlayersBind } from 'models';
 import { PlayerBindRepository } from './player-bind.repository';
 
 const playersBinds: PlayersBind[] = [];
