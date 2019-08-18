@@ -1,0 +1,7 @@
+<p>Статистика:</p>
+<p>Доступные герои:</p>
+<app-account-page (onClick)="getId($event)" [heroList]="heroList">
+    Loading heroes ...</app-account-page>
+<!-- <button [routerLink]="'rules'">Правила игры:</button>
+<router-outlet></router-outlet> -->
+<button [disabled]="isDisabled" (click)="alertId()">Начать бой</button>

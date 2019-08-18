@@ -9,7 +9,6 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class UserService {
     public constructor(private http: Http) {
-
     }
 
     public findUser(userName: string): Observable<any> {

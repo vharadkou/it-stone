@@ -25,6 +25,7 @@ import {
   FightPageComponent,
   NotFoundPageComponent,
   WelcomePageComponent,
+  AccountPageComponent,
 } from 'pages';
 import {
   FightService,
@@ -32,14 +33,16 @@ import {
   TimerService,
   UserService,
 } from 'services';
-import { reducers } from 'store';
+import { reducers, PlayersInfoFacade } from 'store';
+import { HeroFacade, HeroEffects, HeroState } from 'store/hero';
+
 import {
   CardsEffects,
   CardsFacade,
   initialState,
 } from 'store/cards';
 import { PlayersHPEffects } from 'store/players-hp';
-import { AboutPageEffects, AboutPageFacade  } from 'store/about-page';
+import { AboutPageEffects, AboutPageFacade } from 'store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import {
   SkillsEffects,
@@ -47,7 +50,6 @@ import {
   skillsInitialState
 } from 'store/skills';
 import { SocketEffect, SocketFacade } from 'store/socket';
-
 import { AppComponent } from './app.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
@@ -59,7 +61,10 @@ import { CardEditorComponent } from './pages/card-editor/card-editor.component';
 import { PipesModule } from './pipes/pipes.module';
 import { SkillsService } from './services/skills.service';
 import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
-
+import { PlayerInfoComponent } from './components/player-info/player-info.component';
+import { AccountComponent } from './components/account/account.component';
+import { RulesComponent } from './pages/rules/rules.component';
+import { from } from 'rxjs';
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig(
     [
@@ -77,13 +82,21 @@ const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
-  { path: 'about', component: AboutPageComponent},
+  { path: 'about', component: AboutPageComponent },
+  { path: 'player', component: PlayerInfoComponent },
+  {
+    path: 'user/:id', component: AccountComponent,
+    children: [
+      { path: 'rules', component: RulesComponent }
+    ]
+  },
   {
     path: '',
     redirectTo: '/battle',
     pathMatch: 'full'
   },
-  { path: '**', component: FightPageComponent }
+  { path: '**', component: FightPageComponent },
+
 ];
 
 @NgModule({
@@ -109,9 +122,11 @@ const appRoutes: Routes = [
     }),
     StoreModule.forFeature('aboutPageState', reducers.aboutCards, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
-    StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
+    StoreModule.forFeature('heroState', reducers.hero, {}),
     StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects]),
+    StoreModule.forFeature('playersInfoState', reducers.playersInfo, {}),
+    StoreModule.forFeature('heroState', reducers.hero, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects, HeroEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -137,7 +152,11 @@ const appRoutes: Routes = [
     CardEditorComponent,
     CardDetailComponent,
     MaterialDialogComponent,
-    CardCarouselComponent
+    CardCarouselComponent,
+    PlayerInfoComponent,
+    AccountComponent,
+    AccountPageComponent,
+    RulesComponent,
   ],
   entryComponents: [
     MaterialDialogComponent
@@ -155,8 +174,10 @@ const appRoutes: Routes = [
     CardsFacade,
     SkillsFacade,
     AboutPageFacade,
+    PlayersInfoFacade,
     PlayersHPFacade,
-    SocketFacade
+    SocketFacade,
+    HeroFacade,
   ],
   bootstrap: [AppComponent]
 })

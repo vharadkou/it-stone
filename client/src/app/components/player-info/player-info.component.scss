@@ -1,0 +1,16 @@
+    @import '../../settings';
+    .its-card__container {
+        width: 430px;
+        height: 300px;
+        user-select: none;
+        box-shadow: 0 0px 10px 1px $antiquewhite;
+        background-color: $orange;
+    }
+    
+    .its-card__title {
+        font-size: $hp-size;
+    }
+    
+    .its-card__name {
+        font-size: $hp-size;
+    }

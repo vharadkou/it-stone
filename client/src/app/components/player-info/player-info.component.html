@@ -1,0 +1,8 @@
+<p class=" its-card its-card__title">Information about player</p>
+<div class="its-card its-card__container">
+    <div *ngFor="let player of playerInfo">
+        <p class="its-card its-card__name"><span>First name: </span> <span>{{player.firstName}}</span></p>
+        <p class="its-card its-card__name"> <span>Last name: </span> <span>{{player.lastName}}</span></p>
+        <p class="its-card__name"> <span>Health: </span><span>{{player.health}}</span></p>
+    </div>
+</div>
