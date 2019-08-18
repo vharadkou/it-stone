@@ -36,6 +36,15 @@ export interface Player {
   health: number;
 }
 
+export interface Hero {
+  id: number;
+  name: string;
+  skills: string;
+  hp: number;
+  image: string;
+  selected: boolean;
+}
+
 export interface Card {
   _id: string,
   class: string,
@@ -67,11 +76,11 @@ export interface PopupTextContent {
 
 export interface AboutCard {
   title: string;
-  name:string;
-  surname:string;
-  imageSrc:string;
-  skills:string[];
-  email:string;
+  name: string;
+  surname: string;
+  imageSrc: string;
+  skills: string[];
+  email: string;
 }
 
 export interface User{

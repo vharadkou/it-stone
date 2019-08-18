@@ -1,0 +1,10 @@
+<div class="hero-list-container">
+    <div *ngFor="let hero of heroList" class="hero-list" (click)="onClick.emit(hero.id)" [ngStyle]="hero.selected == false ? null : {'color': 'orange'}">
+        <p>{{hero.selected}}</p>
+        <p>{{hero.id}}</p>
+        <p>{{hero.name}}</p>
+        <p>{{hero.skills}}</p>
+        <p>{{hero.hp}}</p>
+        <p>{{hero.image}}</p>
+    </div>
+</div>

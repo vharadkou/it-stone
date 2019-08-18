@@ -33,6 +33,8 @@ import {
   FightPageComponent,
   NotFoundPageComponent,
   AuthorizationComponent,
+  WelcomePageComponent,
+  AccountPageComponent,
 } from 'pages';
 import {
   FightService,
@@ -42,8 +44,10 @@ import {
 
 } from 'services';
 import {SpellService} from './services/spell.service'
-import { reducers, GameProcessFacade } from 'store';
 import { AboutPageEffects, AboutPageFacade } from 'store/about-page';
+import { reducers, PlayersInfoFacade, GameProcessFacade } from 'store';
+import { HeroFacade, HeroEffects, HeroState } from 'store/hero';
+
 import {
   CardsEffects,
   CardsFacade,
@@ -55,10 +59,14 @@ import {
   UserEffects,
 } from 'store/user';
 import { PlayersHPEffects } from 'store/players-hp';
+import { AboutPageEffects, AboutPageFacade } from 'store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
-import { SkillsEffects, SkillsFacade, skillsInitialState } from 'store/skills';
-//import { SocketEffect, SocketFacade } from 'store/socket';
-
+import {
+  SkillsEffects,
+  SkillsFacade,
+  skillsInitialState
+} from 'store/skills';
+import { SocketEffect, SocketFacade } from 'store/socket';
 import { AppComponent } from './app.component';
 import { AboutCardComponent } from './components/about-card/about-card.component';
 import { BattleFieldComponent } from './components/battle-field/battle-field.component';
@@ -80,6 +88,11 @@ import { SignUpComponent } from './pages/authorization/sign-up/sign-up.component
 import { AuthorizationGuard } from './authorization.guard';
 import { ScreensaverComponent } from './components/screensaver/screensaver.component';
 
+import { PlayerInfoComponent } from './components/player-info/player-info.component';
+import { AccountComponent } from './components/account/account.component';
+import { RulesComponent } from './pages/rules/rules.component';
+import { from } from 'rxjs';
+
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
     {
@@ -97,14 +110,21 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginPageLayoutComponent },
   { path: 'battle', canActivate: [AuthorizationGuard], component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
-  { path: 'about', component: AboutPageComponent},
   { path: 'authorization', component: AuthorizationComponent},
+  { path: 'about', component: AboutPageComponent },
+  { path: 'player', component: PlayerInfoComponent },
+  {
+    path: 'user/:id', component: AccountComponent,
+    children: [
+      { path: 'rules', component: RulesComponent }
+    ]
+  },
   {
     path: '',
     redirectTo: '/authorization',
     pathMatch: 'full'
   },
-  { path: '**', component: LoginPageLayoutComponent }
+  { path: '**', component: FightPageComponent },
 ];
 
 @NgModule({
@@ -130,8 +150,11 @@ const appRoutes: Routes = [
     StoreModule.forFeature('gameProcessState', reducers.gameProcess, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
-  //  StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, /*SocketEffect, */SkillsEffects, AboutPageEffects, UserEffects]),
+    StoreModule.forFeature('heroState', reducers.hero, {}),
+    StoreModule.forFeature('socketState', reducers.socket, {}),
+    StoreModule.forFeature('playersInfoState', reducers.playersInfo, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects, HeroEffects, UserEffects]),
+
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -165,7 +188,11 @@ const appRoutes: Routes = [
     InnerPagesComponent,
     LoginPageLayoutComponent,
     MaterialDialogCardChoosingComponent,
-    ScreensaverComponent
+    ScreensaverComponent,
+    PlayerInfoComponent,
+    AccountComponent,
+    AccountPageComponent,
+    RulesComponent,
   ],
   entryComponents: [
     MaterialDialogComponent,
@@ -182,9 +209,11 @@ const appRoutes: Routes = [
     AboutPageFacade,
     GameProcessFacade,
     PlayersHPFacade,
-    //SocketFacade,
     UserFacade,
-    AuthorizationGuard
+    AuthorizationGuard,
+    PlayersInfoFacade,
+    // SocketFacade,
+    HeroFacade,
   ],
   bootstrap: [AppComponent]
 })
