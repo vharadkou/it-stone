@@ -7,6 +7,7 @@ import { skillsReducer } from './skills/skills.reducer';
 import { aboutCardsReducer } from './about-page/about-page.reducer';
 import { AboutPageState } from './about-page/interfaces'
 import { SocketState, socketReducer } from './socket';
+import { userReducer } from './user';
 
 export enum Status {
   Initial,
@@ -28,5 +29,6 @@ export const reducers = {
   playersHP: playersHPReducer,
   skills: skillsReducer,
   socket: socketReducer,
-  aboutCards: aboutCardsReducer
+  aboutCards: aboutCardsReducer,
+  user: userReducer
 };

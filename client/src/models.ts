@@ -49,3 +49,9 @@ export interface AboutCard {
   skills:string[];
   email:string;
 }
+
+export interface User{
+  nickName: string;
+  email: string;
+  password: string;
+}

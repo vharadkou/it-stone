@@ -25,6 +25,7 @@ import {
   FightPageComponent,
   NotFoundPageComponent,
   WelcomePageComponent,
+  AuthorizationComponent,
 } from 'pages';
 import {
   FightService,
@@ -38,6 +39,12 @@ import {
   CardsFacade,
   initialState,
 } from 'store/cards';
+import {
+  // CardsEffects,
+  UserFacade,
+  initialUserState,
+  UserEffects,
+} from 'store/user';
 import { PlayersHPEffects } from 'store/players-hp';
 import { AboutPageEffects, AboutPageFacade  } from 'store/about-page';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
@@ -59,6 +66,10 @@ import { CardEditorComponent } from './pages/card-editor/card-editor.component';
 import { PipesModule } from './pipes/pipes.module';
 import { SkillsService } from './services/skills.service';
 import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
+import { SignInComponent } from './pages/authorization/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/authorization/sign-up/sign-up.component';
+import { AuthorizationGuard } from './authorization.guard';
+// import { AuthorizationComponent } from './pages/authorization/authorization.component';
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig(
@@ -75,12 +86,13 @@ export function getAuthServiceConfigs(): AuthServiceConfig {
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
-  { path: 'battle', component: FightPageComponent },
+  { path: 'battle', canActivate: [AuthorizationGuard], component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
   { path: 'about', component: AboutPageComponent},
+  { path: 'authorization', component: AuthorizationComponent},
   {
     path: '',
-    redirectTo: '/battle',
+    redirectTo: '/authorization',
     pathMatch: 'full'
   },
   { path: '**', component: FightPageComponent }
@@ -107,11 +119,12 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
+    StoreModule.forFeature('userState', reducers.user, {}),
     StoreModule.forFeature('aboutPageState', reducers.aboutCards, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
     StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects]),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects, UserEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -137,7 +150,10 @@ const appRoutes: Routes = [
     CardEditorComponent,
     CardDetailComponent,
     MaterialDialogComponent,
-    CardCarouselComponent
+    CardCarouselComponent,
+    AuthorizationComponent,
+    SignInComponent,
+    SignUpComponent
   ],
   entryComponents: [
     MaterialDialogComponent
@@ -156,7 +172,9 @@ const appRoutes: Routes = [
     SkillsFacade,
     AboutPageFacade,
     PlayersHPFacade,
-    SocketFacade
+    SocketFacade,
+    UserFacade,
+    AuthorizationGuard
   ],
   bootstrap: [AppComponent]
 })
