@@ -1,0 +1,193 @@
+@import '../../settings';
+
+.its-card {
+  font-family: $roboto-font;
+
+
+
+  .its-card__id {
+    display: none;
+  }
+.its-card__manaCost-wrapper {
+  position: relative;
+  height: 5%;
+  width: 100%;
+}
+
+.its-card__disables {
+  background-color: black;
+}
+  .its-card__manaCost {
+    
+    width: 25px;
+    height: 25px;
+    top: -9px;
+    left: -15px;
+   position: absolute;
+   text-align: center;
+   vertical-align: middle;
+   line-height:25px;
+    border-radius: 50% 50%;
+    background-color: $orange;
+    border: 2px solid rgb(138, 132, 132);
+
+    font-weight: 600;
+  }
+
+    &.edit-version {
+    .its-card__container {
+      width: 320px;
+      height: 500px;
+      user-select: none;
+      box-shadow: 0 0px 10px 1px $antiquewhite;
+    }
+
+    .its-card__picture {
+      height: 130px;
+    }
+
+    .its-card__title {
+      font-size: $hp-size;
+    }
+
+    .its-card__name {
+      font-size: $hp-size;
+    }
+
+    .its-card__surname {
+      font-size: $hp-size;
+    }
+
+    .its-card__stat-name {
+      font-size: $thirty;
+    }
+
+    .its-card__stat-value {
+      font-size: $thirty;
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 130px;
+    height: 200px;
+    margin: 10px 5px;
+    border-radius: 5px;
+    background-color: $antiquewhite;
+    box-shadow: 0 2px 1px -1px opacify($black, 0.2), 0 1px 1px 0 opacify($black, 0.14), 0 1px 3px 0 opacify($black, 0.12);
+  }
+
+  &__background-cont {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  &__image {
+    background-image: url("./../../../assets/js-machine.jpg");
+    background-size: 43px 51px;
+    width: 129px;
+    height: 200px;
+    border-radius: 5px;
+  }
+
+  &__picture {
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  &__title {
+    padding: 0 5px;
+   
+    color: $orange;
+    font-size: $small-size;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &__subtitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 5px;
+  }
+
+  &__pers-info {
+    color: opacify($black, 0.5);
+    font-size: $smaller-size;
+    text-align: center;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  &__stat {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    width: 40px;
+  }
+
+  &__stat-name {
+    text-transform: capitalize;
+    font-size: $extra-small-size;
+    font-weight: 400;
+  }
+
+  &__stat-value {
+   
+    font-size: $extra-small-size;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 3px 10px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: $white;
+    background-color: $orange;
+  }
+
+  &__skill {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__my-active-card-explosure {
+    position: relative;
+  }
+}
+
+.its-battlefield__card-under-attack {
+  text-align: center;
+  vertical-align: 75%;
+  line-height:200px;
+position: absolute;
+top: -5px;
+left: -20px;
+
+background-image:url('../../../assets/card-attack.png');
+background-repeat: no-repeat;
+  z-index: 999;
+  background-size: cover;
+  width: 200px;
+  height: 200px;
+  font-weight: 600;
+font-size: 50px;
+color: red;
+font-family: $roboto-font;
+
+}
+

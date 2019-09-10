@@ -2,11 +2,13 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { baseUrl } from 'src/constants/baseUrl';
+import { baseUrl } from 'constants/baseUrl';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class UserService {
     public constructor(private http: Http) {
 

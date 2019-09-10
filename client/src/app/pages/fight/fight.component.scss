@@ -1,0 +1,40 @@
+@import '../../settings';
+
+/*.its-battlefield {
+  display: flex;
+  flex-flow: row nowrap;
+
+  &__container {
+    flex-grow: 1;
+    overflow-x: auto;
+  }
+
+  &__players-hand {
+    height: 223px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: $grey-light;
+  }
+
+  &__active-card {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    min-height: 230px;
+    background-color: $grey;
+    border: .5px solid $black;
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}
+
+.cdk-drag-animating {
+  transition: transform 300ms ease;
+}*/
+
+

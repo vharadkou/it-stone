@@ -1,0 +1,32 @@
+<div class="its-infobar-block">
+  <div class="its-infobar-wrapper">
+    
+    <div class="its-infobar-wrapper-player1-data">
+
+
+
+      <div class="its-infobar__deck">
+        <div class="its-infobar__deck-overlay">
+          <div class="its-infobar__count-of-cards">{{enemyCardsLeft}}</div>
+        </div>
+      </div>
+      <div class="its-infobar__hp-indicator"><div class="its-infobar__hp-indicator-value">{{enemyHP$ | async}}</div></div>
+      <img class="its-infobar__avatar" src={{enemyAvatar}}>
+    </div>
+    <div class="its-infobar__turn-trigger" (click)="turnTrigger()"><div class="its-infobar__turn-trigger-text">End turn</div></div>
+
+    <div class="its-infobar-wrapper-player2-data">
+      <img class="its-infobar__avatar" src={{myAvatar}}>
+      <div class="its-infobar__hp-indicator"><div class="its-infobar__hp-indicator-value">{{myHP$ | async}}</div></div>
+      <div class="its-infobar__deck">
+        <div class="its-infobar__deck-overlay">
+          <div class="its-infobar__count-of-cards">{{myCardsLeft}}</div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+ 
+</div>

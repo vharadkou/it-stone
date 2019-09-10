@@ -1,0 +1,84 @@
+<div class="card-detail">
+
+  <h1 *ngIf="selectedCardId === 100;else Editor" class="card-detail__title">Create card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
+  <ng-template #Editor>
+    <h1 class="card-detail__title">Edit card: {{card.name | uppercase}} {{card.surname | uppercase}}</h1>
+  </ng-template>
+
+  <div class="card-detail__field">
+
+    <div class="card-detail__edit-side">
+      <form #form="ngForm">
+        <mat-accordion class="mat-accordion" multi="true">
+          <mat-expansion-panel class="mat-accordion__panel" expanded>
+            <mat-expansion-panel-header class="mat-accordion__header">
+              <mat-panel-title class="mat-accordion__title">
+                Personal data
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Name" [(ngModel)]="card.name" name="name">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Surname" [(ngModel)]="card.surname" name="surname">
+            </mat-form-field>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel  class="mat-accordion__panel" (opened)="panelOpenState = true" (closed)="panelOpenState = false" expanded>
+            <mat-expansion-panel-header class="mat-accordion__header">
+              <mat-panel-title class="mat-accordion__title">
+                Hp and Damage
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-form-field class="example-full-width">
+              <input class="mat-form-field_number-input" type="number" matInput placeholder="HP" [(ngModel)]="card.hp" name="hp">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input class="mat-form-field_number-input" type="number" matInput placeholder="Damage" [(ngModel)]="card.damage" name="damage">
+            </mat-form-field>
+
+          </mat-expansion-panel>
+
+          <mat-expansion-panel  class="mat-accordion__panel" (opened)="panelOpenState = true" (closed)="panelOpenState = false" expanded>
+            <mat-expansion-panel-header class="mat-accordion__header">
+              <mat-panel-title class="mat-accordion__title">
+                Skills and Image
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-form-field>
+              <mat-select placeholder="Skills" [formControl]="skills" [(ngModel)]="checkedSkills" multiple>
+                <mat-option *ngFor="let skill of skillsList$ | async" [value]="skill" (click)="addSkillsToCard(card)">{{skill.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Image URL" [(ngModel)]="card.image" name="image">
+            </mat-form-field>
+
+          </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+    </div>
+
+    <div class="card-detail__visual-side">
+      <app-card [card]="card" [isEditor]="true"></app-card>
+
+      <button *ngIf="selectedCardId !== 100" mat-fab color="warn" class="card-detail__btn card-detail__btn_delete" (click)="showDeleteCardPopup()">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_delete">delete</i>
+      </button>
+      <button *ngIf="selectedCardId !== 100 && form.dirty" mat-fab class="card-detail__btn card-detail__btn_update" (click)="updateCard(card)">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_update">how_to_reg</i>
+      </button>
+      <button *ngIf="selectedCardId === 100" mat-fab class="card-detail__btn card-detail__btn_create" (click)="createCard(card)">
+        <i class="material-icons card-detail__btn-icon card-detail__btn-icon_create">add</i>
+      </button>
+    </div>
+
+  </div>
+
+</div>

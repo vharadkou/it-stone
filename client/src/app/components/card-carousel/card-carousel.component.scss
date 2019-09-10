@@ -1,0 +1,63 @@
+@import '../../settings';
+
+.card-courusel__container {
+    display: flex;
+    align-items: center;
+}
+
+.card-courusel__button {
+    background-color: rgba($color: rgb(250, 242, 231), $alpha: 1);
+}
+
+.card-courusel__button-backward {
+    margin-right: -2em;
+    z-index: 1;
+}
+
+.card-courusel__button-forward {
+    margin-left: -2em;
+    z-index: 1;
+    padding-left: 1em;
+}
+
+.visible {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    position: relative;
+}
+ 
+@keyframes fadeInForward {
+    0% {left: 160%;}
+    100% {left: 0%;}
+}
+
+@keyframes fadeOutForward {
+    0% {right: 0%;}
+    100% {right: 160%;};
+}
+ 
+.fadeInForward {
+    animation-name: fadeInForward;
+}
+
+.fadeOutForward {
+    animation-name: fadeOutForward;
+}
+
+@keyframes fadeInBackward {
+    0% {right: 160%;}
+    100% {right: 0%;}
+}
+
+@keyframes fadeOutBackward {
+    0% {left: 0%;}
+    100% {left: 160%;};
+}
+ 
+.fadeInBackward {
+    animation-name: fadeInBackward;
+}
+
+.fadeOutBackward {
+    animation-name: fadeOutBackward;
+}

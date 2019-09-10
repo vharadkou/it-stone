@@ -1,0 +1,35 @@
+// COLOR
+$grey: #455a64;
+$grey-light: #546e7a;
+$grey-milk: rgb(196, 196, 196);
+$yellow: rgb(221, 206, 0);
+$yellow-dark: rgb(207, 177, 4);
+$yellow-bright: rgb(255, 218, 9);
+$orange: #ec9b3b;
+$black: black;
+$white: white;
+$antiquewhite: antiquewhite;
+
+// FONT
+$roboto-font: Roboto, 'Helvetica Neue', sans-serif;
+$righteous-font: 'Righteous', cursive;
+
+// FONT-SIZE
+$count-cards-size: 69px;
+$hp-size: 40px;
+$thirty: 30px;
+$big-size: 23px;
+$default-bigger: 19px;
+$default-size: 1rem;
+$small-size: 15px;
+$smaller-size: 14px;
+$extra-small-size: 0.8rem;
+
+//MIXIN
+@mixin transform($property) {
+    -webkit-transform: $property;
+    -ms-transform: $property;
+    transform: $property;
+}
+
+

@@ -1,0 +1,56 @@
+<div *ngIf="isFront" [class.edit-version]="isEditor" class="its-card">
+   
+  <div class="its-card__container">
+  
+    <div class="its-card__id">{{card._id}}</div>
+  <div class="its-card__manaCost-wrapper">
+    <div class="its-card__manaCost" >{{card.manaCost}}</div>
+  </div>
+    <div class="its-card__title">{{card.class}}</div>
+    <div class="its-card__subtitle">
+      <img class="its-card__picture" src={{card.image}}>
+      <div class="its-card__pers-info">
+        <div class="its-card__name">
+          {{card.name}}
+        </div>
+        <div class="its-card__surname">
+          {{card.surname}}
+        </div>
+      </div>
+    </div>
+    <div class="its-card__content">
+      <div *ngIf='card.hp !== undefined' class="its-card__stat">
+        <div  class="its-card__stat-name">
+          <fa-icon [icon]="faShieldAlt" size="lg"></fa-icon>
+        </div>
+        <div  class="its-card__stat-value its-card__stat-value-hp">
+          {{card.hp}}
+        </div>
+      </div>
+      <div *ngIf='card.damage' class="its-card__stat">
+        <div  class="its-card__stat-name">
+          <fa-icon [icon]="faUsb" size="lg" rotate="270"></fa-icon>
+        </div>
+        <div  class="its-card__stat-value its-card__stat-value-damage">
+          {{card.damage}}
+        </div>
+      </div>
+    </div>
+    <div class="its-card__footer">
+      <div *ngIf = 'card.skills.length>0' class="its-card__skill">
+        <div class="its-card__stat-name">main skill</div>
+        <div class="its-card__stat-value" title = {{card.skills[1]}}>{{card.skills[0]}}</div>
+      </div>
+    </div>
+    
+
+  </div>
+</div>
+
+<div *ngIf="!isFront" class="its-card">
+    <div class="its-card__container">
+        <div class="its-card__background-cont">
+            <div class="its-card__image"></div>
+        </div>
+    </div>
+</div>

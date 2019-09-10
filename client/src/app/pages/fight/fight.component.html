@@ -1,0 +1,18 @@
+<div class="its-fightpage">
+
+  <app-battle-field [myCardsInHand]="myCardsInHand"
+                    [allCardsMy]="allCardsMy"
+                    [myActiveCards]="myActiveCards"
+                    [enemyActiveCards]="enemyActiveCards"
+                    [allCardsEnemy]="allCardsEnemy"
+                    [myManaLimit]="myManaLimit"
+                    [myManaCurrentValue]="myManaCurrentValue"
+                    [gameStatus]="gameStatus"
+                   
+                    (onShuffle)="onShuffle($event)"
+                    (onMyDrop)="onMyDrop($event)"
+                    (onEnd)="onEnd($event)"
+                    (onMyCardTaken)="onMyCardTaken($event)">
+  </app-battle-field>
+  
+</div>

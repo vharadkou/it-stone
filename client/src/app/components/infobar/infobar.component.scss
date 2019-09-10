@@ -1,0 +1,101 @@
+@import '../../settings';
+
+.its-infobar {
+
+
+  &-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  &-wrapper-player2-data {
+    display: flex;
+    flex-direction: column;
+    height: 47%;
+    justify-content: flex-start;
+  }
+
+  &-wrapper-player1-data {
+    display: flex;
+    flex-direction: column;
+    height: 47%;
+    justify-content: flex-end;
+  }
+
+  &__avatar {
+    width: 100%;
+    height: 90px;
+  }
+
+  &__hp-indicator {
+    width: 100%;
+    height: 40px;
+    font-size: $hp-size;
+    text-align: center;
+    background-color: $grey-milk;
+    display: flex;
+    align-items: center;
+    justify-content: center
+  }
+
+  &__hp-indicator-value {
+    font-family: $righteous-font;
+  }
+
+  &__deck {
+    width: 100%;
+    height: 85px;
+    background-image: url("./../../../assets/js-machine.jpg");
+    background-repeat: round;
+  }
+
+  &__count-of-cards {
+    font-family: $righteous-font;
+    color: $black;
+    font-size: $count-cards-size;
+    @include transform(translate(-50%, -50%));
+    text-align: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    cursor: pointer;
+  }
+
+  &__deck-overlay {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: $yellow-bright;
+  }
+
+  &__deck-overlay:hover {
+    opacity: 1
+  }
+
+  &__turn-trigger {
+    width: 100%;
+    height: 6%;
+    font-size: $big-size;
+    text-align: center;
+    background-color: $yellow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  &__turn-trigger:hover {
+    background-color: $yellow-dark;
+  }
+
+  &__turn-trigger-text {
+    font-family: $righteous-font;
+  }
+
+}
+

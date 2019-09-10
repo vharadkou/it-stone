@@ -1,0 +1,36 @@
+@import '../../settings';
+
+.cards-container {
+    height: 250px;
+    display: flex;
+    justify-content: left;
+    background-color: #778ca3;
+    align-items: center;
+    overflow-x: auto;
+}
+
+app-card {
+    cursor: pointer;
+    user-select: none;
+}
+
+.btnNewCard__container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 130px;
+    height: 200px;
+    border-radius: 5px;
+    background-color: antiquewhite;
+    box-shadow: 0 2px 1px -1px black, 0 1px 1px 0 black, 0 1px 3px 0 black;
+    margin-left: 5px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    user-select: none;
+    .btnNewCard__text {
+        font-size: 22px;
+        color: rgb(133, 131, 131);
+    }
+}
