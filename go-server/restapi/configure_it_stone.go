@@ -4,6 +4,8 @@ package restapi
 
 import (
 	"crypto/tls"
+	"it-stone/adapters"
+	handlers "it-stone/adapters/rest-api-handlers"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
@@ -34,6 +36,11 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	cardsHandler := handlers.NewCardsHandler()
+
+	restAPIConfig := adapters.NewRestAPIHandler(cardsHandler)
+	restAPIConfig.ConfigureRestAPI(api)
+
 	if api.CardCreateCardHandler == nil {
 		api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams) middleware.Responder {
 			return middleware.NotImplemented("operation card.CreateCard has not yet been implemented")
@@ -47,11 +54,6 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	if api.CardGetCardHandler == nil {
 		api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams) middleware.Responder {
 			return middleware.NotImplemented("operation card.GetCard has not yet been implemented")
-		})
-	}
-	if api.CardGetCardsHandler == nil {
-		api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams) middleware.Responder {
-			return middleware.NotImplemented("operation card.GetCards has not yet been implemented")
 		})
 	}
 
