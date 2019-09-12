@@ -15,5 +15,5 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/jessevdk/go-flags v1.4.0
 	golang.org/x/net v0.0.0-20190909003024-a7b16738d86b
-	google.golang.org/api v0.9.0
+	google.golang.org/api v0.10.0
 )
