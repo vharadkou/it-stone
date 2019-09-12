@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"github.com/go-openapi/runtime/middleware"
 	"google.golang.org/api/option"
 	"it-stone/helpers"
 	"it-stone/models"
@@ -10,8 +11,7 @@ import (
 	"it-stone/restapi/operations/card"
 	"log"
 	"net/http"
-
-	"github.com/go-openapi/runtime/middleware"
+	"os"
 )
 
 // CardsHandler interface
@@ -33,9 +33,10 @@ func NewCardsHandler() CardsHandler {
 }
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
+	dir, _ := os.Getwd()
 
 	ctx := context.Background()
-	co := option.WithCredentialsFile(repository.ConfigDbPath)
+	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
 	if err != nil {
 		log.Println(err)
@@ -64,9 +65,10 @@ func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 }
 
 func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder {
+	dir, _ := os.Getwd()
 
 	ctx := context.Background()
-	co := option.WithCredentialsFile(repository.ConfigDbPath)
+	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
 
 	if err != nil {
@@ -96,8 +98,10 @@ func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder
 }
 
 func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Responder {
+	dir, _ := os.Getwd()
+
 	ctx := context.Background()
-	co := option.WithCredentialsFile(repository.ConfigDbPath)
+	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
 	if err != nil {
 		log.Println(err)
