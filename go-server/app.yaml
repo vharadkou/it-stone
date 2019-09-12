@@ -1,6 +1,3 @@
-runtime: go
-api_version: go1
+runtime: go112
 
-handlers:
-  - url: ./cmd/it-stone-server/.*
-    script: _go_app
+main: ./cmd/it-stone-server
