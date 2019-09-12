@@ -25,7 +25,7 @@ type dbFirestore struct {
 }
 
 // ConfigDbPath const
-const ConfigDbPath string = "./config/IT-Stone-31e4a1a8f90f.json"
+const ConfigDbPath string = "../config/IT-Stone-31e4a1a8f90f.json"
 
 // NewDbClient - Creating a new db client
 func NewDbClient(ctx context.Context, co option.ClientOption) (DbWorker, error) {
