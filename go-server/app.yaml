@@ -1,5 +1,4 @@
 runtime: go112
-api_version: go1
 
 handlers:
   - url: /cmd/it-stone-server
