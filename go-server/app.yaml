@@ -1,7 +1,7 @@
 runtime: go112
 
 handlers:
-  - url: /.*
+  - url: /main.go
     script: _go_app
 
 main: ./cmd/it-stone-server
