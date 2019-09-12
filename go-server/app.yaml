@@ -2,4 +2,4 @@ runtime: go112
 
 handlers:
   - url: /cmd/it-stone-server
-    script: _go_app
+    script: auto
