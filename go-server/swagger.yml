@@ -44,7 +44,7 @@ paths:
         201:
           description: Created
           schema:
-            $ref: "#/definitions/Card"
+            $ref: "#/definitions/CreatedEntity"
         default:
           description: Error
           schema:
@@ -84,6 +84,15 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 definitions:
+  CreatedEntity:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+
+
   Card:
     type: object
     required:
@@ -92,7 +101,6 @@ definitions:
     properties:
       id:
         type: string
-        format: uuid
       class:
         type: string
       name:
@@ -113,7 +121,7 @@ definitions:
         type: number
       effects:
         type: object
-      
+
 
   Error:
     type: object

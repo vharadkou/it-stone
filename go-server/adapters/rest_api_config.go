@@ -23,8 +23,15 @@ func NewRestAPIHandler(cardsHandler handlers.CardsHandler) RestAPIHandlers {
 // ConfigureRestAPI func
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
+	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams) middleware.Responder {
+		return restApi.cardsHandler.GetCard(params)
+	})
+
 	api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams) middleware.Responder {
 		return restApi.cardsHandler.GetCards(params)
 	})
 
+	api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams) middleware.Responder {
+		return restApi.cardsHandler.InsertCards(params)
+	})
 }
