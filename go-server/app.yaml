@@ -1,3 +1,3 @@
 runtime: go112
 
-main: ./cmd/it-stone-server/main.go
+main: cmd/it-stone-server/main.go
