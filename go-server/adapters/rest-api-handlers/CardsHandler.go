@@ -3,12 +3,13 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"google.golang.org/api/option"
 	"it-stone/helpers"
 	"it-stone/models"
 	"it-stone/repository"
 	"it-stone/restapi/operations/card"
+	"log"
+	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -37,12 +38,22 @@ func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 	co := option.WithCredentialsFile(repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewGetCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	sb, err := db.FindOneByID("Cards", params.ID)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewGetCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	var cardItem *models.Card
@@ -57,13 +68,24 @@ func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder
 	ctx := context.Background()
 	co := option.WithCredentialsFile(repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
+
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewGetCardsDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	sb, err := db.FindAll("Cards")
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewGetCardsDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	var cards []*models.Card
@@ -78,7 +100,12 @@ func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Resp
 	co := option.WithCredentialsFile(repository.ConfigDbPath)
 	db, err := repository.NewDbClient(ctx, co)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewCreateCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	params.Card.ID = h.idHelper.GenerateID()
@@ -89,7 +116,12 @@ func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Resp
 
 	err = db.InsertOne("Cards", params.Card.ID, inInterface)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewCreateCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
 	createdId := params.Card.ID
