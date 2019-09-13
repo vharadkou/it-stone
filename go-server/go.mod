@@ -1,6 +1,6 @@
 module it-stone
 
-go 1.13
+go 1.12
 
 require (
 	cloud.google.com/go v0.45.1
