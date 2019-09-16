@@ -3,7 +3,6 @@ package repository
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"encoding/json"
 	firebase "firebase.google.com/go"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
@@ -14,8 +13,10 @@ import (
 type DbWorker interface {
 	Close() error
 	InsertOne(collection, id string, data map[string]interface{}) error
-	FindAll(collection string) ([]byte, error)
-	FindOneByID(collection, id string) ([]byte, error)
+	FindAll(collection string) ([]map[string]interface{}, error)
+	FindOneByID(collection, id string) (map[string]interface{}, error)
+	DeleteOneByID(collection, id string) error
+	UpdateOneByID(collection, id string, data map[string]interface{}) (map[string]interface{}, error)
 }
 
 // DbFirestore Struct
@@ -49,7 +50,6 @@ func (db *dbFirestore) Close() error {
 	return db.Client.Close()
 }
 
-// InsertOne -Вставка документа в уже созданную коллекцию
 func (db *dbFirestore) InsertOne(collection, id string, data map[string]interface{}) error {
 	_, err := db.Client.Collection(collection).Doc(id).Set(db.ctx, data)
 	if err != nil {
@@ -59,7 +59,7 @@ func (db *dbFirestore) InsertOne(collection, id string, data map[string]interfac
 	return nil
 }
 
-func (db *dbFirestore) FindAll(collection string) ([]byte, error) {
+func (db *dbFirestore) FindAll(collection string) ([]map[string]interface{}, error) {
 	var records []map[string]interface{}
 
 	iter := db.Client.Collection(collection).Documents(db.ctx)
@@ -82,18 +82,27 @@ func (db *dbFirestore) FindAll(collection string) ([]byte, error) {
 		records = append(records, recordTmp)
 	}
 
-	sb, err := json.Marshal(records)
-	if err != nil {
-		return nil, err
-	}
-	return sb, nil
+	return records, nil
 }
 
-func (db *dbFirestore) FindOneByID(collection, id string) ([]byte, error) {
+func (db *dbFirestore) FindOneByID(collection, id string) (map[string]interface{}, error) {
 	return db.getDocument(collection, id)
 }
 
-func (db *dbFirestore) getDocument(collection, id string) ([]byte, error) {
+func (db *dbFirestore) DeleteOneByID(collection, id string) error {
+	_, err := db.Client.Collection(collection).Doc(id).Delete(db.ctx)
+	return err
+}
+
+func (db *dbFirestore) UpdateOneByID(collection, id string, data map[string]interface{}) (map[string]interface{}, error) {
+	_, err := db.Client.Collection(collection).Doc(id).Set(db.ctx, data, firestore.MergeAll)
+	if err != nil {
+		return nil, err
+	}
+	return db.getDocument(collection, id)
+}
+
+func (db *dbFirestore) getDocument(collection, id string) (map[string]interface{}, error) {
 	var recordTmp map[string]interface{}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
@@ -109,9 +118,5 @@ func (db *dbFirestore) getDocument(collection, id string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	sb, err := json.Marshal(recordTmp)
-	if err != nil {
-		return nil, err
-	}
-	return sb, nil
+	return recordTmp, nil
 }

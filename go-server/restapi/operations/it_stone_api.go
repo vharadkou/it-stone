@@ -19,7 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"it-stone/restapi/operations/card"
+	"it-stone-server/restapi/operations/card"
 )
 
 // NewItStoneAPI creates a new ItStone instance
@@ -50,6 +50,9 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		}),
 		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCards has not yet been implemented")
+		}),
+		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams) middleware.Responder {
+			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
 		}),
 	}
 }
@@ -90,6 +93,8 @@ type ItStoneAPI struct {
 	CardGetCardHandler card.GetCardHandler
 	// CardGetCardsHandler sets the operation handler for the get cards operation
 	CardGetCardsHandler card.GetCardsHandler
+	// CardUpdateCardHandler sets the operation handler for the update card operation
+	CardUpdateCardHandler card.UpdateCardHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -167,6 +172,10 @@ func (o *ItStoneAPI) Validate() error {
 
 	if o.CardGetCardsHandler == nil {
 		unregistered = append(unregistered, "card.GetCardsHandler")
+	}
+
+	if o.CardUpdateCardHandler == nil {
+		unregistered = append(unregistered, "card.UpdateCardHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -286,6 +295,11 @@ func (o *ItStoneAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/v0/cards"] = card.NewGetCards(o.context, o.CardGetCardsHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/v0/cards/{id}"] = card.NewUpdateCard(o.context, o.CardUpdateCardHandler)
 
 }
 

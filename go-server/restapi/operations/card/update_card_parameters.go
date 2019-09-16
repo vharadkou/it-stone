@@ -12,21 +12,23 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
+	strfmt "github.com/go-openapi/strfmt"
+
 	models "it-stone-server/models"
 )
 
-// NewCreateCardParams creates a new CreateCardParams object
+// NewUpdateCardParams creates a new UpdateCardParams object
 // no default values defined in spec.
-func NewCreateCardParams() CreateCardParams {
+func NewUpdateCardParams() UpdateCardParams {
 
-	return CreateCardParams{}
+	return UpdateCardParams{}
 }
 
-// CreateCardParams contains all the bound params for the create card operation
+// UpdateCardParams contains all the bound params for the update card operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters createCard
-type CreateCardParams struct {
+// swagger:parameters updateCard
+type UpdateCardParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -35,13 +37,18 @@ type CreateCardParams struct {
 	  In: body
 	*/
 	Card *models.Card
+	/*
+	  Required: true
+	  In: path
+	*/
+	ID string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewCreateCardParams() beforehand.
-func (o *CreateCardParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewUpdateCardParams() beforehand.
+func (o *UpdateCardParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
@@ -62,8 +69,28 @@ func (o *CreateCardParams) BindRequest(r *http.Request, route *middleware.Matche
 			}
 		}
 	}
+	rID, rhkID, _ := route.Params.GetOK("id")
+	if err := o.bindID(rID, rhkID, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindID binds and validates parameter ID from path.
+func (o *UpdateCardParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// Parameter is provided by construction from the route
+
+	o.ID = raw
+
 	return nil
 }

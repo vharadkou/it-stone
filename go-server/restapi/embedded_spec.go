@@ -31,7 +31,7 @@ func init() {
   "info": {
     "description": "Some usefull description",
     "title": "IT-Stone Server",
-    "version": "0.0.1"
+    "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
@@ -116,6 +116,35 @@ func init() {
           },
           "default": {
             "description": "generic Error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "card"
+        ],
+        "operationId": "updateCard",
+        "parameters": [
+          {
+            "name": "card",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The card has been updated",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -234,7 +263,7 @@ func init() {
   "info": {
     "description": "Some usefull description",
     "title": "IT-Stone Server",
-    "version": "0.0.1"
+    "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
@@ -319,6 +348,35 @@ func init() {
           },
           "default": {
             "description": "generic Error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "card"
+        ],
+        "operationId": "updateCard",
+        "parameters": [
+          {
+            "name": "card",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The card has been updated",
+            "schema": {
+              "$ref": "#/definitions/Card"
+            }
+          },
+          "default": {
+            "description": "Error",
             "schema": {
               "$ref": "#/definitions/Error"
             }

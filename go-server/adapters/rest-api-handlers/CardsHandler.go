@@ -1,17 +1,12 @@
 package handlers
 
 import (
-	"context"
-	"encoding/json"
 	"github.com/go-openapi/runtime/middleware"
-	"google.golang.org/api/option"
-	"it-stone/helpers"
-	"it-stone/models"
-	"it-stone/repository"
-	"it-stone/restapi/operations/card"
-	"log"
+	"it-stone-server/adapters/converters"
+	"it-stone-server/models"
+	"it-stone-server/repository"
+	"it-stone-server/restapi/operations/card"
 	"net/http"
-	"os"
 )
 
 // CardsHandler interface
@@ -19,27 +14,26 @@ type CardsHandler interface {
 	GetCard(params card.GetCardParams) middleware.Responder
 	GetCards(params card.GetCardsParams) middleware.Responder
 	InsertCards(params card.CreateCardParams) middleware.Responder
+	DeleteCard(params card.DeleteCardParams) middleware.Responder
+	UpdateCard(params card.UpdateCardParams) middleware.Responder
 }
 
 type cardsHandler struct {
-	idHelper helpers.IDHelper
+	converter converters.CardConverter
 }
 
 // NewCardsHandler func
 func NewCardsHandler() CardsHandler {
 	return &cardsHandler{
-		idHelper: helpers.NewIDHelper(),
+		converters.NewCardConverter(),
 	}
 }
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
-	dir, _ := os.Getwd()
+	cardRepository := repository.NewCardRepository()
+	domainCard, err := cardRepository.GetCard(params.ID)
 
-	ctx := context.Background()
-	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
-	db, err := repository.NewDbClient(ctx, co)
 	if err != nil {
-		log.Println(err)
 		errMsg := http.StatusText(http.StatusInternalServerError)
 		return card.NewGetCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -47,32 +41,14 @@ func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 		})
 	}
 
-	sb, err := db.FindOneByID("Cards", params.ID)
-	if err != nil {
-		log.Println(err)
-		errMsg := http.StatusText(http.StatusInternalServerError)
-		return card.NewGetCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
-			Code:    http.StatusInternalServerError,
-			Message: &errMsg,
-		})
-	}
-
-	var cardItem *models.Card
-
-	_ = json.Unmarshal(sb, &cardItem)
-
-	return card.NewGetCardOK().WithPayload(cardItem)
+	return card.NewGetCardOK().WithPayload(h.converter.FromDomain(domainCard))
 }
 
 func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder {
-	dir, _ := os.Getwd()
-
-	ctx := context.Background()
-	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
-	db, err := repository.NewDbClient(ctx, co)
+	cardRepository := repository.NewCardRepository()
+	domainCards, err := cardRepository.GetCards()
 
 	if err != nil {
-		log.Println(err)
 		errMsg := http.StatusText(http.StatusInternalServerError)
 		return card.NewGetCardsDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -80,31 +56,21 @@ func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder
 		})
 	}
 
-	sb, err := db.FindAll("Cards")
-	if err != nil {
-		log.Println(err)
-		errMsg := http.StatusText(http.StatusInternalServerError)
-		return card.NewGetCardsDefault(http.StatusInternalServerError).WithPayload(&models.Error{
-			Code:    http.StatusInternalServerError,
-			Message: &errMsg,
-		})
+	var modelCards []*models.Card
+	for _, model := range domainCards {
+		modelCard := h.converter.FromDomain(model)
+		modelCards = append(modelCards, modelCard)
 	}
 
-	var cards []*models.Card
-
-	_ = json.Unmarshal(sb, &cards)
-
-	return card.NewGetCardsOK().WithPayload(cards)
+	return card.NewGetCardsOK().WithPayload(modelCards)
 }
 
 func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Responder {
-	dir, _ := os.Getwd()
+	cardRepository := repository.NewCardRepository()
 
-	ctx := context.Background()
-	co := option.WithCredentialsFile(dir + repository.ConfigDbPath)
-	db, err := repository.NewDbClient(ctx, co)
+	id, err := cardRepository.InsertCard(h.converter.ToDomain(params.Card))
+
 	if err != nil {
-		log.Println(err)
 		errMsg := http.StatusText(http.StatusInternalServerError)
 		return card.NewCreateCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -112,24 +78,35 @@ func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Resp
 		})
 	}
 
-	params.Card.ID = h.idHelper.GenerateID()
+	return card.NewCreateCardCreated().WithPayload(&models.CreatedEntity{ID: id})
+}
 
-	var inInterface map[string]interface{}
-	inrec, _ := json.Marshal(params.Card)
-	_ = json.Unmarshal(inrec, &inInterface)
+func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Responder {
+	cardRepository := repository.NewCardRepository()
+	err := cardRepository.DeleteCard(params.ID)
 
-	err = db.InsertOne("Cards", params.Card.ID, inInterface)
 	if err != nil {
-		log.Println(err)
 		errMsg := http.StatusText(http.StatusInternalServerError)
-		return card.NewCreateCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+		return card.NewDeleteCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
 		})
 	}
 
-	createdId := params.Card.ID
-	createdEntity := &models.CreatedEntity{ID: &createdId}
+	return card.NewDeleteCardNoContent()
+}
 
-	return card.NewCreateCardCreated().WithPayload(createdEntity)
+func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Responder {
+	cardRepository := repository.NewCardRepository()
+	domainCard, err := cardRepository.UpdateCard(params.ID, h.converter.ToDomain(params.Card))
+
+	if err != nil {
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return card.NewUpdateCardDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
+	modelCard := h.converter.FromDomain(domainCard)
+	return card.NewUpdateCardOK().WithPayload(modelCard)
 }

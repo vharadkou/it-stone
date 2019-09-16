@@ -4,19 +4,18 @@ package restapi
 
 import (
 	"crypto/tls"
-	"it-stone/adapters"
-	handlers "it-stone/adapters/rest-api-handlers"
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/runtime/middleware"
+	"it-stone-server/adapters"
+	handlers "it-stone-server/adapters/rest-api-handlers"
 	"net/http"
 
-	errors "github.com/go-openapi/errors"
-	runtime "github.com/go-openapi/runtime"
-	middleware "github.com/go-openapi/runtime/middleware"
-
-	"it-stone/restapi/operations"
-	"it-stone/restapi/operations/card"
+	"it-stone-server/restapi/operations"
+	"it-stone-server/restapi/operations/card"
 )
 
-//go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml
+//go:generate swagger generate server --target ..\..\it-stone-server-server --name ItStone --spec ..\swagger.yml
 
 func configureFlags(api *operations.ItStoneAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }

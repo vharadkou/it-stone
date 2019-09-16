@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	models "it-stone/models"
+	models "it-stone-server/models"
 )
 
 // GetCardsOKCode is the HTTP code returned for type GetCardsOK

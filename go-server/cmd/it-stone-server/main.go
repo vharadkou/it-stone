@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 
-	"it-stone/restapi"
-	"it-stone/restapi/operations"
+	"it-stone-server/restapi"
+	"it-stone-server/restapi/operations"
 
 	loads "github.com/go-openapi/loads"
 	flags "github.com/jessevdk/go-flags"
