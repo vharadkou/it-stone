@@ -13,6 +13,7 @@ basePath: /api
 paths:
   /v0/cards:
     get:
+      summary: Receiving all cards
       tags:
         - card
       operationId: getCards
@@ -32,6 +33,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     post:
+      summary: Create a new card
       tags:
         - card
       operationId: createCard
@@ -56,6 +58,7 @@ paths:
         in: path
         required: true
     get:
+      summary: Receiving one card by ID
       tags:
         - card
       operationId: getCard
@@ -73,6 +76,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     post:
+      summary: Update one card by ID
       tags:
         - card
       operationId: updateCard
@@ -91,6 +95,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
     delete:
+      summary: Delete one card by ID
       tags:
         - card
       operationId: deleteCard
@@ -133,7 +138,7 @@ definitions:
           type: string
       hp:
         type: number
-      damage: 
+      damage:
         type: number
       mana_cost:
         type: number
