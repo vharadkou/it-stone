@@ -40,6 +40,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Receiving all cards",
         "operationId": "getCards",
         "responses": {
           "200": {
@@ -49,12 +50,6 @@ func init() {
               "items": {
                 "$ref": "#/definitions/Card"
               }
-            }
-          },
-          "404": {
-            "description": "A card with the specified ID was not found.",
-            "schema": {
-              "$ref": "#/definitions/Error"
             }
           },
           "default": {
@@ -69,6 +64,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Create a new card",
         "operationId": "createCard",
         "parameters": [
           {
@@ -100,6 +96,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Receiving one card by ID",
         "operationId": "getCard",
         "responses": {
           "200": {
@@ -126,6 +123,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Update one card by ID",
         "operationId": "updateCard",
         "parameters": [
           {
@@ -155,6 +153,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Delete one card by ID",
         "operationId": "deleteCard",
         "responses": {
           "204": {
@@ -272,6 +271,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Receiving all cards",
         "operationId": "getCards",
         "responses": {
           "200": {
@@ -281,12 +281,6 @@ func init() {
               "items": {
                 "$ref": "#/definitions/Card"
               }
-            }
-          },
-          "404": {
-            "description": "A card with the specified ID was not found.",
-            "schema": {
-              "$ref": "#/definitions/Error"
             }
           },
           "default": {
@@ -301,6 +295,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Create a new card",
         "operationId": "createCard",
         "parameters": [
           {
@@ -332,6 +327,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Receiving one card by ID",
         "operationId": "getCard",
         "responses": {
           "200": {
@@ -358,6 +354,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Update one card by ID",
         "operationId": "updateCard",
         "parameters": [
           {
@@ -387,6 +384,7 @@ func init() {
         "tags": [
           "card"
         ],
+        "summary": "Delete one card by ID",
         "operationId": "deleteCard",
         "responses": {
           "204": {

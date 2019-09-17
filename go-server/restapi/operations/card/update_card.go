@@ -31,7 +31,7 @@ func NewUpdateCard(ctx *middleware.Context, handler UpdateCardHandler) *UpdateCa
 
 /*UpdateCard swagger:route POST /v0/cards/{id} card updateCard
 
-UpdateCard update card API
+Update one card by ID
 
 */
 type UpdateCard struct {

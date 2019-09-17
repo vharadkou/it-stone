@@ -31,7 +31,7 @@ func NewDeleteCard(ctx *middleware.Context, handler DeleteCardHandler) *DeleteCa
 
 /*DeleteCard swagger:route DELETE /v0/cards/{id} card deleteCard
 
-DeleteCard delete card API
+Delete one card by ID
 
 */
 type DeleteCard struct {

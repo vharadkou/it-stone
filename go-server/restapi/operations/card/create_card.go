@@ -31,7 +31,7 @@ func NewCreateCard(ctx *middleware.Context, handler CreateCardHandler) *CreateCa
 
 /*CreateCard swagger:route POST /v0/cards card createCard
 
-CreateCard create card API
+Create a new card
 
 */
 type CreateCard struct {

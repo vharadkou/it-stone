@@ -60,50 +60,6 @@ func (o *GetCardsOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 	}
 }
 
-// GetCardsNotFoundCode is the HTTP code returned for type GetCardsNotFound
-const GetCardsNotFoundCode int = 404
-
-/*GetCardsNotFound A card with the specified ID was not found.
-
-swagger:response getCardsNotFound
-*/
-type GetCardsNotFound struct {
-
-	/*
-	  In: Body
-	*/
-	Payload *models.Error `json:"body,omitempty"`
-}
-
-// NewGetCardsNotFound creates GetCardsNotFound with default headers values
-func NewGetCardsNotFound() *GetCardsNotFound {
-
-	return &GetCardsNotFound{}
-}
-
-// WithPayload adds the payload to the get cards not found response
-func (o *GetCardsNotFound) WithPayload(payload *models.Error) *GetCardsNotFound {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the get cards not found response
-func (o *GetCardsNotFound) SetPayload(payload *models.Error) {
-	o.Payload = payload
-}
-
-// WriteResponse to the client
-func (o *GetCardsNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
-
-	rw.WriteHeader(404)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
-}
-
 /*GetCardsDefault generic Error response
 
 swagger:response getCardsDefault

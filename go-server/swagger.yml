@@ -24,10 +24,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Card"
-        404:
-          description: A card with the specified ID was not found.
-          schema:
-            $ref: "#/definitions/Error"
         default:
           description: generic Error response
           schema:
