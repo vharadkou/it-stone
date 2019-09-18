@@ -57,7 +57,7 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 	}
 }
 
-/*ItStoneAPI Some usefull description */
+/*ItStoneAPI Description for API IT-Stone */
 type ItStoneAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context

@@ -29,7 +29,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API IT-Stone",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
@@ -180,10 +180,6 @@ func init() {
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
@@ -260,7 +256,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API IT-Stone",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
@@ -411,10 +407,6 @@ func init() {
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
