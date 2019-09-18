@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Description for API IT-Stone
+  description: Some usefull description
   title: IT-Stone Server
   version: 0.0.2
 consumes:
@@ -10,6 +10,18 @@ produces:
 schemes:
   - http
 basePath: /api
+securityDefinitions:
+  OauthSecurity:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth'
+    tokenUrl: 'https://www.googleapis.com/oauth2/v4/token'
+    scopes:
+      admin: Admin scope
+      user: User scope
+security:
+  - OauthSecurity:
+    - user
 paths:
   /v0/cards:
     get:
@@ -103,6 +115,116 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /v0/login:
+    get:
+      tags:
+      - "User"
+      summary: Login by using Google client OAuth 2.0.
+      security: []
+      responses:
+        '200':
+          description: Login successful.
+          schema:
+            properties:
+              access_token:
+                type: string
+                format: string
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+
+  /v0/users/{userID}:
+    get:
+      tags:
+        - User
+      produces:
+        - application/json
+      description: Find user by ID.
+      parameters:
+        - name: userID
+          required: true
+          type: string
+          in: path
+          description: the ID of the User.
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The user not found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error.
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - User
+      produces:
+        - application/json
+      description: Delete user by ID.
+      parameters:
+        - name: userID
+          required: true
+          type: string
+          in: path
+          description: the ID of the User.
+      responses:
+        200:
+          description: Delete success
+        404:
+          description: The user not found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error.
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - User
+      produces:
+        - application/json
+      description: Update user info by ID.
+      parameters:
+        - name: userID
+          required: true
+          type: string
+          in: path
+          description: the ID of the User.
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: Update success
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: The user not found.
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected error.
+          schema:
+            $ref: '#/definitions/Error'
+  /v0/auth/callback:
+    get:
+      summary: Return access_token and user
+      security: []
+      responses:
+        '200':
+          description: login
+          schema:
+            $ref: '#/definitions/UserToken'
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
 definitions:
   CreatedEntity:
     type: object
@@ -114,6 +236,9 @@ definitions:
 
   Card:
     type: object
+    required:
+      - name
+      - class
     properties:
       id:
         type: string
@@ -137,7 +262,32 @@ definitions:
         type: number
       effects:
         type: object
-
+        
+  User:
+    type: object
+    properties:
+      userID:
+        type: string
+        description: The ID of the User.
+      userName:
+        type: string
+        description: The user name.
+      firstName:
+        type: string
+        description: First name of the User.
+      lastName:
+        type: string
+        description: Last name of the User.
+      email:
+        type: string
+        description: The email of the User.
+      winGames:
+        type: integer
+        description: Count of all games where the User has won.
+      totalGames:
+        type: integer
+        description: Count of all games of the User.
+        
   Error:
     type: object
     required:
@@ -147,4 +297,15 @@ definitions:
         type: integer
         format: int64
       message:
+        type: string
+        
+  principal:
+    type: string
+
+  UserToken:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/User'
+      token:
         type: string

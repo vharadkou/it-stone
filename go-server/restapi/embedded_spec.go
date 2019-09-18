@@ -29,12 +29,32 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Description for API IT-Stone",
+    "description": "Some usefull description",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
+    "/v0/auth/callback": {
+      "get": {
+        "security": [],
+        "summary": "Return access_token and user",
+        "responses": {
+          "200": {
+            "description": "login",
+            "schema": {
+              "$ref": "#/definitions/UserToken"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v0/cards": {
       "get": {
         "tags": [
@@ -175,11 +195,163 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/v0/login": {
+      "get": {
+        "security": [],
+        "tags": [
+          "User"
+        ],
+        "summary": "Login by using Google client OAuth 2.0.",
+        "responses": {
+          "200": {
+            "description": "Login successful.",
+            "schema": {
+              "properties": {
+                "access_token": {
+                  "type": "string",
+                  "format": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users/{userID}": {
+      "get": {
+        "description": "Find user by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update user info by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete success"
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
+      "required": [
+        "name",
+        "class"
+      ],
       "properties": {
         "class": {
           "type": "string"
@@ -241,8 +413,74 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "The email of the User.",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the User.",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the User.",
+          "type": "string"
+        },
+        "totalGames": {
+          "description": "Count of all games of the User.",
+          "type": "integer"
+        },
+        "userID": {
+          "description": "The ID of the User.",
+          "type": "string"
+        },
+        "userName": {
+          "description": "The user name.",
+          "type": "string"
+        },
+        "winGames": {
+          "description": "Count of all games where the User has won.",
+          "type": "integer"
+        }
+      }
+    },
+    "UserToken": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "principal": {
+      "type": "string"
     }
-  }
+  },
+  "securityDefinitions": {
+    "OauthSecurity": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "scopes": {
+        "admin": "Admin scope",
+        "user": "User scope"
+      }
+    }
+  },
+  "security": [
+    {
+      "OauthSecurity": [
+        "user"
+      ]
+    }
+  ]
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
@@ -256,12 +494,32 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Description for API IT-Stone",
+    "description": "Some usefull description",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
+    "/v0/auth/callback": {
+      "get": {
+        "security": [],
+        "summary": "Return access_token and user",
+        "responses": {
+          "200": {
+            "description": "login",
+            "schema": {
+              "$ref": "#/definitions/UserToken"
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v0/cards": {
       "get": {
         "tags": [
@@ -402,11 +660,163 @@ func init() {
           "required": true
         }
       ]
+    },
+    "/v0/login": {
+      "get": {
+        "security": [],
+        "tags": [
+          "User"
+        ],
+        "summary": "Login by using Google client OAuth 2.0.",
+        "responses": {
+          "200": {
+            "description": "Login successful.",
+            "schema": {
+              "properties": {
+                "access_token": {
+                  "type": "string",
+                  "format": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users/{userID}": {
+      "get": {
+        "description": "Find user by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update user info by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user by ID.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "the ID of the User.",
+            "name": "userID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete success"
+          },
+          "404": {
+            "description": "The user not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Unexpected error.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
+      "required": [
+        "name",
+        "class"
+      ],
       "properties": {
         "class": {
           "type": "string"
@@ -468,7 +878,73 @@ func init() {
           "type": "string"
         }
       }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "The email of the User.",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "First name of the User.",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Last name of the User.",
+          "type": "string"
+        },
+        "totalGames": {
+          "description": "Count of all games of the User.",
+          "type": "integer"
+        },
+        "userID": {
+          "description": "The ID of the User.",
+          "type": "string"
+        },
+        "userName": {
+          "description": "The user name.",
+          "type": "string"
+        },
+        "winGames": {
+          "description": "Count of all games where the User has won.",
+          "type": "integer"
+        }
+      }
+    },
+    "UserToken": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "principal": {
+      "type": "string"
     }
-  }
+  },
+  "securityDefinitions": {
+    "OauthSecurity": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+      "scopes": {
+        "admin": "Admin scope",
+        "user": "User scope"
+      }
+    }
+  },
+  "security": [
+    {
+      "OauthSecurity": [
+        "user"
+      ]
+    }
+  ]
 }`))
 }
