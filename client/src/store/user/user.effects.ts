@@ -16,11 +16,6 @@ import { UserFacade } from './user.facade';
 
 const users: User[] = [
   {
-    email: "SilDog.S@yandex.ru",
-    nickName: "sss",
-    password: '123'
-  },
-  {
     email: "aaa@aaa.ru",
     nickName: "aaa",
     password: '123'

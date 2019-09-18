@@ -9,11 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AuthorizationService {
 
-  private user$;
+  private user: User;
 
-  constructor(private _userFacade: UserFacade, private _router: Router) { 
-    this._userFacade.user$.subscribe(resolve => this.user$ = resolve);
-  }
+  constructor(private _userFacade: UserFacade, private _router: Router) {}
 
   signIn(data){
     this._userFacade.UserSignIn(data);
@@ -21,6 +19,7 @@ export class AuthorizationService {
   }
 
   authCheck(){
+    this._userFacade.user$.subscribe(resolve => this.user = resolve);
     const user: User = JSON.parse(localStorage.getItem('user'));
     if(user && user.email && user.nickName && user.password){
       this._userFacade.UserSignIn(user);
@@ -39,7 +38,7 @@ export class AuthorizationService {
   }
 
   getUser(): Observable<boolean>{
-    if (this.user$.nickName != "null"){
+    if (this.user.nickName != "null"){
       return of(true);
     } else {
       return of(false);

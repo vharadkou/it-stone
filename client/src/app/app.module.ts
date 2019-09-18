@@ -32,9 +32,7 @@ import {
 import {
   FightPageComponent,
   NotFoundPageComponent,
-  WelcomePageComponent,
   AuthorizationComponent,
-  WelcomePageComponent
 } from 'pages';
 import {
   FightService,
@@ -44,16 +42,14 @@ import {
 
 } from 'services';
 import {SpellService} from './services/spell.service'
-import { reducers } from 'store';
+import { reducers, GameProcessFacade } from 'store';
 import { AboutPageEffects, AboutPageFacade } from 'store/about-page';
-import { CardsEffects, CardsFacade, initialState } from 'store/cards';
 import {
   CardsEffects,
   CardsFacade,
   initialState,
 } from 'store/cards';
 import {
-  // CardsEffects,
   UserFacade,
   initialUserState,
   UserEffects,
@@ -66,7 +62,6 @@ import { SocketEffect, SocketFacade } from 'store/socket';
 import { AppComponent } from './app.component';
 import { AboutCardComponent } from './components/about-card/about-card.component';
 import { BattleFieldComponent } from './components/battle-field/battle-field.component';
-import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { HiddenCardComponent } from './components/hidden-card/hidden-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
@@ -83,7 +78,6 @@ import { CardCarouselComponent } from './components/card-carousel/card-carousel.
 import { SignInComponent } from './pages/authorization/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/authorization/sign-up/sign-up.component';
 import { AuthorizationGuard } from './authorization.guard';
-// import { AuthorizationComponent } from './pages/authorization/authorization.component';
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
@@ -100,7 +94,6 @@ export function getAuthServiceConfigs(): AuthServiceConfig {
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginPageLayoutComponent },
-  { path: 'welcome', component: WelcomePageComponent },
   { path: 'battle', canActivate: [AuthorizationGuard], component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
   { path: 'about', component: AboutPageComponent},
@@ -158,7 +151,6 @@ const appRoutes: Routes = [
     CardComponent,
     HiddenCardComponent,
     DialogOverviewExampleDialogComponent,
-    WelcomePageComponent,
     FightPageComponent,
     NotFoundPageComponent,
     InfobarComponent,
@@ -168,7 +160,7 @@ const appRoutes: Routes = [
     CardCarouselComponent,
     AuthorizationComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
     InnerPagesComponent,
     LoginPageLayoutComponent,
     MaterialDialogCardChoosingComponent

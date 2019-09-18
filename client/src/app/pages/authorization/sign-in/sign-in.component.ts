@@ -8,8 +8,8 @@ import { User } from 'models';
 })
 export class SignInComponent implements OnInit {
 
-  private eMail: string;
-  private password: string;
+  private _email: string;
+  private _password: string;
 
   @Output() onSignIn = new EventEmitter<User>();
 
@@ -19,6 +19,6 @@ export class SignInComponent implements OnInit {
   }
 
   handleClick(): void{
-    this.onSignIn.emit({nickName: 'sss', email: this.eMail, password: this.password});
+    this.onSignIn.emit({nickName: 'sss', email: this._email, password: this._password});
   }
 }

@@ -58,13 +58,14 @@ export class BattleFieldComponent implements OnInit {
   }
 
   public dragEnded(event: any, id: any, damage: any): void {
+    console.log(event.source);
     let dropPoint = document.elementFromPoint(
-      event.source._dragRef._pointerPositionAtLastDirectionChange.x,
-      event.source._dragRef._pointerPositionAtLastDirectionChange.y
+      event.source._pointerPositionAtLastDirectionChange.x,
+      event.source._pointerPositionAtLastDirectionChange.y
     );
     let takePoint = document.elementFromPoint(
-      event.source._dragRef._pickupPositionOnPage.x,
-      event.source._dragRef._pickupPositionOnPage.y
+      event.source._pickupPositionOnPage.x,
+      event.source._pickupPositionOnPage.y
     );
 
     let attackCard = takePoint.closest(".its-battlefield__my-active-card");

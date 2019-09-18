@@ -33,6 +33,6 @@ export const reducers = {
   skills: skillsReducer,
   socket: socketReducer,
   aboutCards: aboutCardsReducer,
-  user: userReducer
+  user: userReducer,
   gameProcess: gameProcessReduser
 };
