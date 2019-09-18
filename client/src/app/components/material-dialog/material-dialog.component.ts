@@ -12,7 +12,7 @@ export class MaterialDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<MaterialDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PopupTextContent
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   public onYesClick(): void {
@@ -21,5 +21,9 @@ export class MaterialDialogComponent {
 
   public onNoClick(): void {
     this.dialogRef.close(false);
+  }
+  public onChooseClick(event): void {
+    console.log(event)
+    this.dialogRef.close(event);
   }
 }

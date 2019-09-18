@@ -28,20 +28,20 @@ export const skillsReducer = (
         status: Status.Error
       };
 
-    case SkillsActionTypes.CheckSkills:
-      let checkedSkills: Skill[];
-      if (action.payload.card) {
-        const cardSkills: string[] = action.payload.card.skills;
-        checkedSkills = state.skills.filter((skill) => {
-          return cardSkills.indexOf(skill.name) !== -1;
-        });
-      } else {
-        checkedSkills = [];
-      }
-      return {
-        ...state,
-        checkedSkills
-      };
+    // case SkillsActionTypes.CheckSkills:
+    //   let checkedSkills: Skill[];
+    //   if (action.payload.card) {
+    //     const cardSkills: string[] = action.payload.card.skills;
+    //     checkedSkills = state.skills.filter((skill) => {
+    //       return cardSkills.indexOf(skill.name) !== -1;
+    //     });
+    //   } else {
+    //     checkedSkills = [];
+    //   }
+    //   return {
+    //     ...state,
+    //     checkedSkills
+    //   };
 
     default:
       return state;

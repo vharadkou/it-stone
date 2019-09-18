@@ -1,57 +1,18 @@
-<div class="its-battlefield">
-  <div class="its-battlefield__container"> 
-    <div class="its-battlefield__fight-area">
-      <div
-        class="its-battlefield__players-hand"
-        cdkDropList
-        cdkDropListOrientation="horizontal"
-        #enemyCardList="cdkDropList"
-        [cdkDropListData]="allCardsEnemy$"
-        [cdkDropListConnectedTo]="[enemyActiveFieldList]"
-        (cdkDropListDropped)="enemyDrop($event)"
-        >
-        <app-card *ngFor="let card of allCardsEnemy$ | async" [card]="card" cdkDrag></app-card>
-      </div>
-      </div>
-      <div class="its-battlefield__fight-area">
-        <div
-          class="its-battlefield__active-card"
-          cdkDropList
-          cdkDropListOrientation="horizontal"
-          #enemyActiveFieldList="cdkDropList"
-          [cdkDropListData]="enemyActiveCards$"
-          [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="enemyActiveDrop($event)"
-          >
-            <app-card *ngFor="let card of enemyActiveCards$ | async" [card]="card" cdkDrag></app-card>
-        </div>
-        <div
-          class="its-battlefield__active-card"
-          cdkDropList
-          cdkDropListOrientation="horizontal"
-          #myActiveFieldList="cdkDropList"
-          [cdkDropListData]="myActiveCards$"
-          [cdkDropListConnectedTo]="[]"
-          (cdkDropListDropped)="myActiveDrop($event)"
-          >
-          <app-card *ngFor="let card of myActiveCards$ | async" [card]="card" cdkDrag></app-card>
-        </div>
-      </div>
-      <div class="its-battlefield__fight-area">
-        <div
-          class="its-battlefield__players-hand"
-          cdkDropList
-          cdkDropListOrientation="horizontal"
-          #myCardList="cdkDropList"
-          [cdkDropListData]="allCardsMy$"
-          [cdkDropListConnectedTo]="[myActiveFieldList]"
-          (cdkDropListDropped)="myDrop($event)"
-          >
-            <app-card *ngFor="let card of allCardsMy$ | async" [card]="card" cdkDrag></app-card>
-        </div>
-      </div>
-  </div>
-    <div class="its-infobar">
-      <app-infobar></app-infobar>
-    </div>
+<div class="its-fightpage">
+
+  <app-battle-field [myCardsInHand]="myCardsInHand"
+                    [allCardsMy]="allCardsMy"
+                    [myActiveCards]="myActiveCards"
+                    [enemyActiveCards]="enemyActiveCards"
+                    [allCardsEnemy]="allCardsEnemy"
+                    [myManaLimit]="myManaLimit"
+                    [myManaCurrentValue]="myManaCurrentValue"
+                    [gameStatus]="gameStatus"
+                   
+                    (onShuffle)="onShuffle($event)"
+                    (onMyDrop)="onMyDrop($event)"
+                    (onEnd)="onEnd($event)"
+                    (onMyCardTaken)="onMyCardTaken($event)">
+  </app-battle-field>
+  
 </div>
