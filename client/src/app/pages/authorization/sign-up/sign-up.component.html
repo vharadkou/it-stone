@@ -1,0 +1,33 @@
+<form class="sign-up">
+  <h3 class="sign-up__title">Registration</h3>
+  <input 
+      id="signUp__nickName" 
+      class="sign-up__nick-name"
+      type="text" 
+      [(ngModel)]="_nickName"
+      name="nickName"
+      placeholder="Your Nickname"
+      required 
+  />
+  <input 
+      id="signUp__email" 
+      class="sign-up__email"
+      type="text" 
+      [(ngModel)]="_email"
+      name="email"
+      email
+      #email="ngModel"
+      placeholder="email"
+      required 
+  />
+  <input 
+      id="signUp__password" 
+      class="sign-up__password"
+      type="password" 
+      [(ngModel)]="_password"
+      name="password"
+      placeholder="password"
+      required 
+  />
+  <button type="submit" (click)="handleClick()" [disabled]='email.invalid'>Sign Up</button>
+</form>

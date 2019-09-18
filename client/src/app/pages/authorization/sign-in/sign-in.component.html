@@ -1,0 +1,22 @@
+<form class="sign-in">
+  <h3 class="sign-in__title">Login</h3>
+  <input 
+      class="sign-in__email"
+      type="text"
+      placeholder="email"
+      [(ngModel)] = "_email"
+      name="email"
+      required 
+      email
+      #email="ngModel"
+  />
+  <input 
+      class="sign-in__password"
+      type="password" 
+      placeholder="password"
+      [(ngModel)]="_password"
+      name="password"
+      required 
+  />
+  <button type="submit" (click)='handleClick()' [disabled]='email.invalid'>Login</button>
+</form>

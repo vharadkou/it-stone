@@ -32,7 +32,7 @@ import {
 import {
   FightPageComponent,
   NotFoundPageComponent,
-  WelcomePageComponent
+  AuthorizationComponent,
 } from 'pages';
 import {
   FightService,
@@ -42,14 +42,18 @@ import {
 
 } from 'services';
 import {SpellService} from './services/spell.service'
-import { reducers } from 'store';
+import { reducers, GameProcessFacade } from 'store';
 import { AboutPageEffects, AboutPageFacade } from 'store/about-page';
-import { CardsEffects, CardsFacade, initialState } from 'store/cards';
 import {
- // gameProcessEffects,
- GameProcessFacade,
-  GameProcessInitialState
-} from 'store/game-process';
+  CardsEffects,
+  CardsFacade,
+  initialState,
+} from 'store/cards';
+import {
+  UserFacade,
+  initialUserState,
+  UserEffects,
+} from 'store/user';
 import { PlayersHPEffects } from 'store/players-hp';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import { SkillsEffects, SkillsFacade, skillsInitialState } from 'store/skills';
@@ -58,7 +62,6 @@ import { SocketEffect, SocketFacade } from 'store/socket';
 import { AppComponent } from './app.component';
 import { AboutCardComponent } from './components/about-card/about-card.component';
 import { BattleFieldComponent } from './components/battle-field/battle-field.component';
-import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { HiddenCardComponent } from './components/hidden-card/hidden-card.component';
 import { InfobarComponent } from './components/infobar/infobar.component';
@@ -71,6 +74,10 @@ import { InnerPagesComponent } from './pages/inner-pages/inner-pages.component';
 import { LoginPageLayoutComponent } from './pages/login-page-layout/login-page-layout.component';
 import { PipesModule } from './pipes/pipes.module';
 import { SkillsService } from './services/skills.service';
+import { CardCarouselComponent } from './components/card-carousel/card-carousel.component';
+import { SignInComponent } from './pages/authorization/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/authorization/sign-up/sign-up.component';
+import { AuthorizationGuard } from './authorization.guard';
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
@@ -87,13 +94,13 @@ export function getAuthServiceConfigs(): AuthServiceConfig {
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginPageLayoutComponent },
-  { path: 'welcome', component: WelcomePageComponent },
-  { path: 'battle', component: FightPageComponent },
+  { path: 'battle', canActivate: [AuthorizationGuard], component: FightPageComponent },
   { path: 'editor', component: CardEditorComponent },
-  { path: 'about', component: AboutPageComponent },
+  { path: 'about', component: AboutPageComponent},
+  { path: 'authorization', component: AuthorizationComponent},
   {
     path: '',
-    redirectTo: '/battle',
+    redirectTo: '/authorization',
     pathMatch: 'full'
   },
   { path: '**', component: LoginPageLayoutComponent }
@@ -117,18 +124,13 @@ const appRoutes: Routes = [
     StoreModule.forFeature('cardsState', reducers.cards, {
       initialState
     }),
+    StoreModule.forFeature('userState', reducers.user, {}),
     StoreModule.forFeature('aboutPageState', reducers.aboutCards, {}),
     StoreModule.forFeature('gameProcessState', reducers.gameProcess, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
     StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([
-      CardsEffects,
-      PlayersHPEffects,
-      SocketEffect,
-      SkillsEffects,
-      AboutPageEffects
-    ]),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects, UserEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -149,7 +151,6 @@ const appRoutes: Routes = [
     CardComponent,
     HiddenCardComponent,
     DialogOverviewExampleDialogComponent,
-    WelcomePageComponent,
     FightPageComponent,
     NotFoundPageComponent,
     InfobarComponent,
@@ -157,6 +158,9 @@ const appRoutes: Routes = [
     CardDetailComponent,
     MaterialDialogComponent,
     CardCarouselComponent,
+    AuthorizationComponent,
+    SignInComponent,
+    SignUpComponent,
     InnerPagesComponent,
     LoginPageLayoutComponent,
     MaterialDialogCardChoosingComponent
@@ -176,8 +180,9 @@ const appRoutes: Routes = [
     AboutPageFacade,
     GameProcessFacade,
     PlayersHPFacade,
-    SocketFacade
-   
+    SocketFacade,
+    UserFacade,
+    AuthorizationGuard
   ],
   bootstrap: [AppComponent]
 })
