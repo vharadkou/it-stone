@@ -1,0 +1,93 @@
+<div class="its-battlefield">
+  <div class="its-battlefield__container">
+    <div class="its-battlefield__fight-area">
+      <div class="its-battlefield__enemys-hand">
+        <div *ngFor="let card of allCardsEnemy; let i = index">
+          <app-hidden-card *ngIf="i > 5" [card]="card"></app-hidden-card>
+        </div>
+      </div>
+    </div>
+    <div class="its-buttlefield__drug_zone">
+      <div class="its-battlefield__fight-area">
+        <div class="its-battlefield__active-card">
+          <div
+            *ngFor="let card of enemyActiveCards; let a = index"
+            class="its-battlefield__enemy-active-card"
+          >
+            <app-card [card]="card"></app-card>
+
+            <div class="its-battlefield__enemy-active-card-explosure"></div>
+          </div>
+        </div>
+
+        <div
+          class="its-battlefield__active-card"
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          #myActiveFieldList="cdkDropList"
+          [cdkDropListData]="myActiveCards"
+          [cdkDropListConnectedTo]="[]"
+          (cdkDropListDropped)="myActiveCardDrop($event)"
+        >
+          <div
+            *ngFor="let card of myActiveCards"
+            cdkDragBoundary=".its-buttlefield__drug_zone"
+            cdkDrag
+            (cdkDragEnded)="dragEnded($event, card._id, card.damage)"
+            class="its-battlefield__my-active-card"
+          >
+            <app-card
+              *ngIf="!card.effects.disableWhenSpellInUse"
+              [card]="card"
+            ></app-card>
+            <app-hidden-card
+              *ngIf="card.effects.disableWhenSpellInUse"
+              [card]="card"
+            ></app-hidden-card>
+            <div class="its-battlefield__my-active-card-explosure"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="its-battlefield__fight-area">
+      <div
+        class="its-battlefield__players-hand"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        #myCardList="cdkDropList"
+        [cdkDropListData]="myCardsInHand$"
+        [cdkDropListConnectedTo]="[myActiveFieldList]"
+        (cdkDropListDropped)="myCardsShuffleDrop($event)"
+      >
+        <app-card
+          *ngFor="let card of myCardsInHand"
+          [card]="card"
+          cdkDrag
+        ></app-card>
+      </div>
+    </div>
+  </div>
+  <div class="its-infobar">
+    <app-infobar
+      (onMyCardTaken)="onMyCardTaken($event)"
+      [allCardsMy]="allCardsMy"
+      [allCardsEnemy]="allCardsEnemy"
+    ></app-infobar>
+  </div>
+  <div class="its-battlefield__mana-table">
+    Mana: {{ myManaCurrentValue }}/{{ myManaLimit }}
+  </div>
+  <app-hidden-card
+    *ngFor="let card of allCardsEnemy; let a = index"
+    class="its-battlefield__enemy-deck-card"
+    id="card_{{ a }}"
+    [card]="card"
+  ></app-hidden-card>
+  <app-hidden-card
+    (click)="takeMyCardToHand(card)"
+    *ngFor="let card of allCardsMy; let i = index"
+    class="its-battlefield__my-deck-card"
+    id="card_{{ i }}"
+    [card]="card"
+  ></app-hidden-card>
+</div>

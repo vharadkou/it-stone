@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { NgForm } from '@angular/forms';
-import { Card, PopupTextContent } from 'models';
+import { Card,CardForStart, PopupTextContent } from 'models';
 
 export enum CardsActionTypes {
   LoadCards = '[cards] Load Cards',
@@ -11,13 +11,17 @@ export enum CardsActionTypes {
   LoadCardsError = '[cards] Load Cards (Error)',
   GetMyNewCards = '[cards] Move cards to me from deck',
   GetEnemyNewCards = '[cards] Move cards to enemy from deck',
+  GetMyFirstCards = '[cards] Get my first cards in hand',
+  ChangeMyFirstCards = '[cards] Change my first cards in hand',
   MoveMyCardsWithinArray = '[card] Move My Cards Within Array',
   MoveEnemyCardsWithinArray = '[card] Move Enemy Cards Within Array',
   MoveMyActiveCardsWithinArray = '[card] Move My Active Cards Within Array',
   MoveEnemyActiveCardsWithinArray = '[card] Move Enemy Active Cards Within Array',
+  GetMyCardInHand = '[cards] Move my card to hand',
   GetMyBattleCard = '[cards] Move my card to battle',
   GetEnemyBattleCard = '[cards] Move enemy card to battle',
   DeleteMyCardFromBattle = '[cards] Delete my card from battle field',
+  DeleteEnemyCardFromBattle = '[cards] Delete enemy card from battle field',
   DecrementEnemyCardCount = '[cards] decrement enemy number of cards',
   DeleteCard = '[cards] Delete card from Cards list',
   DeleteCardSuccess = '[cards] Delete card from Cards list (Success)',
@@ -31,7 +35,14 @@ export enum CardsActionTypes {
   ChangeSelectedCardId = '[cards] Change selected card id',
   ShowDeleteCardPopup = '[cards] Show delete card popup',
   ShowNewCardPopup = '[cards] Show new card popup',
-  CheckNewCardDataLoss = '[cards] Check if NewCard data will loss'
+  CheckNewCardDataLoss = '[cards] Check if NewCard data will loss',
+  IncreaceMyCardAttack = '[cards] Increace my card attack',
+  IncreaceMyCardHP = '[cards] Increace my card HP',
+  DecreaceEnemyCardHP = '[cards] Decreace enemy card HP',
+  DecreaceMyCardHPWithMyAttack = '[cards] Decreace my card HP when I am attack enemy card',
+  ChangeCardEffects = '[cards] Change effects of card',
+  AddSomeBonus = '[cards] Add some bonus',
+  RemoveSomeBonus = '[cards] Remove some bonus',
 }
 
 export class LoadCards implements Action {
@@ -48,6 +59,24 @@ export class LoadCardsError implements Action {
   public readonly type = CardsActionTypes.LoadCardsError;
 
   constructor(public payload: Error) { }
+}
+
+export class GetMyCardInHand implements Action {
+  public readonly type = CardsActionTypes.GetMyCardInHand;
+
+  constructor(public payload: Card) { }
+}
+
+export class GetMyFirstCards implements Action {
+  public readonly type = CardsActionTypes.GetMyFirstCards;
+
+  constructor(public payload: number) { }
+}
+
+export class ChangeMyFirstCards implements Action {
+  public readonly type = CardsActionTypes.ChangeMyFirstCards;
+
+  constructor(public payload: CardForStart[]) { }
 }
 
 export class GetMyNewCards implements Action {
@@ -89,13 +118,13 @@ export class MoveEnemyActiveCardsWithinArray implements Action {
 export class GetMyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetMyBattleCard;
 
-  constructor(public payload: CdkDragDrop<Card[]>) { }
+  constructor(public payload: {event: CdkDragDrop<Card[]>, move: number}) { }
 }
 
 export class GetEnemyBattleCard implements Action {
   public readonly type = CardsActionTypes.GetEnemyBattleCard;
 
-  constructor(public payload: CdkDragDrop<Card[]>) { }
+  
 }
 
 export class DeleteMyCardFromBattle implements Action {
@@ -186,12 +215,63 @@ export class CheckNewCardDataLoss implements Action {
   constructor(public payload: { textContent: PopupTextContent, id: number, form: NgForm, card?: Card }) {}
 }
 
+export class IncreaceMyCardAttack implements Action {
+  public readonly type = CardsActionTypes.IncreaceMyCardAttack;
+
+  constructor(public payload: {array: Card[] }) {}
+}
+
+export class IncreaceMyCardHP implements Action {
+  public readonly type = CardsActionTypes.IncreaceMyCardHP;
+
+  constructor(public payload: { card: Card, amount: number }) {}
+}
+
+export class DecreaceEnemyCardHP implements Action {
+  public readonly type = CardsActionTypes.DecreaceEnemyCardHP;
+
+  constructor(public payload: { myCardId: string,  enemyCardId: string, userCardDamage: number }) {}
+}
+
+export class DecreaceMyCardHPWithMyAttack implements Action {
+  public readonly type = CardsActionTypes.DecreaceMyCardHPWithMyAttack;
+
+  constructor(public payload: { myCardId: string,  enemyCardId: string }) {}
+}
+
+export class DeleteEnemyCardFromBattle implements Action {
+  public readonly type = CardsActionTypes.DeleteEnemyCardFromBattle;
+
+  constructor(public payload: { id: number }) {}
+}
+
+export class ChangeCardEffects implements Action {
+  public readonly type = CardsActionTypes.ChangeCardEffects;
+
+  constructor(public payload: { id: number, effects: { [name: string]: any } }) {}
+}
+
+export class AddSomeBonus implements Action {
+  public readonly type = CardsActionTypes.AddSomeBonus;
+
+  constructor(public payload: {card: Card}) {}
+}
+
+export class RemoveSomeBonus implements Action {
+  public readonly type = CardsActionTypes.RemoveSomeBonus;
+
+  constructor(public payload: {card: Card}) {}
+}
+
 export type CardsActions =
   | LoadCards
   | LoadCardsSuccess
   | LoadCardsError
+  | GetMyCardInHand
   | GetMyNewCards
   | GetEnemyNewCards
+  | GetMyFirstCards
+  | ChangeMyFirstCards
   | MoveMyCardsWithinArray
   | MoveEnemyCardsWithinArray
   | MoveMyActiveCardsWithinArray
@@ -199,6 +279,7 @@ export type CardsActions =
   | GetMyBattleCard
   | GetEnemyBattleCard
   | DeleteMyCardFromBattle
+  | DeleteEnemyCardFromBattle
   | DecrementEnemyCardCount
   | DeleteCard
   | DeleteCardSuccess
@@ -212,4 +293,11 @@ export type CardsActions =
   | ChangeSelectedCardId
   | ShowDeleteCardPopup
   | ShowNewCardPopup
-  | CheckNewCardDataLoss;
+  | CheckNewCardDataLoss
+  | IncreaceMyCardAttack
+  | IncreaceMyCardHP
+  | DecreaceEnemyCardHP
+  | DecreaceMyCardHPWithMyAttack
+  | ChangeCardEffects
+  | AddSomeBonus
+  | RemoveSomeBonus;

@@ -6,7 +6,9 @@ import { baseUrl } from 'constants/baseUrl';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class UserService {
     public constructor(private http: Http) {
 

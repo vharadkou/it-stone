@@ -5,6 +5,26 @@ export enum Status {
   Error
 }
 
+export enum GameStatus {
+  Wait,
+  Start,
+  End,
+  Error
+}
+
+export enum GameTurn {
+  NotChosen,
+  MyTurn,
+  EnemyTurn
+}
+
+export enum GameWin {
+  NotChosen,
+  MyWin,
+  EnemyWin,
+  Draw
+}
+
 export enum SocketStatus {
   Disconnected,
   Connected,
@@ -17,6 +37,8 @@ export interface Player {
 }
 
 export interface Card {
+  _id: string,
+  class: string,
   id: number;
   name: string;
   surname: string;
@@ -24,6 +46,8 @@ export interface Card {
   skills: string[];
   hp: number;
   damage: number;
+  manaCost: number;
+  effects: { [name: string]: any; };
 }
 
 export interface Skill {
@@ -36,8 +60,8 @@ export interface PopupTextContent {
   title: string;
   text: string;
   buttonText: {
-    cancel: string,
-    confirm: string
+    cancel?: string,
+    confirm?: string
   };
 }
 
@@ -48,4 +72,9 @@ export interface AboutCard {
   imageSrc:string;
   skills:string[];
   email:string;
+}
+
+export interface CardForStart {
+  card: Card;
+  isChosen: boolean;
 }
