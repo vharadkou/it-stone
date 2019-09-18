@@ -27,10 +27,7 @@ export class InfobarComponent implements OnInit {
   public ngOnInit(): void {
     console.log('Component has been rendered');
   }
-
-
-
-
+  
   public turnTrigger(): void {
     alert('Some action');
   }

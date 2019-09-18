@@ -21,10 +21,5 @@ export class CardComponent {
   public faUsb = faUsb;
   public faShieldAlt = faShieldAlt;
 
-  ngOnInit() {
-}
-
-
-  
-
+  ngOnInit() {}
 }

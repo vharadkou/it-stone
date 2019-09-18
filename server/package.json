@@ -34,6 +34,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chokidar": "^2.0.4",
+    "community-layer": "^2.2.1",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "fs-extra": "^7.0.0",
@@ -45,6 +46,9 @@
     "morgan": "^1.9.0",
     "ngrok": "^3.1.0",
     "reflect-metadata": "^0.1.12",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "@types/uuid": "^3.4.4",
+    "uuid": "^3.3.2",
+    "winston": "^3.1.0"
   }
 }

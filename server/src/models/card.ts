@@ -1,11 +1,12 @@
 import * as mongoose from 'mongoose';
 
 export interface Card extends mongoose.Document {
+    id: number;
     name: string;
     hp: number;
     superSkill: string;
     ignore: string[];
-    createAttack: Array<{ [name: string]: string }>;
+    damage: number;
     image: string;
 }
 

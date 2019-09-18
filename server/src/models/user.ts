@@ -1,22 +1,25 @@
 import * as mongoose from 'mongoose';
+import { Deck, DECK_SCHEMA } from './new-deck';
+import { Statistics, STATISTICS_SCHEMA } from './statistics';
 
 export interface User extends mongoose.Document {
-    email: string;
-    name: string;
-    accessToken: string;
+    userToken: string;
+    decks: Deck[];
+    statistics: Statistics;
 }
 
 export const USER_SCHEMA = {
-    email: {
+    userToken: {
         type: String,
+        unique: true,
         required: true
     },
-    name: {
-        type: String,
-        required: true
+    decks: {
+        type: [DECK_SCHEMA],
+        required: false
     },
-    accessToken: {
-        type: String,
-        required: true
+    statistics: {
+        type: STATISTICS_SCHEMA,
+        required: false
     }
 };

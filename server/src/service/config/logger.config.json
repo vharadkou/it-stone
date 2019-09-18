@@ -1,0 +1,6 @@
+{
+    "level": "info",
+    "errorLogName": "error.log",
+    "combinedLogName": "combined.log",
+    "errorLevel": "error"
+}
