@@ -6,7 +6,7 @@ export class SocketService {
 
   public constructor() {
     if (!this.socket) {
-      this.socket = openSocket('http://localhost:9669');
+      // this.socket = openSocket('http://localhost:9669');
     }
   }
 

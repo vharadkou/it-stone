@@ -74,6 +74,11 @@ export interface AboutCard {
   email:string;
 }
 
+export interface User{
+  nickName: string;
+  email: string;
+  password: string;
+}
 export interface CardForStart {
   card: Card;
   isChosen: boolean;
