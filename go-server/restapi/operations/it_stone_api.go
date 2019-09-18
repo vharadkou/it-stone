@@ -20,6 +20,9 @@ import (
 	"github.com/go-openapi/swag"
 
 	"it-stone-server/restapi/operations/card"
+	"it-stone-server/restapi/operations/user"
+
+	models "it-stone-server/models"
 )
 
 // NewItStoneAPI creates a new ItStone instance
@@ -39,25 +42,47 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams) middleware.Responder {
+		UserDeleteV0UsersUserIDHandler: user.DeleteV0UsersUserIDHandlerFunc(func(params user.DeleteV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserDeleteV0UsersUserID has not yet been implemented")
+		}),
+		GetV0AuthCallbackHandler: GetV0AuthCallbackHandlerFunc(func(params GetV0AuthCallbackParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetV0AuthCallback has not yet been implemented")
+		}),
+		UserGetV0LoginHandler: user.GetV0LoginHandlerFunc(func(params user.GetV0LoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetV0Login has not yet been implemented")
+		}),
+		UserGetV0UsersUserIDHandler: user.GetV0UsersUserIDHandlerFunc(func(params user.GetV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetV0UsersUserID has not yet been implemented")
+		}),
+		UserPutV0UsersUserIDHandler: user.PutV0UsersUserIDHandlerFunc(func(params user.PutV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserPutV0UsersUserID has not yet been implemented")
+		}),
+		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardCreateCard has not yet been implemented")
 		}),
-		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams) middleware.Responder {
+		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardDeleteCard has not yet been implemented")
 		}),
-		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams) middleware.Responder {
+		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCard has not yet been implemented")
 		}),
-		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams) middleware.Responder {
+		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCards has not yet been implemented")
 		}),
-		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams) middleware.Responder {
+		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
 		}),
+
+		OauthSecurityAuth: func(token string, scopes []string) (*models.Principal, error) {
+			return nil, errors.NotImplemented("oauth2 bearer auth (OauthSecurity) has not yet been implemented")
+		},
+
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
-/*ItStoneAPI Description for API IT-Stone */
+/*ItStoneAPI Some usefull description */
 type ItStoneAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
@@ -85,6 +110,23 @@ type ItStoneAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
+	// OauthSecurityAuth registers a function that takes an access token and a collection of required scopes and returns a principal
+	// it performs authentication based on an oauth2 bearer token provided in the request
+	OauthSecurityAuth func(string, []string) (*models.Principal, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
+
+	// UserDeleteV0UsersUserIDHandler sets the operation handler for the delete v0 users user ID operation
+	UserDeleteV0UsersUserIDHandler user.DeleteV0UsersUserIDHandler
+	// GetV0AuthCallbackHandler sets the operation handler for the get v0 auth callback operation
+	GetV0AuthCallbackHandler GetV0AuthCallbackHandler
+	// UserGetV0LoginHandler sets the operation handler for the get v0 login operation
+	UserGetV0LoginHandler user.GetV0LoginHandler
+	// UserGetV0UsersUserIDHandler sets the operation handler for the get v0 users user ID operation
+	UserGetV0UsersUserIDHandler user.GetV0UsersUserIDHandler
+	// UserPutV0UsersUserIDHandler sets the operation handler for the put v0 users user ID operation
+	UserPutV0UsersUserIDHandler user.PutV0UsersUserIDHandler
 	// CardCreateCardHandler sets the operation handler for the create card operation
 	CardCreateCardHandler card.CreateCardHandler
 	// CardDeleteCardHandler sets the operation handler for the delete card operation
@@ -158,6 +200,30 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.OauthSecurityAuth == nil {
+		unregistered = append(unregistered, "OauthSecurityAuth")
+	}
+
+	if o.UserDeleteV0UsersUserIDHandler == nil {
+		unregistered = append(unregistered, "user.DeleteV0UsersUserIDHandler")
+	}
+
+	if o.GetV0AuthCallbackHandler == nil {
+		unregistered = append(unregistered, "GetV0AuthCallbackHandler")
+	}
+
+	if o.UserGetV0LoginHandler == nil {
+		unregistered = append(unregistered, "user.GetV0LoginHandler")
+	}
+
+	if o.UserGetV0UsersUserIDHandler == nil {
+		unregistered = append(unregistered, "user.GetV0UsersUserIDHandler")
+	}
+
+	if o.UserPutV0UsersUserIDHandler == nil {
+		unregistered = append(unregistered, "user.PutV0UsersUserIDHandler")
+	}
+
 	if o.CardCreateCardHandler == nil {
 		unregistered = append(unregistered, "card.CreateCardHandler")
 	}
@@ -193,14 +259,26 @@ func (o *ItStoneAPI) ServeErrorFor(operationID string) func(http.ResponseWriter,
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *ItStoneAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
 
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name := range schemes {
+		switch name {
+
+		case "OauthSecurity":
+
+			result[name] = o.BearerAuthenticator(name, func(token string, scopes []string) (interface{}, error) {
+				return o.OauthSecurityAuth(token, scopes)
+			})
+
+		}
+	}
+	return result
 
 }
 
 // Authorizer returns the registered authorizer
 func (o *ItStoneAPI) Authorizer() runtime.Authorizer {
 
-	return nil
+	return o.APIAuthorizer
 
 }
 
@@ -275,6 +353,31 @@ func (o *ItStoneAPI) initHandlerCache() {
 	if o.handlers == nil {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/v0/users/{userID}"] = user.NewDeleteV0UsersUserID(o.context, o.UserDeleteV0UsersUserIDHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/auth/callback"] = NewGetV0AuthCallback(o.context, o.GetV0AuthCallbackHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/login"] = user.NewGetV0Login(o.context, o.UserGetV0LoginHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/users/{userID}"] = user.NewGetV0UsersUserID(o.context, o.UserGetV0UsersUserIDHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/v0/users/{userID}"] = user.NewPutV0UsersUserID(o.context, o.UserPutV0UsersUserIDHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

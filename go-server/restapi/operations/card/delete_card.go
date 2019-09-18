@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "it-stone-server/models"
 )
 
 // DeleteCardHandlerFunc turns a function with the right signature into a delete card handler
-type DeleteCardHandlerFunc func(DeleteCardParams) middleware.Responder
+type DeleteCardHandlerFunc func(DeleteCardParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteCardHandlerFunc) Handle(params DeleteCardParams) middleware.Responder {
-	return fn(params)
+func (fn DeleteCardHandlerFunc) Handle(params DeleteCardParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // DeleteCardHandler interface for that can handle valid delete card params
 type DeleteCardHandler interface {
-	Handle(DeleteCardParams) middleware.Responder
+	Handle(DeleteCardParams, *models.Principal) middleware.Responder
 }
 
 // NewDeleteCard creates a new http.Handler for the delete card operation
@@ -46,12 +48,25 @@ func (o *DeleteCard) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewDeleteCardParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

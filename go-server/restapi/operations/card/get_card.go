@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "it-stone-server/models"
 )
 
 // GetCardHandlerFunc turns a function with the right signature into a get card handler
-type GetCardHandlerFunc func(GetCardParams) middleware.Responder
+type GetCardHandlerFunc func(GetCardParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCardHandlerFunc) Handle(params GetCardParams) middleware.Responder {
-	return fn(params)
+func (fn GetCardHandlerFunc) Handle(params GetCardParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // GetCardHandler interface for that can handle valid get card params
 type GetCardHandler interface {
-	Handle(GetCardParams) middleware.Responder
+	Handle(GetCardParams, *models.Principal) middleware.Responder
 }
 
 // NewGetCard creates a new http.Handler for the get card operation
@@ -46,12 +48,25 @@ func (o *GetCard) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewGetCardParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

@@ -8,7 +8,9 @@ package models
 import (
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Card card
@@ -16,7 +18,8 @@ import (
 type Card struct {
 
 	// class
-	Class string `json:"class,omitempty"`
+	// Required: true
+	Class *string `json:"class"`
 
 	// damage
 	Damage float64 `json:"damage,omitempty"`
@@ -37,7 +40,8 @@ type Card struct {
 	ManaCost float64 `json:"mana_cost,omitempty"`
 
 	// name
-	Name string `json:"name,omitempty"`
+	// Required: true
+	Name *string `json:"name"`
 
 	// skills
 	Skills []string `json:"skills"`
@@ -48,6 +52,37 @@ type Card struct {
 
 // Validate validates this card
 func (m *Card) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateClass(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Card) validateClass(formats strfmt.Registry) error {
+
+	if err := validate.Required("class", "body", m.Class); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Card) validateName(formats strfmt.Registry) error {
+
+	if err := validate.Required("name", "body", m.Name); err != nil {
+		return err
+	}
+
 	return nil
 }
 
