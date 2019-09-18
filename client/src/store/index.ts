@@ -5,3 +5,4 @@ export * from './skills';
 export * from './socket';
 export * from './about-page';
 export * from './user';
+export * from './game-process';

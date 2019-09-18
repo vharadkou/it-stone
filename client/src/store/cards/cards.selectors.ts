@@ -10,6 +10,8 @@ const getCardState = createFeatureSelector<CardsState>('cardsState');
 const GetCards = (state: CardsState) => state.cards;
 const GetDeck = (state: CardsState) => state.deck;
 const GetMyCards = (state: CardsState) => state.myCards;
+const GetMyCardsForChoosing = (state: CardsState) => state.myCardsForChoosingAtStart;
+const GetMyCardsInHand = (state: CardsState) => state.myCardsInHand;
 const GetEnemyCards = (state: CardsState) => state.enemyCards;
 const GetMyActiveCards = (state: CardsState) => state.myActiveCards;
 const GetEnemyActiveCards = (state: CardsState) => state.enemyActiveCards;
@@ -20,6 +22,11 @@ const GetTemplCard = (state: CardsState) => state.templCard;
 const getCards = createSelector(
   getCardState,
   GetCards
+);
+
+const getMyCardsForChoosing = createSelector(
+  getCardState,
+  GetMyCardsForChoosing
 );
 
 const getDeckId = createSelector(
@@ -63,6 +70,11 @@ const getMyCardsId = createSelector(
 const getMyCards = createSelector(
   getCardState,
   GetMyCards
+);
+
+const getMyCardsInHand = createSelector(
+  getCardState,
+  GetMyCardsInHand
 );
 
 const getMyActiveCardsId = createSelector(
@@ -118,6 +130,7 @@ const getSelectedCard = createSelector(
 
 export const cardsQuery = {
   getCards,
+  getMyCardsForChoosing,
   getCardState,
   getDeck,
   getDeckId,
@@ -128,6 +141,7 @@ export const cardsQuery = {
   getMyActiveCards,
   getMyActiveCardsId,
   getMyCards,
+  getMyCardsInHand,
   getMyCardsId,
   getSelectedCard,
   getSelectedCardId

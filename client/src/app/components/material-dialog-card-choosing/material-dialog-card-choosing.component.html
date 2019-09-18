@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <p>{{ data.text }}</p>
+  <div *ngIf="cards" class="mat-dialog-content-cards">
+    <div *ngFor="let card of cards; let i = index">
+      <app-card [card]="card.card"></app-card>
+      <input
+        name="card.isChosen"
+        (click)="chooseCard(i)"
+        [attr.id]="i"
+        type="checkbox"
+        [attr.checked]="card.isChosen ? '' : null"
+      />
+      <label [attr.for]="i"></label>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onChooseClick($event)" cdkFocusInitial>
+    {{ data.buttonText.confirm }}
+  </button>
+</div>

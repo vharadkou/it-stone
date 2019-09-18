@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 
 @Component({
@@ -7,7 +7,10 @@ import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
   styleUrls: ['./infobar.component.scss']
 })
 export class InfobarComponent implements OnInit {
+  @Input() allCardsEnemy
+  @Input() allCardsMy
 
+  @Output() onMyCardTaken = new EventEmitter<any>();
   // all data typed below is just a mock and will be changed later
   public myHP$ = this.playersHPFacade.myHP$;
   public enemyHP$ = this.playersHPFacade.enemyHP$;
@@ -24,7 +27,7 @@ export class InfobarComponent implements OnInit {
   public ngOnInit(): void {
     console.log('Component has been rendered');
   }
-
+  
   public turnTrigger(): void {
     alert('Some action');
   }
