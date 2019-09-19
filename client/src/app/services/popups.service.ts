@@ -5,7 +5,6 @@ import { MaterialDialogCardChoosingComponent } from 'app/components/material-dia
 import { Observable } from 'rxjs';
 import { Card } from '../../models';
 import { PopupTextContent } from '../../models';
-import { createConfig } from '@ngrx/store-devtools/src/instrument';
 
 @Injectable({
   providedIn: 'root'
