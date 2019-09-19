@@ -28,10 +28,10 @@ var (
 	// the credentials for this API (adapt values when registering API)
 	//clientID = "624575227054-60ko1nceteteqmkbrsolj9m51goqu6ur.apps.googleusercontent.com" // <= enter registered API client ID here
 
-	clientID = "183846424764-mbpe9pp08vfknndvkjv8agcngfqt8rbo.apps.googleusercontent.com"
+	clientID = "1078634773200-ds8m4l7a3gjaak27pgcg0l4tr4njefvm.apps.googleusercontent.com"
 
 	//clientSecret = "z3X_VKhBEC7QXfNoGi4NbmHW" // <= enter registered API client secret here
-	clientSecret = "O0FajfhfbDZZ-lAdIj_m8bf-"
+	clientSecret = "IBLjw2m0FJ1ai7PbX_9PSiuY"
 
 	// the Google login URL
 	authURL = "https://accounts.google.com/o/oauth2/v2/auth"
