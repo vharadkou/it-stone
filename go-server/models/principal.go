@@ -10,7 +10,7 @@ import (
 )
 
 // Principal principal
-// swagger:model principal
+// swagger:model Principal
 type Principal string
 
 // Validate validates this principal

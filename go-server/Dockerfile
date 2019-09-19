@@ -9,6 +9,6 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /app/main .
-COPY --from=builder /app/repository/config.json /root/repository/
-EXPOSE 8080
+COPY --from=builder /app/repository/config/config.json /root/repository/config/
+EXPOSE 8090
 CMD ["./main", "--port=8090", "--host=0.0.0.0"]

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"encoding/json"
+	"it-stone-server/domain"
 	"it-stone-server/models"
 	"log"
 	"os"
@@ -14,22 +15,22 @@ type UserWorker interface {
 	getDbClient() (DbWorker, error)
 	GetUser(id string) (*models.User, error)
 	GetUsers() ([]*models.User, error)
-	InsertUser(user *models.User) error
+	InsertUser(user *domain.User) error
 	DeleteUser(id string) error
 	UpdateUser(id string, User *models.User) (*models.User, error)
 }
 
-type UserRepository struct {
+type userRepository struct {
 	collection string
 }
 
 func NewUserRepository() UserWorker {
-	return &UserRepository{
+	return &userRepository{
 		"Users",
 	}
 }
 
-func (cw *UserRepository) GetUser(id string) (*models.User, error) {
+func (cw *userRepository) GetUser(id string) (*models.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -52,7 +53,7 @@ func (cw *UserRepository) GetUser(id string) (*models.User, error) {
 	return &User, nil
 }
 
-func (cw *UserRepository) GetUsers() ([]*models.User, error) {
+func (cw *userRepository) GetUsers() ([]*models.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -75,7 +76,7 @@ func (cw *UserRepository) GetUsers() ([]*models.User, error) {
 	return Users, nil
 }
 
-func (cw *UserRepository) InsertUser(user *models.User) error {
+func (cw *userRepository) InsertUser(user *domain.User) error {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -90,7 +91,7 @@ func (cw *UserRepository) InsertUser(user *models.User) error {
 	jsonData, _ := json.Marshal(user)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(cw.collection, user.UserID, data)
+	err = db.InsertOne(cw.collection, user.ID, data)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -99,7 +100,7 @@ func (cw *UserRepository) InsertUser(user *models.User) error {
 	return nil
 }
 
-func (cw *UserRepository) DeleteUser(id string) error {
+func (cw *userRepository) DeleteUser(id string) error {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -113,7 +114,7 @@ func (cw *UserRepository) DeleteUser(id string) error {
 	return db.DeleteOneByID(cw.collection, id)
 }
 
-func (cw *UserRepository) UpdateUser(id string, userUp *models.User) (*models.User, error) {
+func (cw *userRepository) UpdateUser(id string, userUp *models.User) (*models.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -128,7 +129,7 @@ func (cw *UserRepository) UpdateUser(id string, userUp *models.User) (*models.Us
 	jsonData, _ := json.Marshal(*userUp)
 	_ = json.Unmarshal(jsonData, &data)
 
-	recordTmpMap, err := db.UpdateOneByID(cw.collection, userUp.UserID, data)
+	recordTmpMap, err := db.UpdateOneByID(cw.collection, userUp.ID, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -140,7 +141,7 @@ func (cw *UserRepository) UpdateUser(id string, userUp *models.User) (*models.Us
 	return &User, nil
 }
 
-func (cw *UserRepository) getDbClient() (DbWorker, error) {
+func (cw *userRepository) getDbClient() (DbWorker, error) {
 	dir, _ := os.Getwd()
 	ctx := context.Background()
 	co := option.WithCredentialsFile(dir + ConfigDbPath)

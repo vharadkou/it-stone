@@ -13,40 +13,40 @@ import (
 	models "it-stone-server/models"
 )
 
-// GetV0UsersUserIDHandlerFunc turns a function with the right signature into a get v0 users user ID handler
-type GetV0UsersUserIDHandlerFunc func(GetV0UsersUserIDParams, *models.Principal) middleware.Responder
+// UpdateUserHandlerFunc turns a function with the right signature into a update user handler
+type UpdateUserHandlerFunc func(UpdateUserParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetV0UsersUserIDHandlerFunc) Handle(params GetV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
+func (fn UpdateUserHandlerFunc) Handle(params UpdateUserParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
-// GetV0UsersUserIDHandler interface for that can handle valid get v0 users user ID params
-type GetV0UsersUserIDHandler interface {
-	Handle(GetV0UsersUserIDParams, *models.Principal) middleware.Responder
+// UpdateUserHandler interface for that can handle valid update user params
+type UpdateUserHandler interface {
+	Handle(UpdateUserParams, *models.Principal) middleware.Responder
 }
 
-// NewGetV0UsersUserID creates a new http.Handler for the get v0 users user ID operation
-func NewGetV0UsersUserID(ctx *middleware.Context, handler GetV0UsersUserIDHandler) *GetV0UsersUserID {
-	return &GetV0UsersUserID{Context: ctx, Handler: handler}
+// NewUpdateUser creates a new http.Handler for the update user operation
+func NewUpdateUser(ctx *middleware.Context, handler UpdateUserHandler) *UpdateUser {
+	return &UpdateUser{Context: ctx, Handler: handler}
 }
 
-/*GetV0UsersUserID swagger:route GET /v0/users/{userID} User getV0UsersUserId
+/*UpdateUser swagger:route POST /v0/users/{id} user updateUser
 
-Find user by ID.
+Update the user by ID
 
 */
-type GetV0UsersUserID struct {
+type UpdateUser struct {
 	Context *middleware.Context
-	Handler GetV0UsersUserIDHandler
+	Handler UpdateUserHandler
 }
 
-func (o *GetV0UsersUserID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *UpdateUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewGetV0UsersUserIDParams()
+	var Params = NewUpdateUserParams()
 
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {

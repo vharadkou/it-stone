@@ -29,7 +29,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "IT-Stone Server"
-	parser.LongDescription = "Description for API IT-Stone"
+	parser.LongDescription = "Description for API Server"
 
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {

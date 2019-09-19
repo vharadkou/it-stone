@@ -13,33 +13,27 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// User user
-// swagger:model User
-type User struct {
+// RegistrationForm registration form
+// swagger:model RegistrationForm
+type RegistrationForm struct {
 
-	// The email of the User.
+	// email
+	// Required: true
 	// Format: email
-	Email strfmt.Email `json:"email,omitempty"`
+	Email *strfmt.Email `json:"email"`
 
-	// The ID of the User.
-	ID string `json:"id,omitempty"`
-
-	// The password of the User.
+	// password
+	// Required: true
 	// Format: password
-	Password strfmt.Password `json:"password,omitempty"`
+	Password *strfmt.Password `json:"password"`
 
-	// Count of all games of the User.
-	TotalGames int64 `json:"total_games,omitempty"`
-
-	// The user name.
-	Username string `json:"username,omitempty"`
-
-	// Count of all games where the User has won.
-	WinGames int64 `json:"win_games,omitempty"`
+	// username
+	// Required: true
+	Username *string `json:"username"`
 }
 
-// Validate validates this user
-func (m *User) Validate(formats strfmt.Registry) error {
+// Validate validates this registration form
+func (m *RegistrationForm) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateEmail(formats); err != nil {
@@ -50,16 +44,20 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateUsername(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
 	return nil
 }
 
-func (m *User) validateEmail(formats strfmt.Registry) error {
+func (m *RegistrationForm) validateEmail(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Email) { // not required
-		return nil
+	if err := validate.Required("email", "body", m.Email); err != nil {
+		return err
 	}
 
 	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
@@ -69,10 +67,10 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *User) validatePassword(formats strfmt.Registry) error {
+func (m *RegistrationForm) validatePassword(formats strfmt.Registry) error {
 
-	if swag.IsZero(m.Password) { // not required
-		return nil
+	if err := validate.Required("password", "body", m.Password); err != nil {
+		return err
 	}
 
 	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
@@ -82,8 +80,17 @@ func (m *User) validatePassword(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *RegistrationForm) validateUsername(formats strfmt.Registry) error {
+
+	if err := validate.Required("username", "body", m.Username); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // MarshalBinary interface implementation
-func (m *User) MarshalBinary() ([]byte, error) {
+func (m *RegistrationForm) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -91,8 +98,8 @@ func (m *User) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *User) UnmarshalBinary(b []byte) error {
-	var res User
+func (m *RegistrationForm) UnmarshalBinary(b []byte) error {
+	var res RegistrationForm
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

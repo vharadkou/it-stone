@@ -57,7 +57,97 @@ func (o *UpdateCardOK) WriteResponse(rw http.ResponseWriter, producer runtime.Pr
 	}
 }
 
-/*UpdateCardDefault Error
+// UpdateCardUnauthorizedCode is the HTTP code returned for type UpdateCardUnauthorized
+const UpdateCardUnauthorizedCode int = 401
+
+/*UpdateCardUnauthorized Authentication information is missing or invalid
+
+swagger:response updateCardUnauthorized
+*/
+type UpdateCardUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewUpdateCardUnauthorized creates UpdateCardUnauthorized with default headers values
+func NewUpdateCardUnauthorized() *UpdateCardUnauthorized {
+
+	return &UpdateCardUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the update card unauthorized response
+func (o *UpdateCardUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *UpdateCardUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the update card unauthorized response
+func (o *UpdateCardUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *UpdateCardUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+// UpdateCardNotFoundCode is the HTTP code returned for type UpdateCardNotFound
+const UpdateCardNotFoundCode int = 404
+
+/*UpdateCardNotFound The card with the specified ID was not found.
+
+swagger:response updateCardNotFound
+*/
+type UpdateCardNotFound struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewUpdateCardNotFound creates UpdateCardNotFound with default headers values
+func NewUpdateCardNotFound() *UpdateCardNotFound {
+
+	return &UpdateCardNotFound{}
+}
+
+// WithPayload adds the payload to the update card not found response
+func (o *UpdateCardNotFound) WithPayload(payload *models.Error) *UpdateCardNotFound {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the update card not found response
+func (o *UpdateCardNotFound) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *UpdateCardNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(404)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+/*UpdateCardDefault Internal server error
 
 swagger:response updateCardDefault
 */

@@ -2,7 +2,7 @@
 
 /*
 Package restapi IT-Stone Server
-Some usefull description
+Description for API Server
 
 
     Schemes:

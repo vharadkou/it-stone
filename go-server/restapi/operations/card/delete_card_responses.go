@@ -13,31 +13,141 @@ import (
 	models "it-stone-server/models"
 )
 
-// DeleteCardNoContentCode is the HTTP code returned for type DeleteCardNoContent
-const DeleteCardNoContentCode int = 204
+// DeleteCardOKCode is the HTTP code returned for type DeleteCardOK
+const DeleteCardOKCode int = 200
 
-/*DeleteCardNoContent The card has been deleted
+/*DeleteCardOK The card with the specified ID has been deleted.
 
-swagger:response deleteCardNoContent
+swagger:response deleteCardOK
 */
-type DeleteCardNoContent struct {
+type DeleteCardOK struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.DeletedEntity `json:"body,omitempty"`
 }
 
-// NewDeleteCardNoContent creates DeleteCardNoContent with default headers values
-func NewDeleteCardNoContent() *DeleteCardNoContent {
+// NewDeleteCardOK creates DeleteCardOK with default headers values
+func NewDeleteCardOK() *DeleteCardOK {
 
-	return &DeleteCardNoContent{}
+	return &DeleteCardOK{}
+}
+
+// WithPayload adds the payload to the delete card o k response
+func (o *DeleteCardOK) WithPayload(payload *models.DeletedEntity) *DeleteCardOK {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the delete card o k response
+func (o *DeleteCardOK) SetPayload(payload *models.DeletedEntity) {
+	o.Payload = payload
 }
 
 // WriteResponse to the client
-func (o *DeleteCardNoContent) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+func (o *DeleteCardOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(200)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+// DeleteCardUnauthorizedCode is the HTTP code returned for type DeleteCardUnauthorized
+const DeleteCardUnauthorizedCode int = 401
+
+/*DeleteCardUnauthorized Authentication information is missing or invalid
+
+swagger:response deleteCardUnauthorized
+*/
+type DeleteCardUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewDeleteCardUnauthorized creates DeleteCardUnauthorized with default headers values
+func NewDeleteCardUnauthorized() *DeleteCardUnauthorized {
+
+	return &DeleteCardUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the delete card unauthorized response
+func (o *DeleteCardUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *DeleteCardUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the delete card unauthorized response
+func (o *DeleteCardUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *DeleteCardUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
-	rw.WriteHeader(204)
+	rw.WriteHeader(401)
 }
 
-/*DeleteCardDefault Error
+// DeleteCardNotFoundCode is the HTTP code returned for type DeleteCardNotFound
+const DeleteCardNotFoundCode int = 404
+
+/*DeleteCardNotFound The card with the specified ID was not found.
+
+swagger:response deleteCardNotFound
+*/
+type DeleteCardNotFound struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.Error `json:"body,omitempty"`
+}
+
+// NewDeleteCardNotFound creates DeleteCardNotFound with default headers values
+func NewDeleteCardNotFound() *DeleteCardNotFound {
+
+	return &DeleteCardNotFound{}
+}
+
+// WithPayload adds the payload to the delete card not found response
+func (o *DeleteCardNotFound) WithPayload(payload *models.Error) *DeleteCardNotFound {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the delete card not found response
+func (o *DeleteCardNotFound) SetPayload(payload *models.Error) {
+	o.Payload = payload
+}
+
+// WriteResponse to the client
+func (o *DeleteCardNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.WriteHeader(404)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+/*DeleteCardDefault Internal server error
 
 swagger:response deleteCardDefault
 */

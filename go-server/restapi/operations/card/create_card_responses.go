@@ -57,7 +57,53 @@ func (o *CreateCardCreated) WriteResponse(rw http.ResponseWriter, producer runti
 	}
 }
 
-/*CreateCardDefault Error
+// CreateCardUnauthorizedCode is the HTTP code returned for type CreateCardUnauthorized
+const CreateCardUnauthorizedCode int = 401
+
+/*CreateCardUnauthorized Authentication information is missing or invalid
+
+swagger:response createCardUnauthorized
+*/
+type CreateCardUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewCreateCardUnauthorized creates CreateCardUnauthorized with default headers values
+func NewCreateCardUnauthorized() *CreateCardUnauthorized {
+
+	return &CreateCardUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the create card unauthorized response
+func (o *CreateCardUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *CreateCardUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the create card unauthorized response
+func (o *CreateCardUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *CreateCardUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+/*CreateCardDefault Internal server error
 
 swagger:response createCardDefault
 */

@@ -9,22 +9,17 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
-	"strings"
 )
 
-// GetV0UsersUserIDURL generates an URL for the get v0 users user ID operation
-type GetV0UsersUserIDURL struct {
-	UserID string
-
+// GetUsersURL generates an URL for the get users operation
+type GetUsersURL struct {
 	_basePath string
-	// avoid unkeyed usage
-	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetV0UsersUserIDURL) WithBasePath(bp string) *GetV0UsersUserIDURL {
+func (o *GetUsersURL) WithBasePath(bp string) *GetUsersURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -32,22 +27,15 @@ func (o *GetV0UsersUserIDURL) WithBasePath(bp string) *GetV0UsersUserIDURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetV0UsersUserIDURL) SetBasePath(bp string) {
+func (o *GetUsersURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *GetV0UsersUserIDURL) Build() (*url.URL, error) {
+func (o *GetUsersURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/v0/users/{userID}"
-
-	userID := o.UserID
-	if userID != "" {
-		_path = strings.Replace(_path, "{userID}", userID, -1)
-	} else {
-		return nil, errors.New("userId is required on GetV0UsersUserIDURL")
-	}
+	var _path = "/v0/users"
 
 	_basePath := o._basePath
 	if _basePath == "" {
@@ -59,7 +47,7 @@ func (o *GetV0UsersUserIDURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *GetV0UsersUserIDURL) Must(u *url.URL, err error) *url.URL {
+func (o *GetUsersURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -70,17 +58,17 @@ func (o *GetV0UsersUserIDURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *GetV0UsersUserIDURL) String() string {
+func (o *GetUsersURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *GetV0UsersUserIDURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *GetUsersURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on GetV0UsersUserIDURL")
+		return nil, errors.New("scheme is required for a full url on GetUsersURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on GetV0UsersUserIDURL")
+		return nil, errors.New("host is required for a full url on GetUsersURL")
 	}
 
 	base, err := o.Build()
@@ -94,6 +82,6 @@ func (o *GetV0UsersUserIDURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *GetV0UsersUserIDURL) StringFull(scheme, host string) string {
+func (o *GetUsersURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }
