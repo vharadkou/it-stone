@@ -13,40 +13,40 @@ import (
 	models "it-stone-server/models"
 )
 
-// PutV0UsersUserIDHandlerFunc turns a function with the right signature into a put v0 users user ID handler
-type PutV0UsersUserIDHandlerFunc func(PutV0UsersUserIDParams, *models.Principal) middleware.Responder
+// GetUserHandlerFunc turns a function with the right signature into a get user handler
+type GetUserHandlerFunc func(GetUserParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutV0UsersUserIDHandlerFunc) Handle(params PutV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
+func (fn GetUserHandlerFunc) Handle(params GetUserParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
-// PutV0UsersUserIDHandler interface for that can handle valid put v0 users user ID params
-type PutV0UsersUserIDHandler interface {
-	Handle(PutV0UsersUserIDParams, *models.Principal) middleware.Responder
+// GetUserHandler interface for that can handle valid get user params
+type GetUserHandler interface {
+	Handle(GetUserParams, *models.Principal) middleware.Responder
 }
 
-// NewPutV0UsersUserID creates a new http.Handler for the put v0 users user ID operation
-func NewPutV0UsersUserID(ctx *middleware.Context, handler PutV0UsersUserIDHandler) *PutV0UsersUserID {
-	return &PutV0UsersUserID{Context: ctx, Handler: handler}
+// NewGetUser creates a new http.Handler for the get user operation
+func NewGetUser(ctx *middleware.Context, handler GetUserHandler) *GetUser {
+	return &GetUser{Context: ctx, Handler: handler}
 }
 
-/*PutV0UsersUserID swagger:route PUT /v0/users/{userID} User putV0UsersUserId
+/*GetUser swagger:route GET /v0/users/{id} user getUser
 
-Update user info by ID.
+Receiving the user by ID
 
 */
-type PutV0UsersUserID struct {
+type GetUser struct {
 	Context *middleware.Context
-	Handler PutV0UsersUserIDHandler
+	Handler GetUserHandler
 }
 
-func (o *PutV0UsersUserID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewPutV0UsersUserIDParams()
+	var Params = NewGetUserParams()
 
 	uprinc, aCtx, err := o.Context.Authorize(r, route)
 	if err != nil {

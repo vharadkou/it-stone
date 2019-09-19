@@ -3,12 +3,17 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-openapi/errors"
 	"io/ioutil"
-	"it-stone/domain"
+	"it-stone-server/adapters/converters"
+	"it-stone-server/domain"
+	"it-stone-server/models"
+	"it-stone-server/repository"
+	"it-stone-server/restapi/operations"
 	"log"
 	"net/http"
 
-	oidc "github.com/coreos/go-oidc"
+	"github.com/coreos/go-oidc"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"golang.org/x/net/context"
@@ -21,12 +26,12 @@ var (
 	state = "foobar" // Don't make this a global in production.
 
 	// the credentials for this API (adapt values when registering API)
-	clientID = "624575227054-60ko1nceteteqmkbrsolj9m51goqu6ur.apps.googleusercontent.com" // <= enter registered API client ID here
+	//clientID = "624575227054-60ko1nceteteqmkbrsolj9m51goqu6ur.apps.googleusercontent.com" // <= enter registered API client ID here
 
-	clientSecret = "z3X_VKhBEC7QXfNoGi4NbmHW" // <= enter registered API client secret here
+	clientID = "183846424764-mbpe9pp08vfknndvkjv8agcngfqt8rbo.apps.googleusercontent.com"
 
-	//  unused in this example: the signer of the delivered token
-	//issuer = "https://accounts.google.com"
+	//clientSecret = "z3X_VKhBEC7QXfNoGi4NbmHW" // <= enter registered API client secret here
+	clientSecret = "O0FajfhfbDZZ-lAdIj_m8bf-"
 
 	// the Google login URL
 	authURL = "https://accounts.google.com/o/oauth2/v2/auth"
@@ -36,7 +41,9 @@ var (
 	userInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 	// our endpoint to be called back by the redirected client
-	callbackURL = "http://127.0.0.1:12345/api/v0/auth/callback"
+	//callbackURL = "http://0.0.0.0:12345/api/v0/auth/callback"
+
+	callbackURL = "http://localhost:8090/api/v0/auth/callback"
 
 	// the description of the OAuth2 flow
 	endpoint = oauth2.Endpoint{
@@ -53,7 +60,28 @@ var (
 	}
 )
 
-func login(r *http.Request) middleware.Responder {
+type AuthHandler interface {
+	Login(r *http.Request) middleware.Responder
+	Callback(r *http.Request) (string, error)
+	Authenticated(token string) (bool, error)
+	OAuthSecurity(token string) (*models.Principal, error)
+	CallbackUserAndToken(params operations.CallbackParams) middleware.Responder
+
+	requestToGoogleByToken(token string) ([]byte, int, error)
+	getGoogleUser(token string) (*domain.GoogleUser, error)
+}
+
+type authHandler struct {
+	utc converters.UserTokenConverter
+}
+
+func NewAuthHandler() AuthHandler {
+	return &authHandler{
+		converters.NewUserTokenConverter(),
+	}
+}
+
+func (h *authHandler) Login(r *http.Request) middleware.Responder {
 	// implements the login with a redirection
 	return middleware.ResponderFunc(
 		func(w http.ResponseWriter, pr runtime.Producer) {
@@ -61,7 +89,7 @@ func login(r *http.Request) middleware.Responder {
 		})
 }
 
-func callback(r *http.Request) (string, error) {
+func (h *authHandler) Callback(r *http.Request) (string, error) {
 	// we expect the redirected client to call us back
 	// with 2 query params: state and code.
 	// We use directly the Request params here, since we did not
@@ -93,21 +121,70 @@ func callback(r *http.Request) (string, error) {
 	log.Println("Raw token data:", oauth2Token)
 	return oauth2Token.AccessToken, nil
 }
-func RequestToGoogleByToken(token string) ([]byte, int, error) {
-	bearToken := "Bearer " + token
+
+func (h *authHandler) Authenticated(token string) (bool, error) {
+	// validates the token by sending a request at userInfoURL
+	_, statusCode, err := h.requestToGoogleByToken(token)
+	if statusCode != 200 {
+		return false, fmt.Errorf("Authorization failed!\n%v", err)
+	}
+	return true, nil
+}
+
+func (h *authHandler) OAuthSecurity(token string) (*models.Principal, error) {
+	ok, err := h.Authenticated(token)
+	if err != nil {
+		return nil, errors.New(401, err.Error())
+	}
+	if !ok {
+		return nil, errors.New(401, "invalid token")
+	}
+	prin := models.Principal(token)
+	return &prin, nil
+}
+
+func (h *authHandler) CallbackUserAndToken(params operations.CallbackParams) middleware.Responder {
+	token, err := h.Callback(params.HTTPRequest)
+	if err != nil {
+		return middleware.NotImplemented(err.Error())
+	}
+
+	googleUser, err := h.getGoogleUser(token)
+	if err != nil {
+		return middleware.NotImplemented(err.Error())
+	}
+
+	user := domain.NewUser(googleUser)
+	userRepository := repository.NewUserRepository()
+	if _, err := userRepository.GetUser(user.ID); err != nil {
+		err = userRepository.InsertUser(user)
+		if err != nil {
+			return middleware.NotImplemented(err.Error())
+		}
+	}
+
+	domainUserToken := domain.NewUserToken(token, user)
+	outUserToken := h.utc.FromDomain(domainUserToken)
+	return operations.NewCallbackOK().WithPayload(outUserToken)
+}
+
+func (h *authHandler) requestToGoogleByToken(token string) ([]byte, int, error) {
 	req, err := http.NewRequest("GET", userInfoURL, nil)
 	if err != nil {
 		return nil, 501, err
 	}
 
-	req.Header.Add("Authorization", bearToken)
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", token))
 
-	cli := &http.Client{}
-	resp, err := cli.Do(req)
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, 501, err
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -119,23 +196,15 @@ func RequestToGoogleByToken(token string) ([]byte, int, error) {
 	return body, resp.StatusCode, err
 }
 
-func GetGooglesUser(token string) (*domain.UserInfo, error) {
-	body, statusCode, err := RequestToGoogleByToken(token)
-	ui := domain.NewUserInfo()
+func (h *authHandler) getGoogleUser(token string) (*domain.GoogleUser, error) {
+	body, statusCode, err := h.requestToGoogleByToken(token)
+	ui := &domain.GoogleUser{}
 	if statusCode == 200 {
-		err := json.Unmarshal(body, &ui)
+		err := json.Unmarshal(body, ui)
 		if err != nil {
-			return nil, fmt.Errorf("Unmarshal failed: %v", err)
+			return nil, fmt.Errorf("Unmarshal failed! \n%v", err)
 		}
 	}
-	log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__Users data:", ui)
+	log.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%__Users data:", *ui)
 	return ui, err
-}
-func authenticated(token string) (bool, error) {
-	// validates the token by sending a request at userInfoURL
-	_, statusCode, err := RequestToGoogleByToken(token)
-	if statusCode != 200 {
-		return false, fmt.Errorf("Authorization failed: %v", err)
-	}
-	return true, nil
 }

@@ -14,40 +14,40 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewDeleteV0UsersUserIDParams creates a new DeleteV0UsersUserIDParams object
+// NewGetUserParams creates a new GetUserParams object
 // no default values defined in spec.
-func NewDeleteV0UsersUserIDParams() DeleteV0UsersUserIDParams {
+func NewGetUserParams() GetUserParams {
 
-	return DeleteV0UsersUserIDParams{}
+	return GetUserParams{}
 }
 
-// DeleteV0UsersUserIDParams contains all the bound params for the delete v0 users user ID operation
+// GetUserParams contains all the bound params for the get user operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters DeleteV0UsersUserID
-type DeleteV0UsersUserIDParams struct {
+// swagger:parameters getUser
+type GetUserParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*the ID of the User.
+	/*
 	  Required: true
 	  In: path
 	*/
-	UserID string
+	ID string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewDeleteV0UsersUserIDParams() beforehand.
-func (o *DeleteV0UsersUserIDParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewGetUserParams() beforehand.
+func (o *GetUserParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
-	rUserID, rhkUserID, _ := route.Params.GetOK("userID")
-	if err := o.bindUserID(rUserID, rhkUserID, route.Formats); err != nil {
+	rID, rhkID, _ := route.Params.GetOK("id")
+	if err := o.bindID(rID, rhkID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,8 +57,8 @@ func (o *DeleteV0UsersUserIDParams) BindRequest(r *http.Request, route *middlewa
 	return nil
 }
 
-// bindUserID binds and validates parameter UserID from path.
-func (o *DeleteV0UsersUserIDParams) bindUserID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+// bindID binds and validates parameter ID from path.
+func (o *GetUserParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
@@ -67,7 +67,7 @@ func (o *DeleteV0UsersUserIDParams) bindUserID(rawData []string, hasKey bool, fo
 	// Required: true
 	// Parameter is provided by construction from the route
 
-	o.UserID = raw
+	o.ID = raw
 
 	return nil
 }

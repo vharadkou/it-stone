@@ -29,7 +29,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API Server",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
@@ -39,6 +39,7 @@ func init() {
       "get": {
         "security": [],
         "summary": "Return access_token and user",
+        "operationId": "callback",
         "responses": {
           "200": {
             "description": "login",
@@ -200,9 +201,10 @@ func init() {
       "get": {
         "security": [],
         "tags": [
-          "User"
+          "login"
         ],
         "summary": "Login by using Google client OAuth 2.0.",
+        "operationId": "login",
         "responses": {
           "200": {
             "description": "Login successful.",
@@ -224,24 +226,39 @@ func init() {
         }
       }
     },
-    "/v0/users/{userID}": {
+    "/v0/users": {
       "get": {
-        "description": "Find user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
+        "summary": "Receiving all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Receiving all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "default": {
+            "description": "generic Error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
+        }
+      }
+    },
+    "/v0/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
         ],
+        "summary": "Receiving the user by ID",
+        "operationId": "getUser",
         "responses": {
           "200": {
             "description": "Success",
@@ -263,24 +280,15 @@ func init() {
           }
         }
       },
-      "put": {
-        "description": "Update user info by ID.",
-        "produces": [
-          "application/json"
-        ],
+      "post": {
         "tags": [
-          "User"
+          "user"
         ],
+        "summary": "Update the user by ID",
+        "operationId": "updateUser",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
+            "name": "user",
             "in": "body",
             "schema": {
               "$ref": "#/definitions/User"
@@ -309,22 +317,11 @@ func init() {
         }
       },
       "delete": {
-        "description": "Delete user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          }
-        ],
+        "summary": "Delete the user by ID",
+        "operationId": "deleteUser",
         "responses": {
           "200": {
             "description": "Delete success"
@@ -342,16 +339,20 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
@@ -414,6 +415,9 @@ func init() {
         }
       }
     },
+    "Principal": {
+      "type": "string"
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -457,9 +461,6 @@ func init() {
           "$ref": "#/definitions/User"
         }
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {
@@ -494,7 +495,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API Server",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
@@ -504,6 +505,7 @@ func init() {
       "get": {
         "security": [],
         "summary": "Return access_token and user",
+        "operationId": "callback",
         "responses": {
           "200": {
             "description": "login",
@@ -665,9 +667,10 @@ func init() {
       "get": {
         "security": [],
         "tags": [
-          "User"
+          "login"
         ],
         "summary": "Login by using Google client OAuth 2.0.",
+        "operationId": "login",
         "responses": {
           "200": {
             "description": "Login successful.",
@@ -689,24 +692,39 @@ func init() {
         }
       }
     },
-    "/v0/users/{userID}": {
+    "/v0/users": {
       "get": {
-        "description": "Find user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
+        "summary": "Receiving all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Receiving all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "default": {
+            "description": "generic Error response",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           }
+        }
+      }
+    },
+    "/v0/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
         ],
+        "summary": "Receiving the user by ID",
+        "operationId": "getUser",
         "responses": {
           "200": {
             "description": "Success",
@@ -728,24 +746,15 @@ func init() {
           }
         }
       },
-      "put": {
-        "description": "Update user info by ID.",
-        "produces": [
-          "application/json"
-        ],
+      "post": {
         "tags": [
-          "User"
+          "user"
         ],
+        "summary": "Update the user by ID",
+        "operationId": "updateUser",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
+            "name": "user",
             "in": "body",
             "schema": {
               "$ref": "#/definitions/User"
@@ -774,22 +783,11 @@ func init() {
         }
       },
       "delete": {
-        "description": "Delete user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          }
-        ],
+        "summary": "Delete the user by ID",
+        "operationId": "deleteUser",
         "responses": {
           "200": {
             "description": "Delete success"
@@ -807,16 +805,20 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
@@ -879,6 +881,9 @@ func init() {
         }
       }
     },
+    "Principal": {
+      "type": "string"
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -922,9 +927,6 @@ func init() {
           "$ref": "#/definitions/User"
         }
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {

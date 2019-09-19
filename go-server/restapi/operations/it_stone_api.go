@@ -20,6 +20,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	"it-stone-server/restapi/operations/card"
+	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/user"
 
 	models "it-stone-server/models"
@@ -42,20 +43,8 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		UserDeleteV0UsersUserIDHandler: user.DeleteV0UsersUserIDHandlerFunc(func(params user.DeleteV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation UserDeleteV0UsersUserID has not yet been implemented")
-		}),
-		GetV0AuthCallbackHandler: GetV0AuthCallbackHandlerFunc(func(params GetV0AuthCallbackParams) middleware.Responder {
-			return middleware.NotImplemented("operation GetV0AuthCallback has not yet been implemented")
-		}),
-		UserGetV0LoginHandler: user.GetV0LoginHandlerFunc(func(params user.GetV0LoginParams) middleware.Responder {
-			return middleware.NotImplemented("operation UserGetV0Login has not yet been implemented")
-		}),
-		UserGetV0UsersUserIDHandler: user.GetV0UsersUserIDHandlerFunc(func(params user.GetV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation UserGetV0UsersUserID has not yet been implemented")
-		}),
-		UserPutV0UsersUserIDHandler: user.PutV0UsersUserIDHandlerFunc(func(params user.PutV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation UserPutV0UsersUserID has not yet been implemented")
+		CallbackHandler: CallbackHandlerFunc(func(params CallbackParams) middleware.Responder {
+			return middleware.NotImplemented("operation Callback has not yet been implemented")
 		}),
 		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardCreateCard has not yet been implemented")
@@ -63,14 +52,29 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardDeleteCard has not yet been implemented")
 		}),
+		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserDeleteUser has not yet been implemented")
+		}),
 		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCard has not yet been implemented")
 		}),
 		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCards has not yet been implemented")
 		}),
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
+		}),
+		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUsers has not yet been implemented")
+		}),
+		LoginLoginHandler: login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation LoginLogin has not yet been implemented")
+		}),
 		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
+		}),
+		UserUpdateUserHandler: user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserUpdateUser has not yet been implemented")
 		}),
 
 		OauthSecurityAuth: func(token string, scopes []string) (*models.Principal, error) {
@@ -82,7 +86,7 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 	}
 }
 
-/*ItStoneAPI Some usefull description */
+/*ItStoneAPI Description for API Server */
 type ItStoneAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
@@ -117,26 +121,28 @@ type ItStoneAPI struct {
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// UserDeleteV0UsersUserIDHandler sets the operation handler for the delete v0 users user ID operation
-	UserDeleteV0UsersUserIDHandler user.DeleteV0UsersUserIDHandler
-	// GetV0AuthCallbackHandler sets the operation handler for the get v0 auth callback operation
-	GetV0AuthCallbackHandler GetV0AuthCallbackHandler
-	// UserGetV0LoginHandler sets the operation handler for the get v0 login operation
-	UserGetV0LoginHandler user.GetV0LoginHandler
-	// UserGetV0UsersUserIDHandler sets the operation handler for the get v0 users user ID operation
-	UserGetV0UsersUserIDHandler user.GetV0UsersUserIDHandler
-	// UserPutV0UsersUserIDHandler sets the operation handler for the put v0 users user ID operation
-	UserPutV0UsersUserIDHandler user.PutV0UsersUserIDHandler
+	// CallbackHandler sets the operation handler for the callback operation
+	CallbackHandler CallbackHandler
 	// CardCreateCardHandler sets the operation handler for the create card operation
 	CardCreateCardHandler card.CreateCardHandler
 	// CardDeleteCardHandler sets the operation handler for the delete card operation
 	CardDeleteCardHandler card.DeleteCardHandler
+	// UserDeleteUserHandler sets the operation handler for the delete user operation
+	UserDeleteUserHandler user.DeleteUserHandler
 	// CardGetCardHandler sets the operation handler for the get card operation
 	CardGetCardHandler card.GetCardHandler
 	// CardGetCardsHandler sets the operation handler for the get cards operation
 	CardGetCardsHandler card.GetCardsHandler
+	// UserGetUserHandler sets the operation handler for the get user operation
+	UserGetUserHandler user.GetUserHandler
+	// UserGetUsersHandler sets the operation handler for the get users operation
+	UserGetUsersHandler user.GetUsersHandler
+	// LoginLoginHandler sets the operation handler for the login operation
+	LoginLoginHandler login.LoginHandler
 	// CardUpdateCardHandler sets the operation handler for the update card operation
 	CardUpdateCardHandler card.UpdateCardHandler
+	// UserUpdateUserHandler sets the operation handler for the update user operation
+	UserUpdateUserHandler user.UpdateUserHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -204,24 +210,8 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "OauthSecurityAuth")
 	}
 
-	if o.UserDeleteV0UsersUserIDHandler == nil {
-		unregistered = append(unregistered, "user.DeleteV0UsersUserIDHandler")
-	}
-
-	if o.GetV0AuthCallbackHandler == nil {
-		unregistered = append(unregistered, "GetV0AuthCallbackHandler")
-	}
-
-	if o.UserGetV0LoginHandler == nil {
-		unregistered = append(unregistered, "user.GetV0LoginHandler")
-	}
-
-	if o.UserGetV0UsersUserIDHandler == nil {
-		unregistered = append(unregistered, "user.GetV0UsersUserIDHandler")
-	}
-
-	if o.UserPutV0UsersUserIDHandler == nil {
-		unregistered = append(unregistered, "user.PutV0UsersUserIDHandler")
+	if o.CallbackHandler == nil {
+		unregistered = append(unregistered, "CallbackHandler")
 	}
 
 	if o.CardCreateCardHandler == nil {
@@ -232,6 +222,10 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "card.DeleteCardHandler")
 	}
 
+	if o.UserDeleteUserHandler == nil {
+		unregistered = append(unregistered, "user.DeleteUserHandler")
+	}
+
 	if o.CardGetCardHandler == nil {
 		unregistered = append(unregistered, "card.GetCardHandler")
 	}
@@ -240,8 +234,24 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "card.GetCardsHandler")
 	}
 
+	if o.UserGetUserHandler == nil {
+		unregistered = append(unregistered, "user.GetUserHandler")
+	}
+
+	if o.UserGetUsersHandler == nil {
+		unregistered = append(unregistered, "user.GetUsersHandler")
+	}
+
+	if o.LoginLoginHandler == nil {
+		unregistered = append(unregistered, "login.LoginHandler")
+	}
+
 	if o.CardUpdateCardHandler == nil {
 		unregistered = append(unregistered, "card.UpdateCardHandler")
+	}
+
+	if o.UserUpdateUserHandler == nil {
+		unregistered = append(unregistered, "user.UpdateUserHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -354,30 +364,10 @@ func (o *ItStoneAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/v0/users/{userID}"] = user.NewDeleteV0UsersUserID(o.context, o.UserDeleteV0UsersUserIDHandler)
-
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v0/auth/callback"] = NewGetV0AuthCallback(o.context, o.GetV0AuthCallbackHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/v0/login"] = user.NewGetV0Login(o.context, o.UserGetV0LoginHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/v0/users/{userID}"] = user.NewGetV0UsersUserID(o.context, o.UserGetV0UsersUserIDHandler)
-
-	if o.handlers["PUT"] == nil {
-		o.handlers["PUT"] = make(map[string]http.Handler)
-	}
-	o.handlers["PUT"]["/v0/users/{userID}"] = user.NewPutV0UsersUserID(o.context, o.UserPutV0UsersUserIDHandler)
+	o.handlers["GET"]["/v0/auth/callback"] = NewCallback(o.context, o.CallbackHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
@@ -389,6 +379,11 @@ func (o *ItStoneAPI) initHandlerCache() {
 	}
 	o.handlers["DELETE"]["/v0/cards/{id}"] = card.NewDeleteCard(o.context, o.CardDeleteCardHandler)
 
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/v0/users/{id}"] = user.NewDeleteUser(o.context, o.UserDeleteUserHandler)
+
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -399,10 +394,30 @@ func (o *ItStoneAPI) initHandlerCache() {
 	}
 	o.handlers["GET"]["/v0/cards"] = card.NewGetCards(o.context, o.CardGetCardsHandler)
 
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/users/{id}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/users"] = user.NewGetUsers(o.context, o.UserGetUsersHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/login"] = login.NewLogin(o.context, o.LoginLoginHandler)
+
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/v0/cards/{id}"] = card.NewUpdateCard(o.context, o.CardUpdateCardHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/v0/users/{id}"] = user.NewUpdateUser(o.context, o.UserUpdateUserHandler)
 
 }
 

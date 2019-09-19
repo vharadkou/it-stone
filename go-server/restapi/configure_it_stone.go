@@ -7,15 +7,20 @@ import (
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"net/http"
-	"it-stone-server/models"
+
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/runtime"
-	"it-stone-server/restapi/operations/card"
+	"github.com/go-openapi/runtime/middleware"
+
 	"it-stone-server/restapi/operations"
+	"it-stone-server/restapi/operations/card"
+	"it-stone-server/restapi/operations/login"
+	"it-stone-server/restapi/operations/user"
+
+	"it-stone-server/models"
 )
 
-//go:generate swagger generate server --target ..\..\it-stone-server-server --name ItStone --spec ..\swagger.yml
+//go:generate swagger generate server --target ../../go-server --name ItStone --spec ../swagger.yml --principal models.Principal
 
 func configureFlags(api *operations.ItStoneAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -25,40 +30,76 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
-
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	authHandler := handlers.NewAuthHandler()
 	cardHandler := handlers.NewCardsHandler()
-	restApiHandler := adapters.NewRestAPIHandler(cardHandler)
+	userHandler := handlers.NewUsersHandler()
+
+	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler)
 	restApiHandler.ConfigureRestAPI(api)
-	
-		if api.CardCreateCardHandler == nil {
-			api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
-				return middleware.NotImplemented("operation card.CreateCard has not yet been implemented")
-			})
-		}
-		if api.CardDeleteCardHandler == nil {
-			api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
-				return middleware.NotImplemented("operation card.DeleteCard has not yet been implemented")
-			})
-		}
-		if api.CardGetCardHandler == nil {
-			api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
-				return middleware.NotImplemented("operation card.GetCard has not yet been implemented")
-			})
-		}
-		if api.CardGetCardsHandler == nil {
-			api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
-				return middleware.NotImplemented("operation card.GetCards has not yet been implemented")
-			})
-		}
+
+	//api.OauthSecurityAuth = func(token string, scopes []string) (*models.Principal, error) {
+	//	return nil, errors.NotImplemented("oauth2 bearer auth (OauthSecurity) has not yet been implemented")
+	//}
+
+	if api.CallbackHandler == nil {
+		api.CallbackHandler = operations.CallbackHandlerFunc(func(params operations.CallbackParams) middleware.Responder {
+			return middleware.NotImplemented("operation .Callback has not yet been implemented")
+		})
+	}
+	if api.CardCreateCardHandler == nil {
+		api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.CreateCard has not yet been implemented")
+		})
+	}
+	if api.CardDeleteCardHandler == nil {
+		api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.DeleteCard has not yet been implemented")
+		})
+	}
+	if api.UserDeleteUserHandler == nil {
+		api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
+		})
+	}
+	if api.CardGetCardHandler == nil {
+		api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.GetCard has not yet been implemented")
+		})
+	}
+	if api.CardGetCardsHandler == nil {
+		api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.GetCards has not yet been implemented")
+		})
+	}
+	if api.UserGetUserHandler == nil {
+		api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
+		})
+	}
+	if api.UserGetUsersHandler == nil {
+		api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUsers has not yet been implemented")
+		})
+	}
+	if api.LoginLoginHandler == nil {
+		api.LoginLoginHandler = login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation login.Login has not yet been implemented")
+		})
+	}
+	if api.CardUpdateCardHandler == nil {
+		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.UpdateCard has not yet been implemented")
+		})
+	}
+	if api.UserUpdateUserHandler == nil {
+		api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
+		})
+	}
 
 	api.ServerShutdown = func() {}
 
