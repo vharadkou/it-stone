@@ -93,7 +93,7 @@ func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Respo
 		})
 	}
 
-	return card.NewDeleteCardNoContent()
+	return card.NewDeleteCardOK()
 }
 
 func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Responder {

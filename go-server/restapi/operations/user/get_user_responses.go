@@ -57,10 +57,56 @@ func (o *GetUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produ
 	}
 }
 
+// GetUserUnauthorizedCode is the HTTP code returned for type GetUserUnauthorized
+const GetUserUnauthorizedCode int = 401
+
+/*GetUserUnauthorized Authentication information is missing or invalid
+
+swagger:response getUserUnauthorized
+*/
+type GetUserUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewGetUserUnauthorized creates GetUserUnauthorized with default headers values
+func NewGetUserUnauthorized() *GetUserUnauthorized {
+
+	return &GetUserUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the get user unauthorized response
+func (o *GetUserUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *GetUserUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the get user unauthorized response
+func (o *GetUserUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *GetUserUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
 // GetUserNotFoundCode is the HTTP code returned for type GetUserNotFound
 const GetUserNotFoundCode int = 404
 
-/*GetUserNotFound The user not found.
+/*GetUserNotFound The user with the specified ID was not found.
 
 swagger:response getUserNotFound
 */
@@ -101,7 +147,7 @@ func (o *GetUserNotFound) WriteResponse(rw http.ResponseWriter, producer runtime
 	}
 }
 
-/*GetUserDefault Unexpected error.
+/*GetUserDefault Internal server error
 
 swagger:response getUserDefault
 */

@@ -1,23 +1,12 @@
 package domain
 
-type User struct {
-	ID         string `json:"userID,omitempty"`
-	Email      string `json:"email,omitempty"`
-	Username   string `json:"userName,omitempty"`
-	FirstName  string `json:"firstName,omitempty"`
-	LastName   string `json:"lastName,omitempty"`
-	TotalGames int64  `json:"totalGames"`
-	WinGames   int64  `json:"winGames"`
-}
+import "github.com/go-openapi/strfmt"
 
-func NewUser(googleUser *GoogleUser) *User {
-	return &User{
-		ID:         googleUser.Sub,
-		Email:      googleUser.Email,
-		Username:   googleUser.Name,
-		FirstName:  googleUser.GivenName,
-		LastName:   googleUser.FamilyName,
-		TotalGames: 0,
-		WinGames:   0,
-	}
+type User struct {
+	Email      strfmt.Email    `json:"email,omitempty"`
+	ID         string          `json:"id,omitempty"`
+	Password   strfmt.Password `json:"password,omitempty"`
+	TotalGames int64           `json:"total_games,omitempty"`
+	Username   string          `json:"username"`
+	WinGames   int64           `json:"win_games"`
 }

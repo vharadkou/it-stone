@@ -6,6 +6,7 @@ import (
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/login"
+	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -28,9 +29,15 @@ func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.C
 // ConfigureRestAPI func
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
-	api.OauthSecurityAuth = func(token string, scopes []string) (*models.Principal, error) {
-		return restApi.authHandler.OAuthSecurity(token)
+	api.APIKeyHeaderAuth = func(token string) (*models.Principal, error) {
+		return restApi.authHandler.APIKeyHeaderAuth(token)
 	}
+	api.RegistrationRegistrationHandler = registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
+		return restApi.authHandler.Registration(params)
+	})
+	api.LoginLoginHandler = login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
+		return restApi.authHandler.Login(params)
+	})
 
 	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.GetCard(params)
@@ -46,14 +53,6 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 	})
 	api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.UpdateCard(params)
-	})
-
-	api.CallbackHandler = operations.CallbackHandlerFunc(func(params operations.CallbackParams) middleware.Responder {
-		return restApi.authHandler.CallbackUserAndToken(params)
-	})
-
-	api.LoginLoginHandler = login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
-		return restApi.authHandler.Login(params.HTTPRequest)
 	})
 
 	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {

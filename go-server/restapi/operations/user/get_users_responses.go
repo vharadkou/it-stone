@@ -60,7 +60,53 @@ func (o *GetUsersOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 	}
 }
 
-/*GetUsersDefault generic Error response
+// GetUsersUnauthorizedCode is the HTTP code returned for type GetUsersUnauthorized
+const GetUsersUnauthorizedCode int = 401
+
+/*GetUsersUnauthorized Authentication information is missing or invalid
+
+swagger:response getUsersUnauthorized
+*/
+type GetUsersUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewGetUsersUnauthorized creates GetUsersUnauthorized with default headers values
+func NewGetUsersUnauthorized() *GetUsersUnauthorized {
+
+	return &GetUsersUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the get users unauthorized response
+func (o *GetUsersUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *GetUsersUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the get users unauthorized response
+func (o *GetUsersUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *GetUsersUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+/*GetUsersDefault Internal server error
 
 swagger:response getUsersDefault
 */

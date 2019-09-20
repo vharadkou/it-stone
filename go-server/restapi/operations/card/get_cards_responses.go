@@ -60,7 +60,53 @@ func (o *GetCardsOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 	}
 }
 
-/*GetCardsDefault generic Error response
+// GetCardsUnauthorizedCode is the HTTP code returned for type GetCardsUnauthorized
+const GetCardsUnauthorizedCode int = 401
+
+/*GetCardsUnauthorized Authentication information is missing or invalid
+
+swagger:response getCardsUnauthorized
+*/
+type GetCardsUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewGetCardsUnauthorized creates GetCardsUnauthorized with default headers values
+func NewGetCardsUnauthorized() *GetCardsUnauthorized {
+
+	return &GetCardsUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the get cards unauthorized response
+func (o *GetCardsUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *GetCardsUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the get cards unauthorized response
+func (o *GetCardsUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *GetCardsUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
+/*GetCardsDefault Internal server error
 
 swagger:response getCardsDefault
 */

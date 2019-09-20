@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
-	strfmt "github.com/go-openapi/strfmt"
-	swag "github.com/go-openapi/swag"
 )
 
 // LoginHandlerFunc turns a function with the right signature into a login handler
@@ -31,9 +29,9 @@ func NewLogin(ctx *middleware.Context, handler LoginHandler) *Login {
 	return &Login{Context: ctx, Handler: handler}
 }
 
-/*Login swagger:route GET /v0/login login login
+/*Login swagger:route POST /v0/login login login
 
-Login by using Google client OAuth 2.0.
+Login by using username and password
 
 */
 type Login struct {
@@ -57,35 +55,4 @@ func (o *Login) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
-}
-
-// LoginOKBody login o k body
-// swagger:model LoginOKBody
-type LoginOKBody struct {
-
-	// access token
-	AccessToken string `json:"access_token,omitempty"`
-}
-
-// Validate validates this login o k body
-func (o *LoginOKBody) Validate(formats strfmt.Registry) error {
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *LoginOKBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *LoginOKBody) UnmarshalBinary(b []byte) error {
-	var res LoginOKBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
-	return nil
 }

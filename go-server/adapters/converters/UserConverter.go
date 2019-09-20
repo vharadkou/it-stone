@@ -18,23 +18,21 @@ func NewUserConverter() UserConverter {
 
 func (uc *userConverter) FromDomain(model *domain.User) *models.User {
 	return &models.User{
+		ID:         model.ID,
 		Email:      model.Email,
-		FirstName:  model.FirstName,
-		LastName:   model.LastName,
+		Username:   model.Username,
+		Password:   model.Password,
 		TotalGames: model.TotalGames,
-		UserID:     model.ID,
-		UserName:   model.Username,
 		WinGames:   model.WinGames,
 	}
 }
 
 func (uc *userConverter) ToDomain(model *models.User) *domain.User {
 	return &domain.User{
-		ID:         model.UserID,
+		ID:         model.ID,
 		Email:      model.Email,
-		Username:   model.UserName,
-		FirstName:  model.FirstName,
-		LastName:   model.LastName,
+		Username:   model.Username,
+		Password:   model.Password,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}

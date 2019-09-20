@@ -60,7 +60,7 @@ func (o *UpdateUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Pr
 // UpdateUserNotFoundCode is the HTTP code returned for type UpdateUserNotFound
 const UpdateUserNotFoundCode int = 404
 
-/*UpdateUserNotFound The user not found.
+/*UpdateUserNotFound The user with the specified ID was not found.
 
 swagger:response updateUserNotFound
 */
@@ -101,7 +101,7 @@ func (o *UpdateUserNotFound) WriteResponse(rw http.ResponseWriter, producer runt
 	}
 }
 
-/*UpdateUserDefault Unexpected error.
+/*UpdateUserDefault Internal server error
 
 swagger:response updateUserDefault
 */

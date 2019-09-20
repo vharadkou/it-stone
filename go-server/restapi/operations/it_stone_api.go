@@ -21,6 +21,7 @@ import (
 
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/login"
+	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
 
 	models "it-stone-server/models"
@@ -43,9 +44,6 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		CallbackHandler: CallbackHandlerFunc(func(params CallbackParams) middleware.Responder {
-			return middleware.NotImplemented("operation Callback has not yet been implemented")
-		}),
 		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardCreateCard has not yet been implemented")
 		}),
@@ -70,6 +68,9 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		LoginLoginHandler: login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
 			return middleware.NotImplemented("operation LoginLogin has not yet been implemented")
 		}),
+		RegistrationRegistrationHandler: registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
+			return middleware.NotImplemented("operation RegistrationRegistration has not yet been implemented")
+		}),
 		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
 		}),
@@ -77,8 +78,9 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 			return middleware.NotImplemented("operation UserUpdateUser has not yet been implemented")
 		}),
 
-		OauthSecurityAuth: func(token string, scopes []string) (*models.Principal, error) {
-			return nil, errors.NotImplemented("oauth2 bearer auth (OauthSecurity) has not yet been implemented")
+		// Applies when the "JWT-Token" header is set
+		APIKeyHeaderAuth: func(token string) (*models.Principal, error) {
+			return nil, errors.NotImplemented("api key auth (APIKeyHeader) JWT-Token from header param [JWT-Token] has not yet been implemented")
 		},
 
 		// default authorizer is authorized meaning no requests are blocked
@@ -114,15 +116,13 @@ type ItStoneAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// OauthSecurityAuth registers a function that takes an access token and a collection of required scopes and returns a principal
-	// it performs authentication based on an oauth2 bearer token provided in the request
-	OauthSecurityAuth func(string, []string) (*models.Principal, error)
+	// APIKeyHeaderAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key JWT-Token provided in the header
+	APIKeyHeaderAuth func(string) (*models.Principal, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// CallbackHandler sets the operation handler for the callback operation
-	CallbackHandler CallbackHandler
 	// CardCreateCardHandler sets the operation handler for the create card operation
 	CardCreateCardHandler card.CreateCardHandler
 	// CardDeleteCardHandler sets the operation handler for the delete card operation
@@ -139,6 +139,8 @@ type ItStoneAPI struct {
 	UserGetUsersHandler user.GetUsersHandler
 	// LoginLoginHandler sets the operation handler for the login operation
 	LoginLoginHandler login.LoginHandler
+	// RegistrationRegistrationHandler sets the operation handler for the registration operation
+	RegistrationRegistrationHandler registration.RegistrationHandler
 	// CardUpdateCardHandler sets the operation handler for the update card operation
 	CardUpdateCardHandler card.UpdateCardHandler
 	// UserUpdateUserHandler sets the operation handler for the update user operation
@@ -206,12 +208,8 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.OauthSecurityAuth == nil {
-		unregistered = append(unregistered, "OauthSecurityAuth")
-	}
-
-	if o.CallbackHandler == nil {
-		unregistered = append(unregistered, "CallbackHandler")
+	if o.APIKeyHeaderAuth == nil {
+		unregistered = append(unregistered, "JWTTokenAuth")
 	}
 
 	if o.CardCreateCardHandler == nil {
@@ -246,6 +244,10 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "login.LoginHandler")
 	}
 
+	if o.RegistrationRegistrationHandler == nil {
+		unregistered = append(unregistered, "registration.RegistrationHandler")
+	}
+
 	if o.CardUpdateCardHandler == nil {
 		unregistered = append(unregistered, "card.UpdateCardHandler")
 	}
@@ -273,10 +275,11 @@ func (o *ItStoneAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) m
 	for name := range schemes {
 		switch name {
 
-		case "OauthSecurity":
+		case "APIKeyHeader":
 
-			result[name] = o.BearerAuthenticator(name, func(token string, scopes []string) (interface{}, error) {
-				return o.OauthSecurityAuth(token, scopes)
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.APIKeyHeaderAuth(token)
 			})
 
 		}
@@ -364,11 +367,6 @@ func (o *ItStoneAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/v0/auth/callback"] = NewCallback(o.context, o.CallbackHandler)
-
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -404,10 +402,15 @@ func (o *ItStoneAPI) initHandlerCache() {
 	}
 	o.handlers["GET"]["/v0/users"] = user.NewGetUsers(o.context, o.UserGetUsersHandler)
 
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/v0/login"] = login.NewLogin(o.context, o.LoginLoginHandler)
+	o.handlers["POST"]["/v0/login"] = login.NewLogin(o.context, o.LoginLoginHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/v0/registration"] = registration.NewRegistration(o.context, o.RegistrationRegistrationHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

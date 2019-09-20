@@ -16,11 +16,16 @@ import (
 // DeleteUserOKCode is the HTTP code returned for type DeleteUserOK
 const DeleteUserOKCode int = 200
 
-/*DeleteUserOK Delete success
+/*DeleteUserOK The user with the specified ID has been deleted
 
 swagger:response deleteUserOK
 */
 type DeleteUserOK struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *models.DeletedEntity `json:"body,omitempty"`
 }
 
 // NewDeleteUserOK creates DeleteUserOK with default headers values
@@ -29,18 +34,79 @@ func NewDeleteUserOK() *DeleteUserOK {
 	return &DeleteUserOK{}
 }
 
+// WithPayload adds the payload to the delete user o k response
+func (o *DeleteUserOK) WithPayload(payload *models.DeletedEntity) *DeleteUserOK {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the delete user o k response
+func (o *DeleteUserOK) SetPayload(payload *models.DeletedEntity) {
+	o.Payload = payload
+}
+
 // WriteResponse to the client
 func (o *DeleteUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
+	rw.WriteHeader(200)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
+}
+
+// DeleteUserUnauthorizedCode is the HTTP code returned for type DeleteUserUnauthorized
+const DeleteUserUnauthorizedCode int = 401
+
+/*DeleteUserUnauthorized Authentication information is missing or invalid
+
+swagger:response deleteUserUnauthorized
+*/
+type DeleteUserUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewDeleteUserUnauthorized creates DeleteUserUnauthorized with default headers values
+func NewDeleteUserUnauthorized() *DeleteUserUnauthorized {
+
+	return &DeleteUserUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the delete user unauthorized response
+func (o *DeleteUserUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *DeleteUserUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the delete user unauthorized response
+func (o *DeleteUserUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *DeleteUserUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
-	rw.WriteHeader(200)
+	rw.WriteHeader(401)
 }
 
 // DeleteUserNotFoundCode is the HTTP code returned for type DeleteUserNotFound
 const DeleteUserNotFoundCode int = 404
 
-/*DeleteUserNotFound The user not found.
+/*DeleteUserNotFound The user with the specified ID was not found.
 
 swagger:response deleteUserNotFound
 */
@@ -81,7 +147,7 @@ func (o *DeleteUserNotFound) WriteResponse(rw http.ResponseWriter, producer runt
 	}
 }
 
-/*DeleteUserDefault Unexpected error.
+/*DeleteUserDefault Internal server error
 
 swagger:response deleteUserDefault
 */

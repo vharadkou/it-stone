@@ -129,7 +129,7 @@ func (cw *userRepository) UpdateUser(id string, userUp *models.User) (*models.Us
 	jsonData, _ := json.Marshal(*userUp)
 	_ = json.Unmarshal(jsonData, &data)
 
-	recordTmpMap, err := db.UpdateOneByID(cw.collection, userUp.UserID, data)
+	recordTmpMap, err := db.UpdateOneByID(cw.collection, userUp.ID, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
