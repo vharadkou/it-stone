@@ -16,13 +16,7 @@ func NewPasswordHelper() PasswordHelper {
 }
 
 func (h *passwordHelper) Compare(externalPass, internalPass string) error {
-	sbExternalPassword := []byte(externalPass)
-	sbInternalPassword := []byte(internalPass)
-	hashedPassword, err := bcrypt.GenerateFromPassword(sbExternalPassword, bcrypt.DefaultCost)
-	if err != nil {
-		return err
-	}
-	return bcrypt.CompareHashAndPassword(hashedPassword, sbInternalPassword)
+	return bcrypt.CompareHashAndPassword([]byte(internalPass), []byte(externalPass))
 }
 
 func (h *passwordHelper) GenerateHashPassword(externalPass string) (*string, error) {
