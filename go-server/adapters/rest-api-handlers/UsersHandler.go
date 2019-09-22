@@ -1,18 +1,21 @@
 package handlers
 
 import (
-	"github.com/go-openapi/runtime/middleware"
 	"it-stone-server/adapters/converters"
+	"it-stone-server/helpers"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations/user"
 	"net/http"
+
+	"github.com/go-openapi/runtime/middleware"
 )
 
 type UsersHandler interface {
 	GetUser(params user.GetUserParams) middleware.Responder
 	UpdateUser(params user.UpdateUserParams) middleware.Responder
 	DeleteUser(params user.DeleteUserParams) middleware.Responder
+	GetUserByToken(principal *models.Principal) middleware.Responder
 }
 
 type usersHandler struct {
@@ -39,6 +42,23 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	}
 
 	return user.NewGetUserOK().WithPayload(h.uc.FromDomain(domainUser))
+}
+
+func (h *usersHandler) GetUserByToken(principal *models.Principal) middleware.Responder {
+	jwt := helpers.NewJWTHelper()
+	userID, err := jwt.GetUserID(string(*principal))
+
+	userRepository := repository.NewUserRepository()
+	domainUser, err := userRepository.GetUserByField("id", *userID)
+
+	if err != nil {
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return user.NewGetUserByTokenDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
+	return user.NewGetUserByTokenOK().WithPayload(h.uc.FromDomain(domainUser))
 }
 func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Responder {
 

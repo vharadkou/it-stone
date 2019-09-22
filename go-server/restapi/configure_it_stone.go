@@ -83,7 +83,11 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
 		})
 	}
-
+	if api.UserGetUserByTokenHandler == nil {
+		api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
+		})
+	}
 	api.ServerShutdown = func() {}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

@@ -269,6 +269,38 @@ func init() {
         }
       }
     },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/v0/users": {
       "get": {
         "tags": [
@@ -851,6 +883,43 @@ func init() {
         "responses": {
           "200": {
             "description": "Registration successful"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "default": {
             "description": "Internal server error",

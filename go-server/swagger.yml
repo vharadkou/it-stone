@@ -190,6 +190,27 @@ paths:
           description: Internal server error
           schema:
             $ref: "#/definitions/Error"
+  /v0/user:
+    get:
+      operationId: getUserByToken
+      tags:
+        - user
+      summary: Receiving the user by token
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: The user with the specified ID was not found.
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
   /v0/users/{id}:
     parameters:
       - name: id
