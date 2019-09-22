@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/go-openapi/runtime/middleware"
+	"it-stone-server/adapters/converters"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations/user"
@@ -15,16 +16,19 @@ type UsersHandler interface {
 }
 
 type usersHandler struct {
+	uc converters.UserConverter
 }
 
 func NewUsersHandler() UsersHandler {
-	return &usersHandler{}
+	return &usersHandler{
+		uc: converters.NewUserConverter(),
+	}
 }
 
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 
 	userRepository := repository.NewUserRepository()
-	u, err := userRepository.GetUser(params.ID)
+	domainUser, err := userRepository.GetUserByField("id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -34,12 +38,12 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 		})
 	}
 
-	return user.NewGetUserOK().WithPayload(u)
+	return user.NewGetUserOK().WithPayload(h.uc.FromDomain(domainUser))
 }
 func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Responder {
 
 	userRepository := repository.NewUserRepository()
-	u, err := userRepository.UpdateUser(params.ID, params.User)
+	domainUser, err := userRepository.UpdateUser(params.ID, h.uc.ToDomain(params.User))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -49,7 +53,7 @@ func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Respo
 		})
 	}
 
-	return user.NewUpdateUserOK().WithPayload(u)
+	return user.NewUpdateUserOK().WithPayload(h.uc.FromDomain(domainUser))
 }
 func (h *usersHandler) DeleteUser(params user.DeleteUserParams) middleware.Responder {
 	userRepository := repository.NewUserRepository()

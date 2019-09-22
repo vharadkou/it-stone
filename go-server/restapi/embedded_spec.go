@@ -227,7 +227,7 @@ func init() {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "$ref": "#/definitions/UserToken"
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
@@ -521,6 +521,14 @@ func init() {
         }
       }
     },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -549,17 +557,6 @@ func init() {
         "win_games": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
-        }
-      }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
-          "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
     }
@@ -822,7 +819,7 @@ func init() {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "$ref": "#/definitions/UserToken"
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
@@ -1131,6 +1128,14 @@ func init() {
         }
       }
     },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -1159,17 +1164,6 @@ func init() {
         "win_games": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
-        }
-      }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
-          "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
     }

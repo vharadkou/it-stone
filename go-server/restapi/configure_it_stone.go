@@ -8,16 +8,17 @@ import (
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"net/http"
 
-	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/runtime/middleware"
+	errors "github.com/go-openapi/errors"
+	runtime "github.com/go-openapi/runtime"
+	middleware "github.com/go-openapi/runtime/middleware"
 
 	"it-stone-server/restapi/operations"
+	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
 
-	"it-stone-server/models"
+	models "it-stone-server/models"
 )
 
 //go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
@@ -72,7 +73,11 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 			return middleware.NotImplemented("operation registration.Registration has not yet been implemented")
 		})
 	}
-
+	if api.CardUpdateCardHandler == nil {
+		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation card.UpdateCard has not yet been implemented")
+		})
+	}
 	if api.UserUpdateUserHandler == nil {
 		api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")

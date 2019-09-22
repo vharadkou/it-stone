@@ -34,7 +34,7 @@ paths:
         200:
           description: Login successful.
           schema:
-            $ref: "#/definitions/UserToken"
+            $ref: "#/definitions/Token"
         default:
           description: Internal server error
           schema:
@@ -356,11 +356,9 @@ definitions:
       total_games:
         type: integer
         description: Count of all games of the User.
-  UserToken:
+  Token:
     type: object
     properties:
-      user:
-        $ref: "#/definitions/User"
       token:
         type: string
   Error:

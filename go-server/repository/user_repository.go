@@ -4,33 +4,31 @@ import (
 	"context"
 	"encoding/json"
 	"it-stone-server/domain"
-	"it-stone-server/models"
+	"it-stone-server/helpers"
 	"log"
 	"os"
-
+	"time"
 	"google.golang.org/api/option"
 )
 
-type UserWorker interface {
+type UserRepository interface {
 	getDbClient() (DbWorker, error)
-	GetUser(id string) (*models.User, error)
-	GetUsers() ([]*models.User, error)
+	GetUserByField(field, value string) (*domain.User, error)
+	GetUsers() ([]*domain.User, error)
 	InsertUser(user *domain.User) error
 	DeleteUser(id string) error
-	UpdateUser(id string, User *models.User) (*models.User, error)
+	UpdateUser(id string, User *domain.User) (*domain.User, error)
 }
 
 type userRepository struct {
 	collection string
 }
 
-func NewUserRepository() UserWorker {
-	return &userRepository{
-		"Users",
-	}
+func NewUserRepository() UserRepository {
+	return &userRepository{"Users"}
 }
 
-func (cw *userRepository) GetUser(id string) (*models.User, error) {
+func (cw *userRepository) GetUserByField(field, value string) (*domain.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -41,19 +39,19 @@ func (cw *userRepository) GetUser(id string) (*models.User, error) {
 		_ = db.Close()
 	}()
 
-	recordTmpMap, err := db.FindOneByID(cw.collection, id)
+	recordTmpMap, err := db.FindOneByField(cw.collection, field, value)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	var User models.User
+	user := new(domain.User)
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, &User)
-	return &User, nil
+	_ = json.Unmarshal(sb, user)
+	return user, nil
 }
 
-func (cw *userRepository) GetUsers() ([]*models.User, error) {
+func (cw *userRepository) GetUsers() ([]*domain.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -70,7 +68,7 @@ func (cw *userRepository) GetUsers() ([]*models.User, error) {
 		return nil, err
 	}
 
-	var Users []*models.User
+	var Users []*domain.User
 	sb, _ := json.Marshal(recordTmpMap)
 	_ = json.Unmarshal(sb, &Users)
 	return Users, nil
@@ -86,6 +84,8 @@ func (cw *userRepository) InsertUser(user *domain.User) error {
 	defer func() {
 		_ = db.Close()
 	}()
+
+	user.ID = helpers.IDHelper.GenerateID(helpers.NewIDHelper())
 
 	var data map[string]interface{}
 	jsonData, _ := json.Marshal(user)
@@ -114,7 +114,7 @@ func (cw *userRepository) DeleteUser(id string) error {
 	return db.DeleteOneByID(cw.collection, id)
 }
 
-func (cw *userRepository) UpdateUser(id string, userUp *models.User) (*models.User, error) {
+func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domain.User, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -125,25 +125,28 @@ func (cw *userRepository) UpdateUser(id string, userUp *models.User) (*models.Us
 		_ = db.Close()
 	}()
 
+	domainUser.ID = id
+
 	var data map[string]interface{}
-	jsonData, _ := json.Marshal(*userUp)
+	jsonData, _ := json.Marshal(*domainUser)
 	_ = json.Unmarshal(jsonData, &data)
 
-	recordTmpMap, err := db.UpdateOneByID(cw.collection, userUp.ID, data)
+	recordTmpMap, err := db.UpdateOneByID(cw.collection, domainUser.ID, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	var User models.User
+	user := new(domain.User)
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, &User)
-	return &User, nil
+	_ = json.Unmarshal(sb, user)
+	return user, nil
 }
 
 func (cw *userRepository) getDbClient() (DbWorker, error) {
 	dir, _ := os.Getwd()
-	ctx := context.Background()
+	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
+
 	co := option.WithCredentialsFile(dir + ConfigDbPath)
-	return NewDbClient(ctx, co)
+	return NewDbClient(ctx, cancelFunc, co)
 }
