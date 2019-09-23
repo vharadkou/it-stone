@@ -31,7 +31,7 @@ func NewCardsHandler() CardsHandler {
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 	cardRepository := repository.NewCardRepository()
-	domainCard, err := cardRepository.GetCard(params.ID)
+	domainCard, err := cardRepository.GetCardByField("id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

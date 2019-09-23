@@ -29,6 +29,7 @@ func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.C
 // ConfigureRestAPI func
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
+	//Authentification
 	api.APIKeyHeaderAuth = func(token string) (*models.Principal, error) {
 		return restApi.authHandler.APIKeyHeaderAuth(token)
 	}
@@ -39,6 +40,7 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 		return restApi.authHandler.Login(params)
 	})
 
+	//Cards
 	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.GetCard(params)
 	})
@@ -55,7 +57,18 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 		return restApi.cardsHandler.UpdateCard(params)
 	})
 
+	//Users
 	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
 		return restApi.usersHandler.GetUser(params)
 	})
+	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.UpdateUser(params)
+	})
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.DeleteUser(params)
+	})
+	api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.GetUserByToken(principal)
+	})
+
 }

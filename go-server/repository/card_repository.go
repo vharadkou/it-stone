@@ -3,16 +3,18 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"google.golang.org/api/option"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
 	"log"
 	"os"
+	"time"
+
+	"google.golang.org/api/option"
 )
 
-type CardWorker interface {
+type CardRepository interface {
 	getDbClient() (DbWorker, error)
-	GetCard(id string) (*domain.Card, error)
+	GetCardByField(field, value string) (*domain.Card, error)
 	GetCards() ([]*domain.Card, error)
 	InsertCard(card *domain.Card) (*string, error)
 	DeleteCard(id string) error
@@ -24,14 +26,14 @@ type cardRepository struct {
 	idHelper   helpers.IDHelper
 }
 
-func NewCardRepository() CardWorker {
+func NewCardRepository() CardRepository {
 	return &cardRepository{
 		"Cards",
 		helpers.NewIDHelper(),
 	}
 }
 
-func (cw *cardRepository) GetCard(id string) (*domain.Card, error) {
+func (cw *cardRepository) GetCardByField(field, value string) (*domain.Card, error) {
 	db, err := cw.getDbClient()
 	if err != nil {
 		log.Println(err)
@@ -42,7 +44,7 @@ func (cw *cardRepository) GetCard(id string) (*domain.Card, error) {
 		_ = db.Close()
 	}()
 
-	recordTmpMap, err := db.FindOneByID(cw.collection, id)
+	recordTmpMap, err := db.FindOneByField(cw.collection, field, value)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -149,7 +151,7 @@ func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domai
 
 func (cw *cardRepository) getDbClient() (DbWorker, error) {
 	dir, _ := os.Getwd()
-	ctx := context.Background()
+	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 	co := option.WithCredentialsFile(dir + ConfigDbPath)
-	return NewDbClient(ctx, co)
+	return NewDbClient(ctx, cancelFunc, co)
 }

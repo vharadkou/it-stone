@@ -62,6 +62,9 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
+		UserGetUserByTokenHandler: user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUserByToken has not yet been implemented")
+		}),
 		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUsers has not yet been implemented")
 		}),
@@ -135,6 +138,8 @@ type ItStoneAPI struct {
 	CardGetCardsHandler card.GetCardsHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
+	// UserGetUserByTokenHandler sets the operation handler for the get user by token operation
+	UserGetUserByTokenHandler user.GetUserByTokenHandler
 	// UserGetUsersHandler sets the operation handler for the get users operation
 	UserGetUsersHandler user.GetUsersHandler
 	// LoginLoginHandler sets the operation handler for the login operation
@@ -234,6 +239,10 @@ func (o *ItStoneAPI) Validate() error {
 
 	if o.UserGetUserHandler == nil {
 		unregistered = append(unregistered, "user.GetUserHandler")
+	}
+
+	if o.UserGetUserByTokenHandler == nil {
+		unregistered = append(unregistered, "user.GetUserByTokenHandler")
 	}
 
 	if o.UserGetUsersHandler == nil {
@@ -396,6 +405,11 @@ func (o *ItStoneAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/v0/users/{id}"] = user.NewGetUser(o.context, o.UserGetUserHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/user"] = user.NewGetUserByToken(o.context, o.UserGetUserByTokenHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
