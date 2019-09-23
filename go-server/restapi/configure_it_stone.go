@@ -11,11 +11,10 @@ import (
 	"github.com/joho/godotenv"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
-	"net/http"
-
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
+	"net/http"
 
 	"it-stone-server/models"
 )

@@ -4,7 +4,6 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"errors"
-	"fmt"
 	"google.golang.org/api/iterator"
 )
 
@@ -89,8 +88,6 @@ func (db *dbFirestore) FindOneByField(collection, field, value string) (map[stri
 	defer func() {
 		db.cancelFunc()
 	}()
-
-	fmt.Println(field, value)
 
 	var record map[string]interface{}
 	iter := db.Client.Collection(collection).Where(field, "==", value).Documents(db.ctx)
