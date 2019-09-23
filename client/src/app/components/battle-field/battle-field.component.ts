@@ -7,7 +7,7 @@ import {
   HostListener
 } from "@angular/core";
 import { CdkDragDrop, CdkDragStart, CdkDragEnd } from "@angular/cdk/drag-drop";
-import { CardsFacade, SocketFacade } from "store";
+import { CardsFacade, /*SocketFacade */} from "store";
 import { Card } from "models";
 import { Observable } from "rxjs";
 
@@ -29,10 +29,10 @@ export class BattleFieldComponent implements OnInit {
 
   constructor(
     private cardsFacade: CardsFacade,
-    private socketFacade: SocketFacade
+  //  private socketFacade: SocketFacade
   ) {
     this.cardsFacade.loadCards();
-    this.socketFacade.joinRoom();
+   // this.socketFacade.joinRoom();
   }
 
   ngOnInit() {}

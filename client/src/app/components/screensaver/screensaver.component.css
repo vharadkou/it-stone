@@ -1,0 +1,42 @@
+
+
+.smoke {
+  position: absolute;
+  top: -1vh;
+  left: -1vw;
+  z-index: -99;
+}
+.name {
+  position: absolute;
+  z-index: 99;
+  top: 5vh;
+  left: 25vw;
+  font-size: 4vw;
+  font-weight: bold;
+  text-shadow: 2px 2px rgb(53, 52, 52);
+  animation-duration: 2s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+h1 {
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(to right, orange 10%, #fff 50%, orange 100%);
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 3s linear infinite;
+  display: inline-block;
+}
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+

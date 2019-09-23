@@ -36,7 +36,7 @@ import {
 } from 'pages';
 import {
   FightService,
-  SocketService,
+ // SocketService,
   TimerService,
   UserService,
 
@@ -57,7 +57,7 @@ import {
 import { PlayersHPEffects } from 'store/players-hp';
 import { PlayersHPFacade } from 'store/players-hp/players-hp.facade';
 import { SkillsEffects, SkillsFacade, skillsInitialState } from 'store/skills';
-import { SocketEffect, SocketFacade } from 'store/socket';
+//import { SocketEffect, SocketFacade } from 'store/socket';
 
 import { AppComponent } from './app.component';
 import { AboutCardComponent } from './components/about-card/about-card.component';
@@ -78,6 +78,7 @@ import { CardCarouselComponent } from './components/card-carousel/card-carousel.
 import { SignInComponent } from './pages/authorization/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/authorization/sign-up/sign-up.component';
 import { AuthorizationGuard } from './authorization.guard';
+import { ScreensaverComponent } from './components/screensaver/screensaver.component';
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
@@ -129,8 +130,8 @@ const appRoutes: Routes = [
     StoreModule.forFeature('gameProcessState', reducers.gameProcess, {}),
     StoreModule.forFeature('skillsState', reducers.skills, {}),
     StoreModule.forFeature('playersHPState', reducers.playersHP, {}),
-    StoreModule.forFeature('socketState', reducers.socket, {}),
-    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, SocketEffect, SkillsEffects, AboutPageEffects, UserEffects]),
+  //  StoreModule.forFeature('socketState', reducers.socket, {}),
+    EffectsModule.forRoot([CardsEffects, PlayersHPEffects, /*SocketEffect, */SkillsEffects, AboutPageEffects, UserEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25
     }),
@@ -163,7 +164,8 @@ const appRoutes: Routes = [
     SignUpComponent,
     InnerPagesComponent,
     LoginPageLayoutComponent,
-    MaterialDialogCardChoosingComponent
+    MaterialDialogCardChoosingComponent,
+    ScreensaverComponent
   ],
   entryComponents: [
     MaterialDialogComponent,
@@ -175,12 +177,12 @@ const appRoutes: Routes = [
       useFactory: getAuthServiceConfigs
     },
  
-    SocketService,
+  //  SocketService,
     CardsFacade,
     AboutPageFacade,
     GameProcessFacade,
     PlayersHPFacade,
-    SocketFacade,
+    //SocketFacade,
     UserFacade,
     AuthorizationGuard
   ],

@@ -38,10 +38,10 @@ export class AuthorizationService {
   }
 
   getUser(): Observable<boolean>{
-    if (this.user.nickName != "null"){
-      return of(true);
-    } else {
+    if ( this.user && this.user.nickName != null){
       return of(false);
+    } else {
+      return of(false); //temporary, just server not give user data (change to false)
     }
   } 
 }

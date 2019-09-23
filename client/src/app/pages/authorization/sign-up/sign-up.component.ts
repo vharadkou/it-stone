@@ -13,6 +13,7 @@ export class SignUpComponent implements OnInit {
   private _password: string;
 
   @Output() onSignUp = new EventEmitter<User>();
+  @Output() onChangeMode = new EventEmitter<User>();
 
   constructor() { }
 
@@ -21,6 +22,11 @@ export class SignUpComponent implements OnInit {
 
   handleClick():void {
     this.onSignUp.emit({nickName: this._nickName, email: this._email, password: this._password});
+  }
+
+  changeSignMode(modeType): void {
+    document.getElementById('menu').classList.add("anim2");
+    setTimeout(() =>{this.onChangeMode.emit(modeType)}, 200);
   }
 
 }
