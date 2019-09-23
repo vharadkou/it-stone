@@ -573,11 +573,6 @@ func init() {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "password": {
-          "description": "The password of the User.",
-          "type": "string",
-          "format": "password"
-        },
         "total_games": {
           "description": "Count of all games of the User.",
           "type": "integer"
@@ -1216,11 +1211,6 @@ func init() {
         "id": {
           "description": "The ID of the User.",
           "type": "string"
-        },
-        "password": {
-          "description": "The password of the User.",
-          "type": "string",
-          "format": "password"
         },
         "total_games": {
           "description": "Count of all games of the User.",

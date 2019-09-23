@@ -24,10 +24,6 @@ type User struct {
 	// The ID of the User.
 	ID string `json:"id,omitempty"`
 
-	// The password of the User.
-	// Format: password
-	Password strfmt.Password `json:"password,omitempty"`
-
 	// Count of all games of the User.
 	TotalGames int64 `json:"total_games,omitempty"`
 
@@ -46,10 +42,6 @@ func (m *User) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validatePassword(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -63,19 +55,6 @@ func (m *User) validateEmail(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *User) validatePassword(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Password) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
 		return err
 	}
 

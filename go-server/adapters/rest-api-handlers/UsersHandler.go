@@ -19,12 +19,14 @@ type UsersHandler interface {
 }
 
 type usersHandler struct {
-	uc converters.UserConverter
+	uc        converters.UserConverter
+	jwtHelper helpers.JWTHelper
 }
 
 func NewUsersHandler() UsersHandler {
 	return &usersHandler{
-		uc: converters.NewUserConverter(),
+		uc:        converters.NewUserConverter(),
+		jwtHelper: helpers.NewJWTHelper(),
 	}
 }
 
@@ -45,11 +47,8 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 }
 
 func (h *usersHandler) GetUserByToken(principal *models.Principal) middleware.Responder {
-	jwt := helpers.NewJWTHelper()
-	userID, err := jwt.GetUserID(string(*principal))
 
-	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.GetUserByField("id", *userID)
+	domainUser, err := h.jwtHelper.GetDomainUserFromToken(string(*principal))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

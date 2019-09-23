@@ -4,9 +4,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"errors"
-	firebase "firebase.google.com/go"
+	"fmt"
 	"google.golang.org/api/iterator"
-	"google.golang.org/api/option"
 )
 
 // DbWorker Interface
@@ -26,17 +25,11 @@ type dbFirestore struct {
 	Client     *firestore.Client
 }
 
-// ConfigDbPath const
-const ConfigDbPath string = "/repository/config/config.json"
+const projectId string = "striped-strata-230320"
 
 // NewDbClient - Creating a new db client
-func NewDbClient(ctx context.Context, cancelFunc context.CancelFunc, co option.ClientOption) (DbWorker, error) {
-	app, err := firebase.NewApp(ctx, nil, co)
-	if err != nil {
-		return nil, err
-	}
-
-	client, err := app.Firestore(ctx)
+func NewDbClient(ctx context.Context, cancelFunc context.CancelFunc) (DbWorker, error) {
+	client, err := firestore.NewClient(ctx, projectId)
 	if err != nil {
 		return nil, err
 	}
@@ -96,6 +89,8 @@ func (db *dbFirestore) FindOneByField(collection, field, value string) (map[stri
 	defer func() {
 		db.cancelFunc()
 	}()
+
+	fmt.Println(field, value)
 
 	var record map[string]interface{}
 	iter := db.Client.Collection(collection).Where(field, "==", value).Documents(db.ctx)

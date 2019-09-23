@@ -4,21 +4,20 @@ package restapi
 
 import (
 	"crypto/tls"
+	"fmt"
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/runtime/middleware"
+	"github.com/joho/godotenv"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"net/http"
 
-	errors "github.com/go-openapi/errors"
-	runtime "github.com/go-openapi/runtime"
-	middleware "github.com/go-openapi/runtime/middleware"
-
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
-	"it-stone-server/restapi/operations/login"
-	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
 
-	models "it-stone-server/models"
+	"it-stone-server/models"
 )
 
 //go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
@@ -63,16 +62,7 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 			return middleware.NotImplemented("operation user.GetUsers has not yet been implemented")
 		})
 	}
-	if api.LoginLoginHandler == nil {
-		api.LoginLoginHandler = login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
-			return middleware.NotImplemented("operation login.Login has not yet been implemented")
-		})
-	}
-	if api.RegistrationRegistrationHandler == nil {
-		api.RegistrationRegistrationHandler = registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
-			return middleware.NotImplemented("operation registration.Registration has not yet been implemented")
-		})
-	}
+
 	if api.CardUpdateCardHandler == nil {
 		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation card.UpdateCard has not yet been implemented")
@@ -103,6 +93,11 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Error getting .env")
+		panic(err)
+	}
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"it-stone-server/adapters/converters"
+	"it-stone-server/domain"
 	"it-stone-server/helpers"
 	"it-stone-server/models"
 	"it-stone-server/repository"
@@ -9,9 +10,10 @@ import (
 	"it-stone-server/restapi/operations/registration"
 	"net/http"
 
+	validateError "errors"
+
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/go-openapi/strfmt"
 )
 
 type AuthHandler interface {
@@ -54,7 +56,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 		})
 	}
 
-	if err := h.passHelper.Compare(params.LoginForm.Password.String(), domainUser.Password.String()); err != nil {
+	if err := h.passHelper.Compare(params.LoginForm.Password.String(), domainUser.Password); err != nil {
 		errMsg := "Incorrect password!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -62,23 +64,43 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 		})
 	}
 
-	outUser := h.userConverter.ToOut(domainUser)
-	token := &models.Token{Token: h.jwtHelper.GenerateToken(outUser)}
+	userForToken := h.userConverter.ToUserForToken(domainUser)
+	token := &models.Token{Token: h.jwtHelper.GenerateToken(userForToken)}
 	return login.NewLoginOK().WithPayload(token)
 }
 
 func (h *authHandler) Registration(params registration.RegistrationParams) middleware.Responder {
+	if params.RegistrationForm == nil {
+		errMsg := "The request body is empty!"
+		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
 	ur := repository.NewUserRepository()
 
 	hashedPassword, err := h.passHelper.GenerateHashPassword(params.RegistrationForm.Password.String())
+	domainUser := domain.NewDomainUser(
+		params.RegistrationForm.Email.String(),
+		*params.RegistrationForm.Username,
+		hashedPassword)
 
-	user := models.User{
-		Email:    *params.RegistrationForm.Email,
-		Username: *params.RegistrationForm.Username,
-		Password: strfmt.Password(*hashedPassword),
+	if err := validateEmail(ur, domainUser.Email); err != nil {
+		errMsg := err.Error()
+		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
 	}
 
-	domainUser := h.userConverter.ToDomain(&user)
+	if err := validateUsername(ur, domainUser.Username); err != nil {
+		errMsg := err.Error()
+		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
+
 	err = ur.InsertUser(domainUser)
 
 	if err != nil {
@@ -97,5 +119,21 @@ func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Principal, error) 
 		principal := models.Principal(token)
 		return &principal, nil
 	}
-	return nil, errors.New(http.StatusUnauthorized, "incorrect api key auth")
+	return nil, errors.New(http.StatusUnauthorized, "Incorrect api key auth!")
+}
+
+func validateEmail(rep repository.UserRepository, value string) error {
+	user, _ := rep.GetUserByField("email", value)
+	if user != nil {
+		return validateError.New("user with this email is already exists")
+	}
+	return nil
+}
+
+func validateUsername(rep repository.UserRepository, value string) error {
+	user, _ := rep.GetUserByField("username", value)
+	if user != nil {
+		return validateError.New("user with this username is already exists")
+	}
+	return nil
 }

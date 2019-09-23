@@ -6,9 +6,7 @@ import (
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
 	"log"
-	"os"
 	"time"
-	"google.golang.org/api/option"
 )
 
 type UserRepository interface {
@@ -144,9 +142,6 @@ func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domai
 }
 
 func (cw *userRepository) getDbClient() (DbWorker, error) {
-	dir, _ := os.Getwd()
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-
-	co := option.WithCredentialsFile(dir + ConfigDbPath)
-	return NewDbClient(ctx, cancelFunc, co)
+	return NewDbClient(ctx, cancelFunc)
 }
