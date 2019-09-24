@@ -111,7 +111,14 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	return registration.NewRegistrationOK()
+	loginParams := login.LoginParams{
+		HTTPRequest: params.HTTPRequest,
+		LoginForm: &models.LoginForm{
+			Password: params.RegistrationForm.Password,
+			Username: params.RegistrationForm.Username,
+		},
+	}
+	return h.Login(loginParams)
 }
 
 func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Principal, error) {
