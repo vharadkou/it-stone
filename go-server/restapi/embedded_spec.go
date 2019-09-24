@@ -29,32 +29,12 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API Server",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
-    "/v0/auth/callback": {
-      "get": {
-        "security": [],
-        "summary": "Return access_token and user",
-        "responses": {
-          "200": {
-            "description": "login",
-            "schema": {
-              "$ref": "#/definitions/UserToken"
-            }
-          },
-          "default": {
-            "description": "error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/v0/cards": {
       "get": {
         "tags": [
@@ -72,8 +52,11 @@ func init() {
               }
             }
           },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
           "default": {
-            "description": "generic Error response",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -102,8 +85,11 @@ func init() {
               "$ref": "#/definitions/CreatedEntity"
             }
           },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -125,6 +111,9 @@ func init() {
               "$ref": "#/definitions/Card"
             }
           },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
           "404": {
             "description": "The card with the specified ID was not found.",
             "schema": {
@@ -132,7 +121,7 @@ func init() {
             }
           },
           "default": {
-            "description": "generic Error response",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -161,8 +150,17 @@ func init() {
               "$ref": "#/definitions/Card"
             }
           },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "The card with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -176,11 +174,23 @@ func init() {
         "summary": "Delete one card by ID",
         "operationId": "deleteCard",
         "responses": {
-          "204": {
-            "description": "The card has been deleted"
+          "200": {
+            "description": "The card with the specified ID has been deleted.",
+            "schema": {
+              "$ref": "#/definitions/DeletedEntity"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "The card with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -197,26 +207,31 @@ func init() {
       ]
     },
     "/v0/login": {
-      "get": {
+      "post": {
         "security": [],
         "tags": [
-          "User"
+          "login"
         ],
-        "summary": "Login by using Google client OAuth 2.0.",
+        "summary": "Login by using username and password",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "LoginForm",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginForm"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "properties": {
-                "access_token": {
-                  "type": "string",
-                  "format": "string"
-                }
-              }
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
-            "description": "error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -224,24 +239,43 @@ func init() {
         }
       }
     },
-    "/v0/users/{userID}": {
-      "get": {
-        "description": "Find user by ID.",
-        "produces": [
-          "application/json"
-        ],
+    "/v0/registration": {
+      "post": {
+        "security": [],
         "tags": [
-          "User"
+          "registration"
         ],
+        "summary": "Registration by using email, username, password",
+        "operationId": "registration",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
+            "name": "RegistrationForm",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RegistrationForm"
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Registration successful"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
         "responses": {
           "200": {
             "description": "Success",
@@ -249,38 +283,93 @@ func init() {
               "$ref": "#/definitions/User"
             }
           },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Receiving all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by ID",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           }
         }
       },
-      "put": {
-        "description": "Update user info by ID.",
-        "produces": [
-          "application/json"
-        ],
+      "post": {
         "tags": [
-          "User"
+          "user"
         ],
+        "summary": "Update the user by ID",
+        "operationId": "updateUser",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
+            "name": "user",
             "in": "body",
             "schema": {
               "$ref": "#/definitions/User"
@@ -295,13 +384,13 @@ func init() {
             }
           },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -309,49 +398,48 @@ func init() {
         }
       },
       "delete": {
-        "description": "Delete user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          }
-        ],
+        "summary": "Delete the user by ID",
+        "operationId": "deleteUser",
         "responses": {
           "200": {
-            "description": "Delete success"
+            "description": "The user with the specified ID has been deleted",
+            "schema": {
+              "$ref": "#/definitions/DeletedEntity"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
           },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
@@ -399,6 +487,17 @@ func init() {
         }
       }
     },
+    "DeletedEntity": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -414,71 +513,106 @@ func init() {
         }
       }
     },
+    "LoginForm": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Principal": {
+      "type": "string"
+    },
+    "RegistrationForm": {
+      "type": "object",
+      "required": [
+        "email",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string"
+          "type": "string",
+          "format": "email"
         },
-        "firstName": {
-          "description": "First name of the User.",
-          "type": "string"
-        },
-        "lastName": {
-          "description": "Last name of the User.",
-          "type": "string"
-        },
-        "totalGames": {
-          "description": "Count of all games of the User.",
-          "type": "integer"
-        },
-        "userID": {
+        "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "userName": {
+        "password": {
+          "description": "The password of the User.",
+          "type": "string",
+          "format": "password"
+        },
+        "total_games": {
+          "description": "Count of all games of the User.",
+          "type": "integer"
+        },
+        "username": {
           "description": "The user name.",
           "type": "string"
         },
-        "winGames": {
+        "win_games": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
         }
       }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
+    }
+  },
+  "responses": {
+    "UnauthorizedError": {
+      "description": "Authentication information is missing or invalid",
+      "headers": {
+        "WWW_Authenticate": {
           "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {
-    "OauthSecurity": {
-      "type": "oauth2",
-      "flow": "accessCode",
-      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
-      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
-      "scopes": {
-        "admin": "Admin scope",
-        "user": "User scope"
-      }
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "name": "JWT-Token",
+      "in": "header"
     }
   },
   "security": [
     {
-      "OauthSecurity": [
-        "user"
-      ]
+      "APIKeyHeader": []
     }
   ]
 }`))
@@ -494,32 +628,12 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "Some usefull description",
+    "description": "Description for API Server",
     "title": "IT-Stone Server",
     "version": "0.0.2"
   },
   "basePath": "/api",
   "paths": {
-    "/v0/auth/callback": {
-      "get": {
-        "security": [],
-        "summary": "Return access_token and user",
-        "responses": {
-          "200": {
-            "description": "login",
-            "schema": {
-              "$ref": "#/definitions/UserToken"
-            }
-          },
-          "default": {
-            "description": "error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/v0/cards": {
       "get": {
         "tags": [
@@ -537,8 +651,16 @@ func init() {
               }
             }
           },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
           "default": {
-            "description": "generic Error response",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -567,8 +689,16 @@ func init() {
               "$ref": "#/definitions/CreatedEntity"
             }
           },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -590,6 +720,14 @@ func init() {
               "$ref": "#/definitions/Card"
             }
           },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
           "404": {
             "description": "The card with the specified ID was not found.",
             "schema": {
@@ -597,7 +735,7 @@ func init() {
             }
           },
           "default": {
-            "description": "generic Error response",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -626,8 +764,22 @@ func init() {
               "$ref": "#/definitions/Card"
             }
           },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The card with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -641,11 +793,28 @@ func init() {
         "summary": "Delete one card by ID",
         "operationId": "deleteCard",
         "responses": {
-          "204": {
-            "description": "The card has been deleted"
+          "200": {
+            "description": "The card with the specified ID has been deleted.",
+            "schema": {
+              "$ref": "#/definitions/DeletedEntity"
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The card with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "default": {
-            "description": "Error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -662,26 +831,31 @@ func init() {
       ]
     },
     "/v0/login": {
-      "get": {
+      "post": {
         "security": [],
         "tags": [
-          "User"
+          "login"
         ],
-        "summary": "Login by using Google client OAuth 2.0.",
+        "summary": "Login by using username and password",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "LoginForm",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginForm"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "properties": {
-                "access_token": {
-                  "type": "string",
-                  "format": "string"
-                }
-              }
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
-            "description": "error",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -689,24 +863,43 @@ func init() {
         }
       }
     },
-    "/v0/users/{userID}": {
-      "get": {
-        "description": "Find user by ID.",
-        "produces": [
-          "application/json"
-        ],
+    "/v0/registration": {
+      "post": {
+        "security": [],
         "tags": [
-          "User"
+          "registration"
         ],
+        "summary": "Registration by using email, username, password",
+        "operationId": "registration",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
+            "name": "RegistrationForm",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RegistrationForm"
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Registration successful"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
         "responses": {
           "200": {
             "description": "Success",
@@ -714,38 +907,108 @@ func init() {
               "$ref": "#/definitions/User"
             }
           },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "Receiving all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/users/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by ID",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "default": {
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           }
         }
       },
-      "put": {
-        "description": "Update user info by ID.",
-        "produces": [
-          "application/json"
-        ],
+      "post": {
         "tags": [
-          "User"
+          "user"
         ],
+        "summary": "Update the user by ID",
+        "operationId": "updateUser",
         "parameters": [
           {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
+            "name": "user",
             "in": "body",
             "schema": {
               "$ref": "#/definitions/User"
@@ -760,13 +1023,13 @@ func init() {
             }
           },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -774,49 +1037,53 @@ func init() {
         }
       },
       "delete": {
-        "description": "Delete user by ID.",
-        "produces": [
-          "application/json"
-        ],
         "tags": [
-          "User"
+          "user"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "the ID of the User.",
-            "name": "userID",
-            "in": "path",
-            "required": true
-          }
-        ],
+        "summary": "Delete the user by ID",
+        "operationId": "deleteUser",
         "responses": {
           "200": {
-            "description": "Delete success"
+            "description": "The user with the specified ID has been deleted",
+            "schema": {
+              "$ref": "#/definitions/DeletedEntity"
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
           },
           "404": {
-            "description": "The user not found.",
+            "description": "The user with the specified ID was not found.",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           },
           "default": {
-            "description": "Unexpected error.",
+            "description": "Internal server error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ]
     }
   },
   "definitions": {
     "Card": {
       "type": "object",
-      "required": [
-        "name",
-        "class"
-      ],
       "properties": {
         "class": {
           "type": "string"
@@ -864,6 +1131,17 @@ func init() {
         }
       }
     },
+    "DeletedEntity": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
     "Error": {
       "type": "object",
       "required": [
@@ -879,71 +1157,106 @@ func init() {
         }
       }
     },
+    "LoginForm": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Principal": {
+      "type": "string"
+    },
+    "RegistrationForm": {
+      "type": "object",
+      "required": [
+        "email",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string"
+          "type": "string",
+          "format": "email"
         },
-        "firstName": {
-          "description": "First name of the User.",
-          "type": "string"
-        },
-        "lastName": {
-          "description": "Last name of the User.",
-          "type": "string"
-        },
-        "totalGames": {
-          "description": "Count of all games of the User.",
-          "type": "integer"
-        },
-        "userID": {
+        "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "userName": {
+        "password": {
+          "description": "The password of the User.",
+          "type": "string",
+          "format": "password"
+        },
+        "total_games": {
+          "description": "Count of all games of the User.",
+          "type": "integer"
+        },
+        "username": {
           "description": "The user name.",
           "type": "string"
         },
-        "winGames": {
+        "win_games": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
         }
       }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
+    }
+  },
+  "responses": {
+    "UnauthorizedError": {
+      "description": "Authentication information is missing or invalid",
+      "headers": {
+        "WWW_Authenticate": {
           "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {
-    "OauthSecurity": {
-      "type": "oauth2",
-      "flow": "accessCode",
-      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
-      "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
-      "scopes": {
-        "admin": "Admin scope",
-        "user": "User scope"
-      }
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "name": "JWT-Token",
+      "in": "header"
     }
   },
   "security": [
     {
-      "OauthSecurity": [
-        "user"
-      ]
+      "APIKeyHeader": []
     }
   ]
 }`))

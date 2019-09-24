@@ -12,7 +12,7 @@ import { CardsFacade, SkillsFacade } from 'store';
 })
 export class CardEditorComponent implements OnInit, OnDestroy {
 
-  @ViewChild('cardDetail') public cardDetail: Component;
+  @ViewChild('cardDetail', { static: true }) public cardDetail: Component;
 
   public allCardsMy$ = this.cardsFacade.myCards$;
   public selectedCard$ = this.cardsFacade.selectedCard$;

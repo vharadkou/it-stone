@@ -5,78 +5,70 @@ import (
 	"it-stone-server/models"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
+	"it-stone-server/restapi/operations/login"
+	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
 
 	"github.com/go-openapi/runtime/middleware"
 )
 
-// RestAPIHandlers struct
 type RestAPIHandlers struct {
+	authHandler  handlers.AuthHandler
 	cardsHandler handlers.CardsHandler
-	usershandler handlers.UsersHandler
+	usersHandler handlers.UsersHandler
 }
 
-// NewRestAPIHandler func
-func NewRestAPIHandler(cardsHandler handlers.CardsHandler) RestAPIHandlers {
+func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.CardsHandler, usersHandler handlers.UsersHandler) RestAPIHandlers {
 	return RestAPIHandlers{
+		authHandler:  authHandler,
 		cardsHandler: cardsHandler,
-		usershandler: handlers.NewUsersHandler(),
+		usersHandler: usersHandler,
 	}
 }
 
 // ConfigureRestAPI func
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
-	api.OauthSecurityAuth = func(token string, scopes []string) (*models.Principal, error) {
-		return restApi.usershandler.OAuthSecurity(token)
+	//Authentification
+	api.APIKeyHeaderAuth = func(token string) (*models.Principal, error) {
+		return restApi.authHandler.APIKeyHeaderAuth(token)
 	}
-	
+	api.RegistrationRegistrationHandler = registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
+		return restApi.authHandler.Registration(params)
+	})
+	api.LoginLoginHandler = login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
+		return restApi.authHandler.Login(params)
+	})
+
+	//Cards
 	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.GetCard(params)
 	})
-
 	api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.GetCards(params)
 	})
-
 	api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.InsertCards(params)
 	})
-
 	api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.DeleteCard(params)
 	})
-
 	api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
 		return restApi.cardsHandler.UpdateCard(params)
 	})
 
-	api.GetV0AuthCallbackHandler = operations.GetV0AuthCallbackHandlerFunc(func(params operations.GetV0AuthCallbackParams) middleware.Responder {
-		usToken, err := restApi.usershandler.CallbackUserAndToken(params.HTTPRequest)
-		if err != nil {
-			return middleware.NotImplemented("Some errors in the callback")
-		}
-		return operations.NewGetV0AuthCallbackOK().WithPayload(usToken)
+	//Users
+	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.GetUser(params)
 	})
-
-	api.UserGetV0LoginHandler = user.GetV0LoginHandlerFunc(func(params user.GetV0LoginParams) middleware.Responder {
-		return restApi.usershandler.LoginUser(params.HTTPRequest)
+	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.UpdateUser(params)
 	})
-
-	if api.UserDeleteV0UsersUserIDHandler == nil {
-		api.UserDeleteV0UsersUserIDHandler = user.DeleteV0UsersUserIDHandlerFunc(func(params user.DeleteV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation user.DeleteV0UsersUserID has not yet been implemented")
-		})
-	}
-
-	api.UserGetV0UsersUserIDHandler = user.GetV0UsersUserIDHandlerFunc(func(params user.GetV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-		return restApi.usershandler.GetUser(params)
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.DeleteUser(params)
 	})
-
-	if api.UserPutV0UsersUserIDHandler == nil {
-		api.UserPutV0UsersUserIDHandler = user.PutV0UsersUserIDHandlerFunc(func(params user.PutV0UsersUserIDParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation user.PutV0UsersUserID has not yet been implemented")
-		})
-	}
+	api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+		return restApi.usersHandler.GetUserByToken(principal)
+	})
 
 }

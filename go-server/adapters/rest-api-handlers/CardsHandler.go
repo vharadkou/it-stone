@@ -31,7 +31,7 @@ func NewCardsHandler() CardsHandler {
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 	cardRepository := repository.NewCardRepository()
-	domainCard, err := cardRepository.GetCard(params.ID)
+	domainCard, err := cardRepository.GetCardByField("id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -93,7 +93,7 @@ func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Respo
 		})
 	}
 
-	return card.NewDeleteCardNoContent()
+	return card.NewDeleteCardOK()
 }
 
 func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Responder {

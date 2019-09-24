@@ -15,7 +15,7 @@ export class CardDetailComponent implements OnChanges {
   @Input() public checkedSkills: Skill[];
   @Input() public card: Card;
   @Input() public selectedCardId: number;
-  @ViewChild('form') public form: NgForm;
+  @ViewChild('form', { static: true }) public form: NgForm;
 
   public skills = new FormControl();
   public skillsList$: Observable<Skill[]> = this.skillsFacade.allSkills$;

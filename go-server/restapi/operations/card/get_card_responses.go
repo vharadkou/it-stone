@@ -57,6 +57,52 @@ func (o *GetCardOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produ
 	}
 }
 
+// GetCardUnauthorizedCode is the HTTP code returned for type GetCardUnauthorized
+const GetCardUnauthorizedCode int = 401
+
+/*GetCardUnauthorized Authentication information is missing or invalid
+
+swagger:response getCardUnauthorized
+*/
+type GetCardUnauthorized struct {
+	/*
+
+	 */
+	WWWAuthenticate string `json:"WWW_Authenticate"`
+}
+
+// NewGetCardUnauthorized creates GetCardUnauthorized with default headers values
+func NewGetCardUnauthorized() *GetCardUnauthorized {
+
+	return &GetCardUnauthorized{}
+}
+
+// WithWWWAuthenticate adds the wWWAuthenticate to the get card unauthorized response
+func (o *GetCardUnauthorized) WithWWWAuthenticate(wWWAuthenticate string) *GetCardUnauthorized {
+	o.WWWAuthenticate = wWWAuthenticate
+	return o
+}
+
+// SetWWWAuthenticate sets the wWWAuthenticate to the get card unauthorized response
+func (o *GetCardUnauthorized) SetWWWAuthenticate(wWWAuthenticate string) {
+	o.WWWAuthenticate = wWWAuthenticate
+}
+
+// WriteResponse to the client
+func (o *GetCardUnauthorized) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header WWW_Authenticate
+
+	wWWAuthenticate := o.WWWAuthenticate
+	if wWWAuthenticate != "" {
+		rw.Header().Set("WWW_Authenticate", wWWAuthenticate)
+	}
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(401)
+}
+
 // GetCardNotFoundCode is the HTTP code returned for type GetCardNotFound
 const GetCardNotFoundCode int = 404
 
@@ -101,7 +147,7 @@ func (o *GetCardNotFound) WriteResponse(rw http.ResponseWriter, producer runtime
 	}
 }
 
-/*GetCardDefault generic Error response
+/*GetCardDefault Internal server error
 
 swagger:response getCardDefault
 */

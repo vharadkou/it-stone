@@ -8,7 +8,9 @@ package models
 import (
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // User user
@@ -16,29 +18,67 @@ import (
 type User struct {
 
 	// The email of the User.
-	Email string `json:"email,omitempty"`
-
-	// First name of the User.
-	FirstName string `json:"firstName,omitempty"`
-
-	// Last name of the User.
-	LastName string `json:"lastName,omitempty"`
-
-	// Count of all games of the User.
-	TotalGames int64 `json:"totalGames,omitempty"`
+	// Format: email
+	Email strfmt.Email `json:"email,omitempty"`
 
 	// The ID of the User.
-	UserID string `json:"userID,omitempty"`
+	ID string `json:"id,omitempty"`
+
+	// The password of the User.
+	// Format: password
+	Password strfmt.Password `json:"password,omitempty"`
+
+	// Count of all games of the User.
+	TotalGames int64 `json:"total_games,omitempty"`
 
 	// The user name.
-	UserName string `json:"userName,omitempty"`
+	Username string `json:"username,omitempty"`
 
 	// Count of all games where the User has won.
-	WinGames int64 `json:"winGames,omitempty"`
+	WinGames int64 `json:"win_games,omitempty"`
 }
 
 // Validate validates this user
 func (m *User) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateEmail(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validatePassword(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *User) validateEmail(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Email) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *User) validatePassword(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Password) { // not required
+		return nil
+	}
+
+	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Some usefull description
+  description: Description for API Server
   title: IT-Stone Server
   version: 0.0.2
 consumes:
@@ -11,18 +11,54 @@ schemes:
   - http
 basePath: /api
 securityDefinitions:
-  OauthSecurity:
-    type: oauth2
-    flow: accessCode
-    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth'
-    tokenUrl: 'https://www.googleapis.com/oauth2/v4/token'
-    scopes:
-      admin: Admin scope
-      user: User scope
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: JWT-Token
 security:
-  - OauthSecurity:
-    - user
+  - APIKeyHeader: []
 paths:
+  /v0/login:
+    post:
+      parameters:
+        - name: LoginForm
+          in: body
+          schema:
+            $ref: "#/definitions/LoginForm"
+      operationId: login
+      tags:
+        - login
+      summary: Login by using username and password
+      security: []
+      responses:
+        200:
+          description: Login successful.
+          schema:
+            $ref: "#/definitions/Token"
+        default:
+          description: Internal server error
+          schema:
+              $ref: "#/definitions/Error"
+  /v0/registration:
+    post:
+      parameters:
+        - name: RegistrationForm
+          in: body
+          schema:
+            $ref: "#/definitions/RegistrationForm"
+      tags:
+        - registration
+      operationId: registration
+      summary: Registration by using email, username, password
+      security: []
+      responses:
+        200:
+          description: Registration successful
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+
   /v0/cards:
     get:
       summary: Receiving all cards
@@ -36,8 +72,10 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Card"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: generic Error response
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
     post:
@@ -55,8 +93,10 @@ paths:
           description: Created
           schema:
             $ref: "#/definitions/CreatedEntity"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: Error
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
   /v0/cards/{id}:
@@ -79,8 +119,10 @@ paths:
           description: The card with the specified ID was not found.
           schema:
             $ref: "#/definitions/Error"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: generic Error response
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
     post:
@@ -98,8 +140,14 @@ paths:
           description: The card has been updated
           schema:
             $ref: "#/definitions/Card"
+        404:
+          description: The card with the specified ID was not found.
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: Error
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
     delete:
@@ -108,124 +156,165 @@ paths:
         - card
       operationId: deleteCard
       responses:
-        204:
-          description: The card has been deleted
+        200:
+          description: The card with the specified ID has been deleted.
+          schema:
+            $ref: "#/definitions/DeletedEntity"
+        404:
+          description: The card with the specified ID was not found.
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: Error
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
 
-  /v0/login:
+  /v0/users:
     get:
+      summary: Receiving all users
       tags:
-      - "User"
-      summary: Login by using Google client OAuth 2.0.
-      security: []
+        - user
+      operationId: getUsers
       responses:
-        '200':
-          description: Login successful.
+        200:
+          description: Receiving all users
           schema:
-            properties:
-              access_token:
-                type: string
-                format: string
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         default:
-          description: error
+          description: Internal server error
           schema:
             $ref: "#/definitions/Error"
-
-  /v0/users/{userID}:
+  /v0/user:
     get:
+      operationId: getUserByToken
       tags:
-        - User
-      produces:
-        - application/json
-      description: Find user by ID.
-      parameters:
-        - name: userID
-          required: true
-          type: string
-          in: path
-          description: the ID of the User.
+        - user
+      summary: Receiving the user by token
       responses:
         200:
           description: Success
           schema:
-            $ref: '#/definitions/User'
+            $ref: "#/definitions/User"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         404:
-          description: The user not found.
+          description: The user with the specified ID was not found.
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
         default:
-          description: Unexpected error.
+          description: Internal server error
           schema:
-            $ref: '#/definitions/Error'
-    delete:
+            $ref: "#/definitions/Error"
+  /v0/users/{id}:
+    parameters:
+      - name: id
+        required: true
+        type: string
+        in: path
+    get:
+      operationId: getUser
       tags:
-        - User
-      produces:
-        - application/json
-      description: Delete user by ID.
-      parameters:
-        - name: userID
-          required: true
-          type: string
-          in: path
-          description: the ID of the User.
+        - user
+      summary: Receiving the user by ID
       responses:
         200:
-          description: Delete success
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          $ref: "#/responses/UnauthorizedError"
         404:
-          description: The user not found.
+          description: The user with the specified ID was not found.
           schema:
-            $ref: '#/definitions/Error'
+            $ref: "#/definitions/Error"
         default:
-          description: Unexpected error.
+          description: Internal server error
           schema:
-            $ref: '#/definitions/Error'
-    put:
+            $ref: "#/definitions/Error"
+    delete:
       tags:
-        - User
-      produces:
-        - application/json
-      description: Update user info by ID.
+        - user
+      summary: Delete the user by ID
+      operationId: deleteUser
+      responses:
+        200:
+          description: The user with the specified ID has been deleted
+          schema:
+            $ref: "#/definitions/DeletedEntity"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: The user with the specified ID was not found.
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - user
+      summary: Update the user by ID
+      operationId: updateUser
       parameters:
-        - name: userID
-          required: true
-          type: string
-          in: path
-          description: the ID of the User.
-        - name: body
+        - name: user
           in: body
           schema:
-            $ref: '#/definitions/User'
+            $ref: "#/definitions/User"
       responses:
         200:
           description: Update success
           schema:
-            $ref: '#/definitions/User'
+            $ref: "#/definitions/User"
         404:
-          description: The user not found.
-          schema:
-            $ref: '#/definitions/Error'
-        default:
-          description: Unexpected error.
-          schema:
-            $ref: '#/definitions/Error'
-  /v0/auth/callback:
-    get:
-      summary: Return access_token and user
-      security: []
-      responses:
-        '200':
-          description: login
-          schema:
-            $ref: '#/definitions/UserToken'
-        default:
-          description: error
+          description: The user with the specified ID was not found.
           schema:
             $ref: "#/definitions/Error"
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+
+responses:
+  UnauthorizedError:
+    description: Authentication information is missing or invalid
+    headers:
+      WWW_Authenticate:
+        type: string
+
 definitions:
+  RegistrationForm:
+    type: object
+    required:
+      - email
+      - username
+      - password
+    properties:
+      email:
+        type: string
+        format: email
+      username:
+        type: string
+      password:
+        type: string
+        format: password
+  LoginForm:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+        format: password
   CreatedEntity:
     type: object
     required:
@@ -233,12 +322,15 @@ definitions:
     properties:
       id:
         type: string
-
-  Card:
+  DeletedEntity:
     type: object
     required:
-      - name
-      - class
+      - id
+    properties:
+      id:
+        type: string
+  Card:
+    type: object
     properties:
       id:
         type: string
@@ -262,32 +354,34 @@ definitions:
         type: number
       effects:
         type: object
-        
   User:
     type: object
     properties:
-      userID:
+      id:
         type: string
         description: The ID of the User.
-      userName:
+      username:
         type: string
         description: The user name.
-      firstName:
-        type: string
-        description: First name of the User.
-      lastName:
-        type: string
-        description: Last name of the User.
       email:
         type: string
+        format: email
         description: The email of the User.
-      winGames:
+      password:
+        type: string
+        format: password
+        description: The password of the User.
+      win_games:
         type: integer
         description: Count of all games where the User has won.
-      totalGames:
+      total_games:
         type: integer
         description: Count of all games of the User.
-        
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
   Error:
     type: object
     required:
@@ -298,14 +392,5 @@ definitions:
         format: int64
       message:
         type: string
-        
-  principal:
+  Principal:
     type: string
-
-  UserToken:
-    type: object
-    properties:
-      user:
-        $ref: '#/definitions/User'
-      token:
-        type: string
