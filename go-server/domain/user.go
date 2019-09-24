@@ -1,12 +1,12 @@
 package domain
 
 type User struct {
-	ID         string `json:"id,omitempty"`
-	Email      string `json:"email,omitempty"`
-	UserName   string `json:"username"`
-	Password   string `json:"password,omitempty"`
-	TotalGames int64  `json:"total_games"`
-	WinGames   int64  `json:"win_games"`
+	ID         string
+	Email      string
+	UserName   string
+	Password   string
+	TotalGames int64
+	WinGames   int64
 }
 
 func NewDomainUser(email, username, password string) *User {

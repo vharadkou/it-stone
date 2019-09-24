@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	validateError "errors"
 	"it-stone-server/adapters/converters"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
@@ -9,9 +10,6 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"net/http"
-	"regexp"
-
-	validateError "errors"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
@@ -37,6 +35,9 @@ func NewAuthHandler() AuthHandler {
 	}
 }
 
+var usernameField = "UserName"
+var emailField = "Email"
+
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if params.LoginForm == nil {
@@ -48,7 +49,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	}
 
 	ur := repository.NewUserRepository()
-	domainUser, err := ur.GetUserByField("username", *params.LoginForm.UserName)
+	domainUser, err := ur.GetUserByField(usernameField, *params.LoginForm.UserName)
 	if err != nil {
 		errMsg := "User does not exists!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
@@ -131,7 +132,7 @@ func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Token, error) {
 }
 
 func validateEmail(rep repository.UserRepository, value string) error {
-	user, _ := rep.GetUserByField("email", value)
+	user, _ := rep.GetUserByField(emailField, value)
 	if user != nil {
 		return validateError.New("user with this email is already exists")
 	}
@@ -139,12 +140,7 @@ func validateEmail(rep repository.UserRepository, value string) error {
 }
 
 func validateUsername(rep repository.UserRepository, value string) error {
-	var reg = regexp.MustCompile(`(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$`)
-	if !reg.MatchString(value) {
-		return validateError.New("password must contain UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
-	}
-
-	user, _ := rep.GetUserByField("username", value)
+	user, _ := rep.GetUserByField(usernameField, value)
 	if user != nil {
 		return validateError.New("user with this username is already exists")
 	}
