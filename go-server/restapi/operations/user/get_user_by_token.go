@@ -14,16 +14,16 @@ import (
 )
 
 // GetUserByTokenHandlerFunc turns a function with the right signature into a get user by token handler
-type GetUserByTokenHandlerFunc func(GetUserByTokenParams, *models.Principal) middleware.Responder
+type GetUserByTokenHandlerFunc func(GetUserByTokenParams, *models.Token) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserByTokenHandlerFunc) Handle(params GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+func (fn GetUserByTokenHandlerFunc) Handle(params GetUserByTokenParams, principal *models.Token) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUserByTokenHandler interface for that can handle valid get user by token params
 type GetUserByTokenHandler interface {
-	Handle(GetUserByTokenParams, *models.Principal) middleware.Responder
+	Handle(GetUserByTokenParams, *models.Token) middleware.Responder
 }
 
 // NewGetUserByToken creates a new http.Handler for the get user by token operation
@@ -56,9 +56,9 @@ func (o *GetUserByToken) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.Token
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.Token) // this is really a models.Token, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

@@ -459,7 +459,7 @@ func init() {
         "image": {
           "type": "string"
         },
-        "mana_cost": {
+        "manaCost": {
           "type": "number"
         },
         "name": {
@@ -471,7 +471,7 @@ func init() {
             "type": "string"
           }
         },
-        "surname": {
+        "surName": {
           "type": "string"
         }
       }
@@ -516,27 +516,23 @@ func init() {
     "LoginForm": {
       "type": "object",
       "required": [
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "type": "string"
         }
       }
-    },
-    "Principal": {
-      "type": "string"
     },
     "RegistrationForm": {
       "type": "object",
       "required": [
         "email",
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
@@ -545,11 +541,13 @@ func init() {
           "format": "email"
         },
         "password": {
-          "type": "string",
-          "format": "password"
-        },
-        "username": {
           "type": "string"
+        },
+        "userName": {
+          "type": "string",
+          "maxLength": 16,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_]{3,16}$"
         }
       }
     },
@@ -566,22 +564,21 @@ func init() {
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string",
-          "format": "email"
+          "type": "string"
         },
         "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "total_games": {
+        "totalGames": {
           "description": "Count of all games of the User.",
           "type": "integer"
         },
-        "username": {
+        "userName": {
           "description": "The user name.",
           "type": "string"
         },
-        "win_games": {
+        "winGames": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
         }
@@ -1098,7 +1095,7 @@ func init() {
         "image": {
           "type": "string"
         },
-        "mana_cost": {
+        "manaCost": {
           "type": "number"
         },
         "name": {
@@ -1110,7 +1107,7 @@ func init() {
             "type": "string"
           }
         },
-        "surname": {
+        "surName": {
           "type": "string"
         }
       }
@@ -1155,27 +1152,23 @@ func init() {
     "LoginForm": {
       "type": "object",
       "required": [
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "type": "string"
         }
       }
-    },
-    "Principal": {
-      "type": "string"
     },
     "RegistrationForm": {
       "type": "object",
       "required": [
         "email",
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
@@ -1184,11 +1177,13 @@ func init() {
           "format": "email"
         },
         "password": {
-          "type": "string",
-          "format": "password"
-        },
-        "username": {
           "type": "string"
+        },
+        "userName": {
+          "type": "string",
+          "maxLength": 16,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_]{3,16}$"
         }
       }
     },
@@ -1205,22 +1200,21 @@ func init() {
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string",
-          "format": "email"
+          "type": "string"
         },
         "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "total_games": {
+        "totalGames": {
           "description": "Count of all games of the User.",
           "type": "integer"
         },
-        "username": {
+        "userName": {
           "description": "The user name.",
           "type": "string"
         },
-        "win_games": {
+        "winGames": {
           "description": "Count of all games where the User has won.",
           "type": "integer"
         }

@@ -46,37 +46,33 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	restApiHandler.ConfigureRestAPI(api)
 
 	if api.UserDeleteUserHandler == nil {
-		api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+		api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, token *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
 		})
 	}
 
 	if api.UserGetUserHandler == nil {
-		api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+		api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, token *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
 		})
 	}
 	if api.UserGetUsersHandler == nil {
-		api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
+		api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, token *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUsers has not yet been implemented")
 		})
 	}
 
 	if api.CardUpdateCardHandler == nil {
-		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, token *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation card.UpdateCard has not yet been implemented")
 		})
 	}
 	if api.UserUpdateUserHandler == nil {
-		api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, token *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
 		})
 	}
-	if api.UserGetUserByTokenHandler == nil {
-		api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
-		})
-	}
+
 	api.ServerShutdown = func() {}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

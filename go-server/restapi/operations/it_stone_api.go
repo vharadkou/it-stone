@@ -44,28 +44,28 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
+		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardCreateCard has not yet been implemented")
 		}),
-		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
+		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardDeleteCard has not yet been implemented")
 		}),
-		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserDeleteUser has not yet been implemented")
 		}),
-		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
+		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCard has not yet been implemented")
 		}),
-		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
+		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCards has not yet been implemented")
 		}),
-		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
-		UserGetUserByTokenHandler: user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
+		UserGetUserByTokenHandler: user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUserByToken has not yet been implemented")
 		}),
-		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
+		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUsers has not yet been implemented")
 		}),
 		LoginLoginHandler: login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
@@ -74,15 +74,15 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		RegistrationRegistrationHandler: registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
 			return middleware.NotImplemented("operation RegistrationRegistration has not yet been implemented")
 		}),
-		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
 		}),
-		UserUpdateUserHandler: user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		UserUpdateUserHandler: user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserUpdateUser has not yet been implemented")
 		}),
 
 		// Applies when the "JWT-Token" header is set
-		APIKeyHeaderAuth: func(token string) (*models.Principal, error) {
+		APIKeyHeaderAuth: func(token string) (*models.Token, error) {
 			return nil, errors.NotImplemented("api key auth (APIKeyHeader) JWT-Token from header param [JWT-Token] has not yet been implemented")
 		},
 
@@ -121,7 +121,7 @@ type ItStoneAPI struct {
 
 	// APIKeyHeaderAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key JWT-Token provided in the header
-	APIKeyHeaderAuth func(string) (*models.Principal, error)
+	APIKeyHeaderAuth func(string) (*models.Token, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer

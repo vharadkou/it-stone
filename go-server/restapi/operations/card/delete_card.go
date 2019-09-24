@@ -14,16 +14,16 @@ import (
 )
 
 // DeleteCardHandlerFunc turns a function with the right signature into a delete card handler
-type DeleteCardHandlerFunc func(DeleteCardParams, *models.Principal) middleware.Responder
+type DeleteCardHandlerFunc func(DeleteCardParams, *models.Token) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteCardHandlerFunc) Handle(params DeleteCardParams, principal *models.Principal) middleware.Responder {
+func (fn DeleteCardHandlerFunc) Handle(params DeleteCardParams, principal *models.Token) middleware.Responder {
 	return fn(params, principal)
 }
 
 // DeleteCardHandler interface for that can handle valid delete card params
 type DeleteCardHandler interface {
-	Handle(DeleteCardParams, *models.Principal) middleware.Responder
+	Handle(DeleteCardParams, *models.Token) middleware.Responder
 }
 
 // NewDeleteCard creates a new http.Handler for the delete card operation
@@ -56,9 +56,9 @@ func (o *DeleteCard) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.Token
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.Token) // this is really a models.Token, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

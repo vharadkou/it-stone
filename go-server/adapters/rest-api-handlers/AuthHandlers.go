@@ -9,6 +9,7 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"net/http"
+	"regexp"
 
 	validateError "errors"
 
@@ -19,7 +20,7 @@ import (
 type AuthHandler interface {
 	Login(params login.LoginParams) middleware.Responder
 	Registration(params registration.RegistrationParams) middleware.Responder
-	APIKeyHeaderAuth(token string) (*models.Principal, error)
+	APIKeyHeaderAuth(token string) (*models.Token, error)
 }
 
 type authHandler struct {
@@ -47,7 +48,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	}
 
 	ur := repository.NewUserRepository()
-	domainUser, err := ur.GetUserByField("username", *params.LoginForm.Username)
+	domainUser, err := ur.GetUserByField("username", *params.LoginForm.UserName)
 	if err != nil {
 		errMsg := "User does not exists!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
@@ -56,7 +57,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 		})
 	}
 
-	if err := h.passHelper.Compare(params.LoginForm.Password.String(), domainUser.Password); err != nil {
+	if err := h.passHelper.Compare(*params.LoginForm.Password, domainUser.Password); err != nil {
 		errMsg := "Incorrect password!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -65,7 +66,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	}
 
 	userForToken := h.userConverter.ToUserForToken(domainUser)
-	token := &models.Token{Token: h.jwtHelper.GenerateToken(userForToken)}
+	token := h.jwtHelper.GenerateToken(userForToken)
 	return login.NewLoginOK().WithPayload(token)
 }
 
@@ -77,12 +78,13 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 			Message: &errMsg,
 		})
 	}
+
 	ur := repository.NewUserRepository()
 
-	hashedPassword, err := h.passHelper.GenerateHashPassword(params.RegistrationForm.Password.String())
+	hashedPassword, err := h.passHelper.GenerateHashPassword(*params.RegistrationForm.Password)
 	domainUser := domain.NewDomainUser(
 		params.RegistrationForm.Email.String(),
-		*params.RegistrationForm.Username,
+		*params.RegistrationForm.UserName,
 		hashedPassword)
 
 	if err := validateEmail(ur, domainUser.Email); err != nil {
@@ -93,7 +95,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	if err := validateUsername(ur, domainUser.Username); err != nil {
+	if err := validateUsername(ur, domainUser.UserName); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -115,16 +117,15 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		HTTPRequest: params.HTTPRequest,
 		LoginForm: &models.LoginForm{
 			Password: params.RegistrationForm.Password,
-			Username: params.RegistrationForm.Username,
+			UserName: params.RegistrationForm.UserName,
 		},
 	}
 	return h.Login(loginParams)
 }
 
-func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Principal, error) {
+func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Token, error) {
 	if h.jwtHelper.Verify(token) {
-		principal := models.Principal(token)
-		return &principal, nil
+		return &models.Token{Token: token}, nil
 	}
 	return nil, errors.New(http.StatusUnauthorized, "Incorrect api key auth!")
 }
@@ -138,6 +139,11 @@ func validateEmail(rep repository.UserRepository, value string) error {
 }
 
 func validateUsername(rep repository.UserRepository, value string) error {
+	var reg = regexp.MustCompile(`(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$`)
+	if !reg.MatchString(value) {
+		return validateError.New("password must contain UpperCase, LowerCase, Number/SpecialChar and min 8 Chars")
+	}
+
 	user, _ := rep.GetUserByField("username", value)
 	if user != nil {
 		return validateError.New("user with this username is already exists")

@@ -24,12 +24,14 @@ type RegistrationForm struct {
 
 	// password
 	// Required: true
-	// Format: password
-	Password *strfmt.Password `json:"password"`
+	Password *string `json:"password"`
 
-	// username
+	// user name
 	// Required: true
-	Username *string `json:"username"`
+	// Max Length: 16
+	// Min Length: 3
+	// Pattern: ^[A-Za-z0-9_]{3,16}$
+	UserName *string `json:"userName"`
 }
 
 // Validate validates this registration form
@@ -44,7 +46,7 @@ func (m *RegistrationForm) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUsername(formats); err != nil {
+	if err := m.validateUserName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -73,16 +75,24 @@ func (m *RegistrationForm) validatePassword(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
-func (m *RegistrationForm) validateUsername(formats strfmt.Registry) error {
+func (m *RegistrationForm) validateUserName(formats strfmt.Registry) error {
 
-	if err := validate.Required("username", "body", m.Username); err != nil {
+	if err := validate.Required("userName", "body", m.UserName); err != nil {
+		return err
+	}
+
+	if err := validate.MinLength("userName", "body", string(*m.UserName), 3); err != nil {
+		return err
+	}
+
+	if err := validate.MaxLength("userName", "body", string(*m.UserName), 16); err != nil {
+		return err
+	}
+
+	if err := validate.Pattern("userName", "body", string(*m.UserName), `^[A-Za-z0-9_]{3,16}$`); err != nil {
 		return err
 	}
 

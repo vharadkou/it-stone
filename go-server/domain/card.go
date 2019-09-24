@@ -10,5 +10,5 @@ type Card struct {
 	ManaCost float64     `json:"mana_cost"`
 	Name     string      `json:"name"`
 	Skills   []string    `json:"skills"`
-	Surname  string      `json:"surname"`
+	SurName  string      `json:"surname"`
 }

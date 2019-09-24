@@ -14,16 +14,16 @@ import (
 )
 
 // GetUserHandlerFunc turns a function with the right signature into a get user handler
-type GetUserHandlerFunc func(GetUserParams, *models.Principal) middleware.Responder
+type GetUserHandlerFunc func(GetUserParams, *models.Token) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserHandlerFunc) Handle(params GetUserParams, principal *models.Principal) middleware.Responder {
+func (fn GetUserHandlerFunc) Handle(params GetUserParams, principal *models.Token) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUserHandler interface for that can handle valid get user params
 type GetUserHandler interface {
-	Handle(GetUserParams, *models.Principal) middleware.Responder
+	Handle(GetUserParams, *models.Token) middleware.Responder
 }
 
 // NewGetUser creates a new http.Handler for the get user operation
@@ -56,9 +56,9 @@ func (o *GetUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.Token
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.Token) // this is really a models.Token, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

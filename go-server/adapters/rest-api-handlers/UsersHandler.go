@@ -15,7 +15,7 @@ type UsersHandler interface {
 	GetUser(params user.GetUserParams) middleware.Responder
 	UpdateUser(params user.UpdateUserParams) middleware.Responder
 	DeleteUser(params user.DeleteUserParams) middleware.Responder
-	GetUserByToken(principal *models.Principal) middleware.Responder
+	GetUserByToken(token *models.Token) middleware.Responder
 }
 
 type usersHandler struct {
@@ -46,9 +46,9 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	return user.NewGetUserOK().WithPayload(h.uc.FromDomain(domainUser))
 }
 
-func (h *usersHandler) GetUserByToken(principal *models.Principal) middleware.Responder {
+func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder {
 
-	domainUser, err := h.jwtHelper.GetDomainUserFromToken(string(*principal))
+	domainUser, err := h.jwtHelper.GetDomainUserFromToken(token)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

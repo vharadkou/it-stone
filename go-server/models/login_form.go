@@ -19,12 +19,11 @@ type LoginForm struct {
 
 	// password
 	// Required: true
-	// Format: password
-	Password *strfmt.Password `json:"password"`
+	Password *string `json:"password"`
 
-	// username
+	// user name
 	// Required: true
-	Username *string `json:"username"`
+	UserName *string `json:"userName"`
 }
 
 // Validate validates this login form
@@ -35,7 +34,7 @@ func (m *LoginForm) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateUsername(formats); err != nil {
+	if err := m.validateUserName(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -51,16 +50,12 @@ func (m *LoginForm) validatePassword(formats strfmt.Registry) error {
 		return err
 	}
 
-	if err := validate.FormatOf("password", "body", "password", m.Password.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 
-func (m *LoginForm) validateUsername(formats strfmt.Registry) error {
+func (m *LoginForm) validateUserName(formats strfmt.Registry) error {
 
-	if err := validate.Required("username", "body", m.Username); err != nil {
+	if err := validate.Required("userName", "body", m.UserName); err != nil {
 		return err
 	}
 

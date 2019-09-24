@@ -3,13 +3,14 @@ package helpers
 import (
 	"github.com/brianvoe/sjwt"
 	"it-stone-server/domain"
+	"it-stone-server/models"
 	"os"
 )
 
 type JWTHelper interface {
-	GenerateToken(model interface{}) string
+	GenerateToken(model interface{}) *models.Token
 	Verify(token string) bool
-	GetDomainUserFromToken(token string) (*domain.User, error)
+	GetDomainUserFromToken(token *models.Token) (*domain.User, error)
 }
 
 type jwtHelper struct{}
@@ -18,17 +19,18 @@ func NewJWTHelper() JWTHelper {
 	return &jwtHelper{}
 }
 
-func (h *jwtHelper) GenerateToken(model interface{}) string {
+func (h *jwtHelper) GenerateToken(model interface{}) *models.Token {
 	claims, _ := sjwt.ToClaims(model)
-	return claims.Generate([]byte(os.Getenv("JWT_SECRET_KEY")))
+	strToken := claims.Generate([]byte(os.Getenv("JWT_SECRET_KEY")))
+	return &models.Token{Token: strToken}
 }
 
 func (h *jwtHelper) Verify(token string) bool {
 	return sjwt.Verify(token, []byte(os.Getenv("JWT_SECRET_KEY")))
 }
 
-func (h *jwtHelper) GetDomainUserFromToken(token string) (*domain.User, error) {
-	claims, err := sjwt.Parse(token)
+func (h *jwtHelper) GetDomainUserFromToken(token *models.Token) (*domain.User, error) {
+	claims, err := sjwt.Parse(token.Token)
 	if err != nil {
 		return nil, err
 	}

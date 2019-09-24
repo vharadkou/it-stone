@@ -1,7 +1,6 @@
 package converters
 
 import (
-	"github.com/go-openapi/strfmt"
 	"it-stone-server/domain"
 	"it-stone-server/models"
 )
@@ -21,8 +20,8 @@ func NewUserConverter() UserConverter {
 func (uc *userConverter) ToDomain(model *models.User) *domain.User {
 	return &domain.User{
 		ID:         model.ID,
-		Email:      model.Email.String(),
-		Username:   model.Username,
+		Email:      model.Email,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}
@@ -31,8 +30,8 @@ func (uc *userConverter) ToDomain(model *models.User) *domain.User {
 func (uc *userConverter) FromDomain(model *domain.User) *models.User {
 	return &models.User{
 		ID:         model.ID,
-		Email:      strfmt.Email(model.Email),
-		Username:   model.Username,
+		Email:      model.Email,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}
@@ -42,7 +41,7 @@ func (uc *userConverter) ToUserForToken(model *domain.User) *domain.UserForToken
 	return &domain.UserForToken{
 		ID:         model.ID,
 		Email:      model.Email,
-		Username:   model.Username,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}

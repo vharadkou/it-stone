@@ -27,7 +27,7 @@ func (converter *cardConverter) FromDomain(card *domain.Card) *models.Card {
 	outData.Image = card.Image
 	outData.ManaCost = card.ManaCost
 	outData.Name = card.Name
-	outData.Surname = card.Surname
+	outData.SurName = card.SurName
 	outData.Skills = card.Skills
 
 	return &outData
@@ -44,7 +44,7 @@ func (converter *cardConverter) ToDomain(card *models.Card) *domain.Card {
 	outData.Image = card.Image
 	outData.ManaCost = card.ManaCost
 	outData.Name = card.Name
-	outData.Surname = card.Surname
+	outData.SurName = card.SurName
 	outData.Skills = card.Skills
 
 	return &outData

@@ -8,9 +8,7 @@ package models
 import (
 	strfmt "github.com/go-openapi/strfmt"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
 // User user
@@ -18,46 +16,23 @@ import (
 type User struct {
 
 	// The email of the User.
-	// Format: email
-	Email strfmt.Email `json:"email,omitempty"`
+	Email string `json:"email,omitempty"`
 
 	// The ID of the User.
 	ID string `json:"id,omitempty"`
 
 	// Count of all games of the User.
-	TotalGames int64 `json:"total_games,omitempty"`
+	TotalGames int64 `json:"totalGames,omitempty"`
 
 	// The user name.
-	Username string `json:"username,omitempty"`
+	UserName string `json:"userName,omitempty"`
 
 	// Count of all games where the User has won.
-	WinGames int64 `json:"win_games,omitempty"`
+	WinGames int64 `json:"winGames,omitempty"`
 }
 
 // Validate validates this user
 func (m *User) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateEmail(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *User) validateEmail(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Email) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("email", "body", "email", m.Email.String(), formats); err != nil {
-		return err
-	}
-
 	return nil
 }
 

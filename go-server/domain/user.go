@@ -3,7 +3,7 @@ package domain
 type User struct {
 	ID         string `json:"id,omitempty"`
 	Email      string `json:"email,omitempty"`
-	Username   string `json:"username"`
+	UserName   string `json:"username"`
 	Password   string `json:"password,omitempty"`
 	TotalGames int64  `json:"total_games"`
 	WinGames   int64  `json:"win_games"`
@@ -12,7 +12,7 @@ type User struct {
 func NewDomainUser(email, username, password string) *User {
 	return &User{
 		Email:      email,
-		Username:   username,
+		UserName:   username,
 		Password:   password,
 		TotalGames: 0,
 		WinGames:   0,

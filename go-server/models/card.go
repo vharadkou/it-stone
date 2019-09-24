@@ -34,7 +34,7 @@ type Card struct {
 	Image string `json:"image,omitempty"`
 
 	// mana cost
-	ManaCost float64 `json:"mana_cost,omitempty"`
+	ManaCost float64 `json:"manaCost,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
@@ -42,8 +42,8 @@ type Card struct {
 	// skills
 	Skills []string `json:"skills"`
 
-	// surname
-	Surname string `json:"surname,omitempty"`
+	// sur name
+	SurName string `json:"surName,omitempty"`
 }
 
 // Validate validates this card

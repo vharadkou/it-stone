@@ -293,28 +293,29 @@ definitions:
     type: object
     required:
       - email
-      - username
+      - userName
       - password
     properties:
       email:
         type: string
         format: email
-      username:
+      userName:
         type: string
+        pattern: '^[A-Za-z0-9_]{3,16}$'
+        minLength: 3
+        maxLength: 16
       password:
         type: string
-        format: password
   LoginForm:
     type: object
     required:
-      - username
+      - userName
       - password
     properties:
-      username:
+      userName:
         type: string
       password:
         type: string
-        format: password
   CreatedEntity:
     type: object
     required:
@@ -338,7 +339,7 @@ definitions:
         type: string
       name:
         type: string
-      surname:
+      surName:
         type: string
       image:
         type: string
@@ -350,7 +351,7 @@ definitions:
         type: number
       damage:
         type: number
-      mana_cost:
+      manaCost:
         type: number
       effects:
         type: object
@@ -360,17 +361,16 @@ definitions:
       id:
         type: string
         description: The ID of the User.
-      username:
+      userName:
         type: string
         description: The user name.
       email:
         type: string
-        format: email
         description: The email of the User.
-      win_games:
+      winGames:
         type: integer
         description: Count of all games where the User has won.
-      total_games:
+      totalGames:
         type: integer
         description: Count of all games of the User.
   Token:
@@ -388,5 +388,3 @@ definitions:
         format: int64
       message:
         type: string
-  Principal:
-    type: string
