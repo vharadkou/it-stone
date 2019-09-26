@@ -1,10 +1,28 @@
-<div class="hero-list-container">
-    <div *ngFor="let hero of heroList" class="hero-list" (click)="onClick.emit(hero.id)" [ngStyle]="hero.selected == false ? null : {'color': 'orange'}">
-        <p>{{hero.selected}}</p>
-        <p>{{hero.id}}</p>
-        <p>{{hero.name}}</p>
-        <p>{{hero.skills}}</p>
-        <p>{{hero.hp}}</p>
-        <p>{{hero.image}}</p>
+<div class="hero-data-wrapper">
+  <div class="hero-list-container">
+    <label *ngFor="let hero of heroList" class="container">
+      <input
+        name="heroChoosing"
+        [(ngModel)]="heroChoosing"
+        type="radio"
+        [value]="hero"
+        (change)="handleChange()"
+      />
+      {{ hero.name }}
+      <div class="checkmark"></div>
+    </label>
+  </div>
+
+  <div class="modal-wrapper">
+    <div class="modal anim4" id="modal-window">
+      <div class="colOne">
+        <p>Skills:</p>
+        <p>{{ heroChoosing.skills }}</p>
+        <p>Health:{{ heroChoosing.hp }}</p>
+      </div>
+      <div class="colTwo">
+        <p>Skills description: Can do 2 damage per move</p>
+      </div>
     </div>
+  </div>
 </div>

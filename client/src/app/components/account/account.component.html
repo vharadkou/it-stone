@@ -1,7 +1,23 @@
-<p>Статистика:</p>
-<p>Доступные герои:</p>
-<app-account-page (onClick)="getId($event)" [heroList]="heroList">
-    Loading heroes ...</app-account-page>
-<!-- <button [routerLink]="'rules'">Правила игры:</button>
-<router-outlet></router-outlet> -->
-<button [disabled]="isDisabled" (click)="alertId()">Начать бой</button>
+<div *ngIf='!loading' class="account__wrapper">
+  <div  class="menu-field" id="menu-field">
+    <button mat-button [routerLink]="'rules'">Rules</button >
+      <button mat-raised-button class='logout-button' (click)="logOut()">Log out</button >
+  </div>
+
+  <div class="user-field"  id="user-field">
+    <h1>Information about player</h1>
+    <app-player-info></app-player-info>
+    <button class='start-button' mat-raised-button color='warn'  (click)="submit()">Start fight</button >
+  </div>
+  <div  class="hero-field " id="hero-field">
+    <h1>Choose your hero</h1>
+    <app-account-page (onClick)="handleChange($event)" [heroList]="heroList">
+      </app-account-page
+    >
+  </div>
+</div>
+<div *ngIf='loading' class="loading">
+  <h1>Looking for a partner...</h1>
+  <app-screensaver></app-screensaver>
+</div>
+

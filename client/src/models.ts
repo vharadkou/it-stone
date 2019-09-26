@@ -84,9 +84,11 @@ export interface AboutCard {
 }
 
 export interface User{
-  nickName: string;
+  id: string;
+  userName: string;
   email: string;
-  password: string;
+  winGames: number;
+  totalGames: number;
 }
 export interface CardForStart {
   card: Card;

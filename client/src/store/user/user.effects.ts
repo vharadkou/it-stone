@@ -1,52 +1,105 @@
-import { baseUrl } from 'constants/baseUrl';
+import { baseUrl } from "constants/baseUrl";
 
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { PopupsService } from 'app/services/popups.service';
-import { User } from 'models';
-import { Observable, of } from 'rxjs';
-import { catchError, filter, map, switchMap, take } from 'rxjs/operators';
+import { HttpClient, HttpHeaders  } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Actions, Effect, ofType } from "@ngrx/effects";
+import { Action } from "@ngrx/store";
+import { PopupsService } from "app/services/popups.service";
+import { User } from "models";
+import { Observable, of } from "rxjs";
+import { catchError, filter, map, switchMap, take } from "rxjs/operators";
+import { TokenService } from "../../app/services/token.service";
 
-import * as skillsActions from '../skills/skills.action';
+import * as userActions from "./user.action";
 
-import * as userActions from './user.action';
-import { UserFacade } from './user.facade';
 
-const users: User[] = [
-  {
-    email: "aaa@aaa.ru",
-    nickName: "aaa",
-    password: '123'
-  }
-]
-
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class UserEffects {
   public resultAction: Action;
 
-  @Effect() public getUser$: Observable<Action> = this.actions$.pipe(
+
+
+  @Effect() public registerUser$: Observable<Action> = this.actions$.pipe(
+    ofType<userActions.UserSignUp>(userActions.UserActionTypes.UserSignUp),
+    switchMap((action: userActions.UserSignUp) => {
+      return this.http.post("/api/v0/registration", action.payload).pipe(
+        map((data: any) => {
+          this._tokenService.setToken(data.token);
+          return new userActions.UserSignUpSuccess();
+        }),
+        catchError(errorData => of(new userActions.UserSignUpError(errorData)))
+      );
+    })
+  );
+
+  @Effect() public loginUser$: Observable<Action> = this.actions$.pipe(
     ofType<userActions.UserSignIn>(userActions.UserActionTypes.UserSignIn),
     switchMap((action: userActions.UserSignIn) => {
-      const localStorageUser = JSON.parse(localStorage.getItem('user'));
-      return of(users).pipe(
-        map((data: User[], i) => {
-          if (data[i].email === action.payload.email && data[i].password === action.payload.password) {
-            localStorage.setItem('user', JSON.stringify(data[i]));
-            return new userActions.UserSignInSuccess(data[i]);
-          } else if (data[i].email === localStorageUser.email && data[i].password === localStorageUser.password){
-            return new userActions.UserSignInSuccess(data[i]);
-          } else{
-            throw new Error;
-          }
+      return this.http.post("/api/v0/login", action.payload).pipe(
+        map((data: any, i) => {
+          this._tokenService.setToken(data.token);
+          return new userActions.UserSignInSuccess();
         }),
-        catchError(() => of(new userActions.UserSignInError({nickName: 'null', email: 'null', password: 'null'})))
-      )
-    }), catchError(() => of(new userActions.UserSignInError({nickName: 'null', email: 'null', password: 'null'})))
+        catchError(errorData => of(new userActions.UserSignInError(errorData)))
+      );
+    })
+  );
+
+  @Effect() public getUserInfoWithSignUp$: Observable<Action> = this.actions$.pipe(
+    ofType<userActions.UserSignUpSuccess>(
+      userActions.UserActionTypes.UserSignUpSuccess
+    ),
+    switchMap((action: userActions.UserSignUpSuccess) => {
+      let headers: HttpHeaders = new HttpHeaders();
+      headers = headers.append(
+        "JWT-Token",
+        this._tokenService.getToken()
+      );
+      return this.http.get("/api/v0/user", {headers: headers}).pipe(
+        map((data: any) => {
+          return new userActions.UserSetData({
+            id: data.id,
+            userName: data.userName,
+            email: data.email,
+            winGames: data.winGames,
+            totalGames: data.totalGames
+          });
+        }),
+        catchError(errorData => of(new userActions.UserSetDataError(errorData)))
+      );
+    })
+  );
+
+  @Effect() public getUserInfoWithSignIn$: Observable<Action> = this.actions$.pipe(
+    ofType<userActions.UserSignInSuccess>(
+      userActions.UserActionTypes.UserSignInSuccess
+    ),
+    switchMap((action: userActions.UserSignInSuccess) => {
+      let headers: HttpHeaders = new HttpHeaders();
+      headers = headers.append(
+        "JWT-Token",
+        this._tokenService.getToken()
+      );
+      return this.http.get("/api/v0/user", {headers: headers}).pipe(
+        map((data: any, i) => {
+          return new userActions.UserSetData({
+            id: data.id,
+            userName: data.userName,
+            email: data.email,
+            winGames: data.winGames,
+            totalGames: data.totalGames
+          });
+        }),
+        catchError(errorData => of(new userActions.UserSetDataError(errorData)))
+      );
+    })
   );
 
   public constructor(
-    private actions$: Actions
-  ) { }
+    private actions$: Actions,
+    private http: HttpClient,
+    private _tokenService: TokenService
+  ) {}
 }

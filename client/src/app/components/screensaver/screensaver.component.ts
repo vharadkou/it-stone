@@ -23,7 +23,7 @@ export class ScreensaverComponent implements OnInit {
   onWindowResize(event) {
     this.renderer.setSize(event.target.innerWidth, event.target.innerHeight);
   }
-  @ViewChild("rendererContainer") rendererContainer: ElementRef;
+  @ViewChild("rendererContainer",  { static: true }) rendererContainer: ElementRef;
   renderer = new THREE.WebGLRenderer();
   scene = null;
   camera = null;

@@ -6,24 +6,24 @@ export const initialHeroState: HeroState = {
     heroes: [
         {
             id: 1,
-            name: 'Jaina Proudmoore',
-            skills: '1 damage',
+            name: 'Project Manager',
+            skills: 'Dedline coming!',
             hp: 30,
             image: 'no image',
             selected: true
         },
         {
             id: 2,
-            name: 'Rexxar',
-            skills: '2 damage to the enemy hero',
+            name: 'Team Lead',
+            skills: 'Work at weekend',
             hp: 30,
             image:  'no image',
             selected: false
         },
         {
             id: 3,
-            name: 'Thrall',
-            skills: 'Summon a random Totem',
+            name: 'Startuper',
+            skills: 'Promise an option',
             hp: 30,
             image:  'no image',
             selected: false

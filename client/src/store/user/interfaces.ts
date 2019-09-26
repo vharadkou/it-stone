@@ -1,6 +1,7 @@
 import { User, Status } from 'models';
 
 export interface UserState {
-  status: Status
+  status: Status;
   user: User;
+  errorText?: string;
 }

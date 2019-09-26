@@ -1,6 +1,6 @@
 import { baseUrl } from 'constants/baseUrl';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -11,7 +11,7 @@ import { catchError, filter, map, switchMap, take, delay } from 'rxjs/operators'
 import { CardsFacade } from 'store/cards/cards.facade';
 import {GameStatus} from '../../models'
 import * as skillsActions from '../skills/skills.action';
-
+import { TokenService } from "../../app/services/token.service";
 import * as cardActions from './cards.action';
 import * as gameProcessActions from '../game-process/game-process.action';
 
@@ -20,21 +20,28 @@ export class CardsEffects {
   public resultAction: Action;
 
 
-public myFirstMoveVariants = [true, false]   //just a temporary mock 
+public myFirstMoveVariants = [true, false]   
 
 
-@Effect() public getCards$: Observable<any> = this.actions$.pipe(
-  ofType<cardActions.LoadCards>(cardActions.CardsActionTypes.LoadCards),
-  switchMap((action: cardActions.LoadCards) => (
-    this.http.get(`/api/v0/cards`).pipe(
-      switchMap((data: any[]) => [     
-       new gameProcessActions.StartGameSuccess({status: GameStatus.Start, myFirstMove: this.shuffle(this.myFirstMoveVariants)}), //just a temporary mock 
-       new cardActions.LoadCardsSuccess(this.shuffle(data)) 
-      ]),
+
+
+@Effect() public getCards$: Observable<Action> = this.actions$.pipe(
+  ofType<cardActions.LoadCards>(
+    cardActions.CardsActionTypes.LoadCards
+  ),
+  switchMap((action: cardActions.LoadCards) => {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append(
+      "JWT-Token",
+      this._tokenService.getToken()
+    );
+    return this.http.get("/api/v0/cards", {headers: headers}).pipe(
+      map((data: Card[]) => {
+        return new cardActions.LoadCardsSuccess(data);
+      }),
       catchError(error => of(new cardActions.LoadCardsError(error)))
-    )
-  )
-  )
+    );
+  })
 );
 
 
@@ -127,7 +134,8 @@ public myFirstMoveVariants = [true, false]   //just a temporary mock
     private http: HttpClient,
     private actions$: Actions,
     private popupsService: PopupsService,
-    private cardsFacade: CardsFacade
+    private cardsFacade: CardsFacade,
+    private _tokenService: TokenService
   ) { }
 
   public shuffle(array) {

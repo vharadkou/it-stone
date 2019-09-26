@@ -2,7 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Player } from 'models';
 import { PlayersInfoFacade } from 'store';
-
+import {
+  UserFacade
+} from "store";
 
 @Component({
   selector: 'app-player-info',
@@ -10,17 +12,18 @@ import { PlayersInfoFacade } from 'store';
   styleUrls: ['./player-info.component.scss']
 })
 export class PlayerInfoComponent implements OnInit {
-
+  public user$ = this.userFacade.user$;
   public player$: Observable<Player[]> = this.playerInfoFacade.playersInfo$;
-  public playerInfo: Array<any> = [];
-  constructor(private playerInfoFacade: PlayersInfoFacade) {
+  public user;
+  constructor(private playerInfoFacade: PlayersInfoFacade, private userFacade: UserFacade,) {
   }
 
   ngOnInit() {
-    this.playerInfoFacade.loadPlayerInfo();
-    this.player$.subscribe(p => {
-      this.playerInfo = p;
-    });
+    this.user$.subscribe(data =>{
+      this.user = data;
+      console.log(this.user)
+    })
+ 
 
   }
 

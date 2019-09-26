@@ -9,9 +9,10 @@
 .name {
   position: absolute;
   z-index: 99;
-  top: 5vh;
-  left: 25vw;
-  font-size: 4vw;
+  top: 10vh;
+  left: 18vw;
+  font-size: 3vw;
+ 
   font-weight: bold;
   text-shadow: 2px 2px rgb(53, 52, 52);
   animation-duration: 2s;
@@ -21,7 +22,8 @@
 
 h1 {
   color: #fff;
-  font-weight: 700;
+  font-family: 'Press Start 2P';
+  font-weight: 600;
   background: linear-gradient(to right, orange 10%, #fff 50%, orange 100%);
   background-size: auto auto;
   background-clip: border-box;

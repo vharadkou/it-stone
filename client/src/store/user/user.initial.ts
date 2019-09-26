@@ -5,8 +5,10 @@ import { UserState } from './interfaces';
 export const initialUserState: UserState = {
   status: Status.Init,
   user: {
-    nickName: null,
-    email: null,
-    password: null
+    id: null,
+  userName: null,
+  email: null,
+  winGames: 0,
+  totalGames: 0  
   }
 };

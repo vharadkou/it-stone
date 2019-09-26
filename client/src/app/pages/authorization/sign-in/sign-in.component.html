@@ -7,12 +7,11 @@
         matInput
         class="sign-in__email"
         type="text"
-        placeholder="email"
-        [(ngModel)]="_email"
-        name="email"
+        placeholder="User name"
+        [(ngModel)]="_userName"
+        name="userName"
         required
-        email
-        #email="ngModel"
+        #userName="ngModel"
       />
     </mat-form-field>
 
@@ -32,7 +31,7 @@
       <button
         type="submit"
         (click)="handleClick()"
-        [disabled]="email.invalid"
+        [disabled]="userName.invalid"
         class="login__sign-field-sign_button"
         mat-raised-button
       >
@@ -52,14 +51,7 @@
         Sign up
       </button>
     </div>
-    <mat-divider></mat-divider>
-    <button
-    type="submit"
-    class="login__sign-field-sign_button"
-    mat-raised-button
-  >
-    Sign in with Google
-  </button>
+  
   </form>
 
 
