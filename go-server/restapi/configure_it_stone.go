@@ -8,13 +8,13 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/joho/godotenv"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
 	"net/http"
+	"os"
 
 	"it-stone-server/models"
 )
@@ -88,11 +88,7 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Println("Error getting .env")
-		panic(err)
-	}
+	fmt.Println(os.Getenv("jwt_secret_key"))
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

@@ -21,12 +21,12 @@ func NewJWTHelper() JWTHelper {
 
 func (h *jwtHelper) GenerateToken(model interface{}) *models.Token {
 	claims, _ := sjwt.ToClaims(model)
-	strToken := claims.Generate([]byte(os.Getenv("JWT_SECRET_KEY")))
+	strToken := claims.Generate([]byte(os.Getenv("jwt_secret_key")))
 	return &models.Token{Token: strToken}
 }
 
 func (h *jwtHelper) Verify(token string) bool {
-	return sjwt.Verify(token, []byte(os.Getenv("JWT_SECRET_KEY")))
+	return sjwt.Verify(token, []byte(os.Getenv("jwt_secret_key")))
 }
 
 func (h *jwtHelper) GetDomainUserFromToken(token *models.Token) (*domain.User, error) {
