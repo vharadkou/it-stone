@@ -41,7 +41,7 @@ var emailField = "Email"
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if params.LoginForm == nil {
-		errMsg := "The request body is empty!"
+		errMsg := "The request body is empty!123123"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
