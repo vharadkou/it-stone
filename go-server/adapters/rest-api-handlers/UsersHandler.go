@@ -31,7 +31,6 @@ func NewUsersHandler() UsersHandler {
 }
 
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
-
 	userRepository := repository.NewUserRepository()
 	domainUser, err := userRepository.GetUserByField("id", params.ID)
 
