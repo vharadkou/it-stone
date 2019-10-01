@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"github.com/go-openapi/runtime/middleware"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/models"
 	"it-stone-server/restapi/operations"
@@ -8,8 +9,6 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
-
-	"github.com/go-openapi/runtime/middleware"
 )
 
 type RestAPIHandlers struct {
