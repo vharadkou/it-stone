@@ -61,7 +61,6 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if domainUser.ID == "" {
 		errMsg := "User does not exists!"
-
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
