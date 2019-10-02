@@ -13,6 +13,7 @@ import (
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
+	"log"
 	"net/http"
 )
 
@@ -30,7 +31,8 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	// Expected interface func(string, ...interface{})
 	//
 	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
+	log.Printf("Service started")
 
 	api.JSONConsumer = runtime.JSONConsumer()
 

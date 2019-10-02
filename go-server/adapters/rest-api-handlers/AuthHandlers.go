@@ -10,6 +10,7 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"net/http"
+	"os"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
@@ -41,7 +42,11 @@ var emailField = "Email"
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if params.LoginForm == nil {
-		errMsg := "The request body is empty!"
+		osE := os.Getenv("project_id")
+		if osE == "" {
+			osE = "Empty ENV"
+		}
+		errMsg := osE
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
