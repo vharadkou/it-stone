@@ -3,8 +3,8 @@ package repository
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"errors"
 	"google.golang.org/api/iterator"
+	"os"
 )
 
 // DbWorker Interface
@@ -24,11 +24,9 @@ type dbFirestore struct {
 	Client     *firestore.Client
 }
 
-const projectId string = "striped-strata-230320"
-
 // NewDbClient - Creating a new db client
 func NewDbClient(ctx context.Context, cancelFunc context.CancelFunc) (DbWorker, error) {
-	client, err := firestore.NewClient(ctx, projectId)
+	client, err := firestore.NewClient(ctx, os.Getenv("project_id"))
 	if err != nil {
 		return nil, err
 	}
@@ -106,9 +104,7 @@ func (db *dbFirestore) FindOneByField(collection, field, value string) (map[stri
 		}
 		break
 	}
-	if len(record) == 0 {
-		return nil, errors.New("the record does not exists")
-	}
+
 	return record, nil
 }
 

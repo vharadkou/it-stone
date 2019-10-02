@@ -30,9 +30,11 @@ func NewUsersHandler() UsersHandler {
 	}
 }
 
+var idField = "id"
+
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.GetUserByField("id", params.ID)
+	domainUser, err := userRepository.GetUserByField(idField, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

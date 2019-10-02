@@ -41,7 +41,7 @@ var emailField = "Email"
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if params.LoginForm == nil {
-		errMsg := "RRRRThe request body is empty!"
+		errMsg := "The request body is empty!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
@@ -51,7 +51,17 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	ur := repository.NewUserRepository()
 	domainUser, err := ur.GetUserByField(usernameField, *params.LoginForm.UserName)
 	if err != nil {
+		errMsg := "Internal server error!"
+
+		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
+
+	if domainUser.ID == "" {
 		errMsg := "User does not exists!"
+
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,

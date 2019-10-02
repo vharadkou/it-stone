@@ -1,8 +1,11 @@
 FROM golang:latest as builder
+ADD . /app
 WORKDIR /app
-COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
+
+RUN go get -u github.com/go-swagger/go-swagger/cmd/swagger
+RUN swagger generate server -A it-stone -P models.Token
+
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/it-stone-server/main.go
 
 FROM alpine:latest

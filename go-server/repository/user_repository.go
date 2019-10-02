@@ -43,10 +43,10 @@ func (cw *userRepository) GetUserByField(field, value string) (*domain.User, err
 		return nil, err
 	}
 
-	user := new(domain.User)
+	var user domain.User
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, user)
-	return user, nil
+	_ = json.Unmarshal(sb, &user)
+	return &user, nil
 }
 
 func (cw *userRepository) GetUsers() ([]*domain.User, error) {
