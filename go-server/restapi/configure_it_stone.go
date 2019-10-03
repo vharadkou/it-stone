@@ -17,6 +17,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 //go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
@@ -95,7 +96,7 @@ func configureServer(s *http.Server, scheme, addr string) {
 	firestoreConfig := domain.NewFirestoreConfig()
 	firestoreConfig.CreateConfigFile(directory, filename)
 
-	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filename)
+	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filepath.Join(directory, filename))
 	if err != nil {
 		panic(err)
 	}
