@@ -50,7 +50,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	ur := repository.NewUserRepository()
 	domainUser, err := ur.GetUserByField(usernameField, *params.LoginForm.UserName)
 	if err != nil {
-		errMsg := err.Error()
+		errMsg := "Internal server error!"
 
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,

@@ -4,3 +4,4 @@
 !/restapi/configure_it_stone.go
 /.env
 /config.json
+/temp/
