@@ -2,6 +2,8 @@ package handlers
 
 import (
 	validateError "errors"
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime/middleware"
 	"it-stone-server/adapters/converters"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
@@ -10,10 +12,6 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"net/http"
-	"os"
-
-	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime/middleware"
 )
 
 type AuthHandler interface {
@@ -42,11 +40,7 @@ var emailField = "Email"
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if params.LoginForm == nil {
-		osE := os.Getenv("project_id")
-		if osE == "" {
-			osE = "Empty ENV"
-		}
-		errMsg := osE
+		errMsg := "The request body is empty!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
@@ -56,7 +50,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	ur := repository.NewUserRepository()
 	domainUser, err := ur.GetUserByField(usernameField, *params.LoginForm.UserName)
 	if err != nil {
-		errMsg := "Internal server error!"
+		errMsg := err.Error()
 
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
