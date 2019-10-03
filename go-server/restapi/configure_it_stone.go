@@ -9,12 +9,14 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
+	"it-stone-server/domain"
 	"it-stone-server/models"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
 	"log"
 	"net/http"
+	"os"
 )
 
 //go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
@@ -87,6 +89,16 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
+	directory := "temp"
+	filename := "config.json"
+
+	firestoreConfig := domain.NewFirestoreConfig()
+	firestoreConfig.CreateConfigFile(directory, filename)
+
+	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filename)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
