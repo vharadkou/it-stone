@@ -2,14 +2,15 @@ package helpers
 
 import (
 	"github.com/brianvoe/sjwt"
+	"it-stone-server/domain"
+	"it-stone-server/models"
+	"os"
 )
 
-const secretKey string = "6LbNC5Cm91sdf"
-
 type JWTHelper interface {
-	GenerateToken(model interface{}) string
+	GenerateToken(model interface{}) *models.Token
 	Verify(token string) bool
-	GetUserID(token string) (*string,error)
+	GetDomainUserFromToken(token *models.Token) (*domain.User, error)
 }
 
 type jwtHelper struct{}
@@ -18,25 +19,26 @@ func NewJWTHelper() JWTHelper {
 	return &jwtHelper{}
 }
 
-func (h *jwtHelper) GenerateToken(model interface{}) string {
+func (h *jwtHelper) GenerateToken(model interface{}) *models.Token {
 	claims, _ := sjwt.ToClaims(model)
-	return claims.Generate([]byte(secretKey))
+	strToken := claims.Generate([]byte(os.Getenv("jwt_secret_key")))
+	return &models.Token{Token: strToken}
 }
 
 func (h *jwtHelper) Verify(token string) bool {
-	return sjwt.Verify(token, []byte(secretKey))
+	return sjwt.Verify(token, []byte(os.Getenv("jwt_secret_key")))
 }
 
-func (h *jwtHelper) GetUserID(token string) (*string,error) {
-	//Parse the token
-	claims, err := sjwt.Parse(token)
+func (h *jwtHelper) GetDomainUserFromToken(token *models.Token) (*domain.User, error) {
+	claims, err := sjwt.Parse(token.Token)
 	if err != nil {
 		return nil, err
 	}
 
-	idValue, err := claims.GetStr("id") 
+	domainUser := new(domain.User)
+	err = claims.ToStruct(domainUser)
 	if err != nil {
 		return nil, err
 	}
-	return &idValue, err
+	return domainUser, nil
 }

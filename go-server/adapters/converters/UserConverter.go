@@ -8,7 +8,7 @@ import (
 type UserConverter interface {
 	FromDomain(model *domain.User) *models.User
 	ToDomain(model *models.User) *domain.User
-	ToOut(model *domain.User) *domain.OutUser
+	ToUserForToken(model *domain.User) *domain.UserForToken
 }
 
 type userConverter struct{}
@@ -21,8 +21,7 @@ func (uc *userConverter) ToDomain(model *models.User) *domain.User {
 	return &domain.User{
 		ID:         model.ID,
 		Email:      model.Email,
-		Password:   model.Password,
-		Username:   model.Username,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}
@@ -32,18 +31,17 @@ func (uc *userConverter) FromDomain(model *domain.User) *models.User {
 	return &models.User{
 		ID:         model.ID,
 		Email:      model.Email,
-		Password:   model.Password,
-		Username:   model.Username,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}
 }
 
-func (uc *userConverter) ToOut(model *domain.User) *domain.OutUser {
-	return &domain.OutUser{
+func (uc *userConverter) ToUserForToken(model *domain.User) *domain.UserForToken {
+	return &domain.UserForToken{
 		ID:         model.ID,
 		Email:      model.Email,
-		Username:   model.Username,
+		UserName:   model.UserName,
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}

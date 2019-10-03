@@ -6,10 +6,7 @@ import (
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
 	"log"
-	"os"
 	"time"
-
-	"google.golang.org/api/option"
 )
 
 type CardRepository interface {
@@ -150,8 +147,6 @@ func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domai
 }
 
 func (cw *cardRepository) getDbClient() (DbWorker, error) {
-	dir, _ := os.Getwd()
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	co := option.WithCredentialsFile(dir + ConfigDbPath)
-	return NewDbClient(ctx, cancelFunc, co)
+	return NewDbClient(ctx, cancelFunc)
 }

@@ -1,12 +1,20 @@
 package domain
 
-import "github.com/go-openapi/strfmt"
-
 type User struct {
-	ID         string          `json:"id,omitempty"`
-	Email      strfmt.Email    `json:"email,omitempty"`
-	Username   string          `json:"username"`
-	Password   strfmt.Password `json:"password,omitempty"`
-	TotalGames int64           `json:"total_games"`
-	WinGames   int64           `json:"win_games"`
+	ID         string
+	Email      string
+	UserName   string
+	Password   string
+	TotalGames int64
+	WinGames   int64
+}
+
+func NewDomainUser(email, username, password string) *User {
+	return &User{
+		Email:      email,
+		UserName:   username,
+		Password:   password,
+		TotalGames: 0,
+		WinGames:   0,
+	}
 }

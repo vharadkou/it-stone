@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	cloud.google.com/go v0.45.1
-	firebase.google.com/go v3.9.0+incompatible
 	github.com/brianvoe/sjwt v0.5.1
 	github.com/go-openapi/errors v0.19.2
 	github.com/go-openapi/loads v0.19.3

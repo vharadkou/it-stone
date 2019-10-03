@@ -1,5 +1,7 @@
-#restapi/*
-#!restapi/configure_it_stone.go
-#models/*
-#cmd/*
-vendor/*
+/cmd/
+/models/
+/restapi/
+!/restapi/configure_it_stone.go
+/.env
+/config.json
+/temp/

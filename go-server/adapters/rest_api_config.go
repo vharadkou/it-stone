@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"github.com/go-openapi/runtime/middleware"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/models"
 	"it-stone-server/restapi/operations"
@@ -8,8 +9,6 @@ import (
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
 	"it-stone-server/restapi/operations/user"
-
-	"github.com/go-openapi/runtime/middleware"
 )
 
 type RestAPIHandlers struct {
@@ -30,7 +29,7 @@ func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.C
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
 	//Authentification
-	api.APIKeyHeaderAuth = func(token string) (*models.Principal, error) {
+	api.APIKeyHeaderAuth = func(token string) (*models.Token, error) {
 		return restApi.authHandler.APIKeyHeaderAuth(token)
 	}
 	api.RegistrationRegistrationHandler = registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
@@ -41,34 +40,34 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 	})
 
 	//Cards
-	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
+	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.GetCard(params)
 	})
-	api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
+	api.CardGetCardsHandler = card.GetCardsHandlerFunc(func(params card.GetCardsParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.GetCards(params)
 	})
-	api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
+	api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.InsertCards(params)
 	})
-	api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
+	api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.DeleteCard(params)
 	})
-	api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+	api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.UpdateCard(params)
 	})
 
 	//Users
-	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.GetUser(params)
 	})
-	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.UpdateUser(params)
 	})
-	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.DeleteUser(params)
 	})
-	api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Principal) middleware.Responder {
-		return restApi.usersHandler.GetUserByToken(principal)
+	api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, token *models.Token) middleware.Responder {
+		return restApi.usersHandler.GetUserByToken(token)
 	})
 
 }

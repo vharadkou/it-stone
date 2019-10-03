@@ -15,23 +15,26 @@ type UsersHandler interface {
 	GetUser(params user.GetUserParams) middleware.Responder
 	UpdateUser(params user.UpdateUserParams) middleware.Responder
 	DeleteUser(params user.DeleteUserParams) middleware.Responder
-	GetUserByToken(principal *models.Principal) middleware.Responder
+	GetUserByToken(token *models.Token) middleware.Responder
 }
 
 type usersHandler struct {
-	uc converters.UserConverter
+	uc        converters.UserConverter
+	jwtHelper helpers.JWTHelper
 }
 
 func NewUsersHandler() UsersHandler {
 	return &usersHandler{
-		uc: converters.NewUserConverter(),
+		uc:        converters.NewUserConverter(),
+		jwtHelper: helpers.NewJWTHelper(),
 	}
 }
 
-func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
+var idField = "id"
 
+func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.GetUserByField("id", params.ID)
+	domainUser, err := userRepository.GetUserByField(idField, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -44,12 +47,9 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	return user.NewGetUserOK().WithPayload(h.uc.FromDomain(domainUser))
 }
 
-func (h *usersHandler) GetUserByToken(principal *models.Principal) middleware.Responder {
-	jwt := helpers.NewJWTHelper()
-	userID, err := jwt.GetUserID(string(*principal))
+func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder {
 
-	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.GetUserByField("id", *userID)
+	domainUser, err := h.jwtHelper.GetDomainUserFromToken(token)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
