@@ -6,12 +6,11 @@ import (
 	"it-stone-server/adapters/converters"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
-	"it-stone-server/helpers/search"
-	"it-stone-server/helpers/validators"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
+	"it-stone-server/validation"
 	"net/http"
 )
 
@@ -23,14 +22,14 @@ type AuthHandler interface {
 
 type authHandler struct {
 	userRepository repository.UserRepository
-	userSearcher   search.UserSearcher
-	userValidation validators.UserValidation
+	userSearcher   helpers.UserSearchHelper
+	userValidation validation.UserValidation
 	userConverter  converters.UserConverter
 	passHelper     helpers.PasswordHelper
 	jwtHelper      helpers.JWTHelper
 }
 
-func NewAuthHandler(userRepository repository.UserRepository, userSearcher search.UserSearcher, userValidation validators.UserValidation) AuthHandler {
+func NewAuthHandler(userRepository repository.UserRepository, userSearcher helpers.UserSearchHelper, userValidation validation.UserValidation) AuthHandler {
 	return &authHandler{
 		userRepository: userRepository,
 		userSearcher:   userSearcher,

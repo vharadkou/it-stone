@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"it-stone-server/domain"
+	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"log"
 	"time"
 )
 
 type CardRepository interface {
-	getDbClient() (DbWorker, error)
+	getDbClient() (firestore.FirestoreClient, error)
 	GetCardByField(field, value string) (*domain.Card, error)
 	GetCards() ([]*domain.Card, error)
 	InsertCard(card *domain.Card) (*string, error)
@@ -146,7 +147,7 @@ func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domai
 	return &card, nil
 }
 
-func (cw *cardRepository) getDbClient() (DbWorker, error) {
+func (cw *cardRepository) getDbClient() (firestore.FirestoreClient, error) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	return NewDbClient(ctx, cancelFunc)
+	return firestore.NewDbClient(ctx, cancelFunc)
 }

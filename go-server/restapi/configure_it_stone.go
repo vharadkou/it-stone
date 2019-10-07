@@ -10,20 +10,18 @@ import (
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/domain"
-	"it-stone-server/helpers/search"
-	"it-stone-server/helpers/validators"
+	"it-stone-server/helpers"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
+	"it-stone-server/validation"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 )
-
-//go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
 
 func configureFlags(api *operations.ItStoneAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -46,9 +44,9 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	userRepository := repository.NewUserRepository()
 	cardRepository := repository.NewCardRepository()
 
-	userSearcher := search.NewUserSearcher()
+	userSearcher := helpers.NewUserSearchHelper()
 
-	userValidation := validators.NewUserValidation(userRepository, userSearcher)
+	userValidation := validation.NewUserValidation(userRepository, userSearcher)
 
 	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
 	cardHandler := handlers.NewCardsHandler(cardRepository)

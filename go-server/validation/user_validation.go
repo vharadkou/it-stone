@@ -1,8 +1,8 @@
-package validators
+package validation
 
 import (
 	"errors"
-	"it-stone-server/helpers/search"
+	"it-stone-server/helpers"
 	"it-stone-server/repository"
 )
 
@@ -13,10 +13,10 @@ type UserValidation interface {
 
 type userValidation struct {
 	userRepository repository.UserRepository
-	userSearcher   search.UserSearcher
+	userSearcher   helpers.UserSearchHelper
 }
 
-func NewUserValidation(userRepository repository.UserRepository, userSearcher search.UserSearcher) UserValidation {
+func NewUserValidation(userRepository repository.UserRepository, userSearcher helpers.UserSearchHelper) UserValidation {
 	return &userValidation{
 		userRepository: userRepository,
 		userSearcher:   userSearcher,

@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"it-stone-server/domain"
+	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"log"
 	"time"
 )
 
 type UserRepository interface {
-	getDbClient() (DbWorker, error)
+	getDbClient() (firestore.FirestoreClient, error)
 	GetUserByField(field, value string) (*domain.User, error)
 	GetUsers() ([]*domain.User, error)
 	InsertUser(user *domain.User) error
@@ -141,7 +142,7 @@ func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domai
 	return user, nil
 }
 
-func (cw *userRepository) getDbClient() (DbWorker, error) {
+func (cw *userRepository) getDbClient() (firestore.FirestoreClient, error) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	return NewDbClient(ctx, cancelFunc)
+	return firestore.NewDbClient(ctx, cancelFunc)
 }
