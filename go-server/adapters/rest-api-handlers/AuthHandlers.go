@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	validateError "errors"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime/middleware"
 	"it-stone-server/adapters/converters"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
+	"it-stone-server/helpers/search"
+	"it-stone-server/helpers/validators"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations/login"
@@ -21,24 +22,27 @@ type AuthHandler interface {
 }
 
 type authHandler struct {
-	userConverter converters.UserConverter
-	passHelper    helpers.PasswordHelper
-	jwtHelper     helpers.JWTHelper
+	userRepository repository.UserRepository
+	userSearcher   search.UserSearcher
+	userValidation validators.UserValidation
+	userConverter  converters.UserConverter
+	passHelper     helpers.PasswordHelper
+	jwtHelper      helpers.JWTHelper
 }
 
-func NewAuthHandler() AuthHandler {
+func NewAuthHandler(userRepository repository.UserRepository, userSearcher search.UserSearcher, userValidation validators.UserValidation) AuthHandler {
 	return &authHandler{
+		userRepository: userRepository,
+		userSearcher:   userSearcher,
+		userValidation: userValidation,
+
 		userConverter: converters.NewUserConverter(),
 		passHelper:    helpers.NewPasswordHelper(),
 		jwtHelper:     helpers.NewJWTHelper(),
 	}
 }
 
-var usernameField = "UserName"
-var emailField = "Email"
-
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
-
 	if params.LoginForm == nil {
 		errMsg := "The request body is empty!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
@@ -47,8 +51,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 		})
 	}
 
-	ur := repository.NewUserRepository()
-	domainUser, err := ur.GetUserByField(usernameField, *params.LoginForm.UserName)
+	domainUser, err := h.userRepository.GetUserByField(h.userSearcher.SearchByUsername(), *params.LoginForm.UserName)
 	if err != nil {
 		errMsg := "Internal server error!"
 
@@ -88,15 +91,13 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	ur := repository.NewUserRepository()
-
 	hashedPassword, err := h.passHelper.GenerateHashPassword(*params.RegistrationForm.Password)
 	domainUser := domain.NewDomainUser(
 		params.RegistrationForm.Email.String(),
 		*params.RegistrationForm.UserName,
 		hashedPassword)
 
-	if err := validateEmail(ur, domainUser.Email); err != nil {
+	if err := h.userValidation.ValidateEmail(domainUser.Email); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -104,7 +105,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	if err := validateUsername(ur, domainUser.UserName); err != nil {
+	if err := h.userValidation.ValidateUsername(domainUser.UserName); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -112,7 +113,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	err = ur.InsertUser(domainUser)
+	err = h.userRepository.InsertUser(domainUser)
 
 	if err != nil {
 		errMsg := "Some problems with data base!"
@@ -137,20 +138,4 @@ func (h *authHandler) APIKeyHeaderAuth(token string) (*models.Token, error) {
 		return &models.Token{Token: token}, nil
 	}
 	return nil, errors.New(http.StatusUnauthorized, "Incorrect api key auth!")
-}
-
-func validateEmail(rep repository.UserRepository, value string) error {
-	user, _ := rep.GetUserByField(emailField, value)
-	if user != nil {
-		return validateError.New("user with this email is already exists")
-	}
-	return nil
-}
-
-func validateUsername(rep repository.UserRepository, value string) error {
-	user, _ := rep.GetUserByField(usernameField, value)
-	if user != nil {
-		return validateError.New("user with this username is already exists")
-	}
-	return nil
 }
