@@ -45,9 +45,10 @@
   font-size: 16px;
 }
 
-.colOne p {
+.colOne  {
   box-sizing: border-box;
   width: 50%;
+  margin-left: 10px;
 }
 
 .colTwo {
@@ -121,4 +122,10 @@
   to {
     transform: scale(1) rotateX(2deg) rotateY(10deg);
   }
+}
+.hero-photo {
+  margin-left: 70%;
+}
+.photo-wrapper {
+  height: 240px;
 }

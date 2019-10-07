@@ -1,8 +1,8 @@
 import { LayoutModule } from "@angular/cdk/layout";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { HttpModule } from "@angular/http";
+import { HttpModule, } from "@angular/http";
 import { MatNativeDateModule } from "@angular/material";
 import {
   MatButtonModule,
@@ -76,6 +76,7 @@ import { PlayerInfoComponent } from "./components/player-info/player-info.compon
 import { AccountComponent } from "./components/account/account.component";
 import { RulesComponent } from "./pages/rules/rules.component";
 import { from } from "rxjs";
+import {TokenInterceptor} from './interceptors/http.interceptor'
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
@@ -196,7 +197,7 @@ const appRoutes: Routes = [
       provide: AuthServiceConfig,
       useFactory: getAuthServiceConfigs
     },
-
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     //  SocketService,
     CardsFacade,
     AboutPageFacade,

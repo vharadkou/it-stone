@@ -3,13 +3,34 @@ import { Observable } from "rxjs";
 import { HeroFacade } from "store/hero/hero.facade";
 import { Hero } from "models";
 import { AccountService } from "../../services/account.service";
-
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from "@angular/animations";
 @Component({
   selector: "app-account-page",
   templateUrl: "./account-page.component.html",
-  styleUrls: ["./account-page.component.css"]
+  styleUrls: ["./account-page.component.css"],
+  animations: [
+    trigger("smoothModalAnimationOn", [
+      state("false", style({transform: "scale(0)" })),
+      state(
+        "true",
+        style({
+          transform: "scale(1) rotateX(2deg) rotateY(10deg)"
+        })
+      ),
+
+      transition("false => true", animate("300ms"))
+    
+    ])
+  ]
 })
 export class AccountPageComponent implements OnInit {
+  public smoothModalAnimationOn = true
   @Input() public heroList: Array<any> = [];
   constructor(
     private HeroFacade: HeroFacade,
@@ -27,8 +48,8 @@ export class AccountPageComponent implements OnInit {
 
 
   handleChange() {
-    document.getElementById('modal-window').classList.remove("anim4");
-    setTimeout(() => {document.getElementById('modal-window').classList.add("anim4")},100);
+    this.smoothModalAnimationOn = false;
+    setTimeout(() => {this.smoothModalAnimationOn = true},100);
     this.onClick.emit(this.heroChoosing.id);
   }
 

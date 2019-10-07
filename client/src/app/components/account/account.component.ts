@@ -9,14 +9,34 @@ import { Hero } from "models";
 import { Router } from "@angular/router";
 import { UserFacade } from "store";
 import { User } from "../../../models";
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from "@angular/animations";
 @Component({
   selector: "app-account",
   templateUrl: "./account.component.html",
   styleUrls: ["./account.component.css"],
-  providers: [AccountService]
+  providers: [AccountService],
+  animations: [
+    trigger("pageOut", [
+      state("false", style({ transform: "scale(1)" })),
+      state(
+        "true",
+        style({
+          transform: "scale(0)"
+        })
+      ),
+
+      transition("false => true", animate("200ms"))
+    ])
+  ]
 })
 export class AccountComponent implements OnInit {
-
+  public pageOut = false
   public routeSub: Subscription;
   public heroList: Array<any> = [];
   public hero$: Observable<Hero[]> = this.HeroFacade.heroes$;
@@ -38,18 +58,12 @@ export class AccountComponent implements OnInit {
     this.loading = false;
     this.user$.subscribe((data: User) => {
       this.user = data;
-      console.log(this.user)
     });
-
-    //  this.routeSub = this.route.params.subscribe(params => {
-    //  console.log(params);
-    //   console.log(params["id"]);
-    // });
 
     this.HeroFacade.loadHero();
     this.hero$.subscribe(p => {
       this.heroList = p;
-      console.log(this.heroList);
+    
     });
   }
   selectedHero: number = 1;
@@ -65,17 +79,16 @@ export class AccountComponent implements OnInit {
   submit() {
     this.httpService.postData(this.choodenHero).subscribe(
       (data: number) => {
+        this.pageOut = true;
         this.receivedIdsMass = data;
         this.done = true;
         setTimeout(() => {
           this.loading = true;
-        }, 500);
+        }, 400);
         setTimeout(() => {
           this._router.navigate([`/battle`]);
-        }, 6000);
-        document.getElementById("menu-field").classList.add("scaleToZero");
-        document.getElementById("user-field").classList.add("scaleToZero");
-        document.getElementById("hero-field").classList.add("scaleToZero");
+        }, 7000);
+       
       },
       error => alert(error)
     );
@@ -85,9 +98,7 @@ export class AccountComponent implements OnInit {
     setTimeout(() => {
       this._authService.logOut();
     }, 500);
-    document.getElementById("menu-field").classList.add("scaleToZero");
-    document.getElementById("user-field").classList.add("scaleToZero");
-    document.getElementById("hero-field").classList.add("scaleToZero");
+    this.pageOut = true
   }
 
   ngOnDestroy() {

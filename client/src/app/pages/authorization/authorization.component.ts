@@ -15,6 +15,13 @@ export class AuthorizationComponent implements OnInit {
   public userError: string;
   public user: User;
   private signInMode = true;
+  constructor(
+    private _authService: AuthorizationService,
+    private userFacade: UserFacade,
+    private _router: Router,
+    private _tokenService: TokenService
+  ) {}
+  
   onSignIn(data) {
     this._authService.signIn(data);
   }
@@ -23,20 +30,16 @@ export class AuthorizationComponent implements OnInit {
     this._authService.signUp(data);
   }
 
-  constructor(
-    private _authService: AuthorizationService,
-    private userFacade: UserFacade,
-    private _router: Router,
-    private _tokenService: TokenService
-  ) {}
+
 
   ngOnInit() {
     this._authService.authCheck();
 
     this.userError$.subscribe((data: string) => {
       this.userError = data;
-      if(this.userError) { alert(this.userError);}
-     
+      if (this.userError) {
+        alert(this.userError);
+      }
     });
     this.user$.subscribe(data => {
       this.user = data;

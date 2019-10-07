@@ -1,5 +1,5 @@
 import { baseUrl } from "constants/baseUrl";
-
+import {UserHttpData} from './interfaces'
 import { HttpClient, HttpHeaders  } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
@@ -25,7 +25,7 @@ export class UserEffects {
     ofType<userActions.UserSignUp>(userActions.UserActionTypes.UserSignUp),
     switchMap((action: userActions.UserSignUp) => {
       return this.http.post("/api/v0/registration", action.payload).pipe(
-        map((data: any) => {
+        map((data: {token:string}) => {
           this._tokenService.setToken(data.token);
           return new userActions.UserSignUpSuccess();
         }),
@@ -38,7 +38,7 @@ export class UserEffects {
     ofType<userActions.UserSignIn>(userActions.UserActionTypes.UserSignIn),
     switchMap((action: userActions.UserSignIn) => {
       return this.http.post("/api/v0/login", action.payload).pipe(
-        map((data: any, i) => {
+        map((data: {token:string}, i) => {
           this._tokenService.setToken(data.token);
           return new userActions.UserSignInSuccess();
         }),
@@ -52,13 +52,8 @@ export class UserEffects {
       userActions.UserActionTypes.UserSignUpSuccess
     ),
     switchMap((action: userActions.UserSignUpSuccess) => {
-      let headers: HttpHeaders = new HttpHeaders();
-      headers = headers.append(
-        "JWT-Token",
-        this._tokenService.getToken()
-      );
-      return this.http.get("/api/v0/user", {headers: headers}).pipe(
-        map((data: any) => {
+      return this.http.get("/api/v0/user").pipe(
+        map((data: UserHttpData) => {
           return new userActions.UserSetData({
             id: data.id,
             userName: data.userName,
@@ -77,13 +72,8 @@ export class UserEffects {
       userActions.UserActionTypes.UserSignInSuccess
     ),
     switchMap((action: userActions.UserSignInSuccess) => {
-      let headers: HttpHeaders = new HttpHeaders();
-      headers = headers.append(
-        "JWT-Token",
-        this._tokenService.getToken()
-      );
-      return this.http.get("/api/v0/user", {headers: headers}).pipe(
-        map((data: any, i) => {
+      return this.http.get("/api/v0/user").pipe(
+        map((data: UserHttpData) => {
           return new userActions.UserSetData({
             id: data.id,
             userName: data.userName,

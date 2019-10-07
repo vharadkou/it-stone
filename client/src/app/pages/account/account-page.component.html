@@ -14,7 +14,8 @@
   </div>
 
   <div class="modal-wrapper">
-    <div class="modal anim4" id="modal-window">
+    <div class="modal" [@smoothModalAnimationOn]='smoothModalAnimationOn' id="modal-window">
+        <p>{{ heroChoosing.name }}</p>
       <div class="colOne">
         <p>Skills:</p>
         <p>{{ heroChoosing.skills }}</p>
@@ -25,4 +26,9 @@
       </div>
     </div>
   </div>
+  <div class='photo-wrapper'>
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 1'  src="../../../assets/PM.png" width="196" height="auto">
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 2'  src="../../../assets/TL.png" width="196" height="auto">
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 3'  src="../../../assets/ST.png" width="280" height="auto">
+</div>
 </div>

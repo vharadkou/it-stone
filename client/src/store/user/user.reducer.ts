@@ -49,14 +49,8 @@ export const userReducer = (
     case UserActionTypes.UserLogOut:
       return {
         ...state,
-        status: Status.Init,
-        user:  {
-          id: null,
-        userName: null,
-        email: null,
-        winGames: 0,
-        totalGames: 0  
-        }
+        status: initialUserState.status,
+        user: initialUserState.user
       };
 
       case UserActionTypes.UserSetData:
