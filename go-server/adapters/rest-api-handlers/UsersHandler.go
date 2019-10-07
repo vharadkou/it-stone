@@ -19,22 +19,23 @@ type UsersHandler interface {
 }
 
 type usersHandler struct {
-	uc        converters.UserConverter
-	jwtHelper helpers.JWTHelper
+	userRepository repository.UserRepository
+	userConverter  converters.UserConverter
+	jwtHelper      helpers.JWTHelper
 }
 
-func NewUsersHandler() UsersHandler {
+func NewUsersHandler(userRepository repository.UserRepository) UsersHandler {
 	return &usersHandler{
-		uc:        converters.NewUserConverter(),
-		jwtHelper: helpers.NewJWTHelper(),
+		userRepository: userRepository,
+		userConverter:  converters.NewUserConverter(),
+		jwtHelper:      helpers.NewJWTHelper(),
 	}
 }
 
 var idField = "id"
 
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
-	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.GetUserByField(idField, params.ID)
+	domainUser, err := h.userRepository.GetUserByField(idField, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -44,11 +45,10 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 		})
 	}
 
-	return user.NewGetUserOK().WithPayload(h.uc.FromDomain(domainUser))
+	return user.NewGetUserOK().WithPayload(h.userConverter.FromDomain(domainUser))
 }
 
 func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder {
-
 	domainUser, err := h.jwtHelper.GetDomainUserFromToken(token)
 
 	if err != nil {
@@ -58,12 +58,10 @@ func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder 
 			Message: &errMsg,
 		})
 	}
-	return user.NewGetUserByTokenOK().WithPayload(h.uc.FromDomain(domainUser))
+	return user.NewGetUserByTokenOK().WithPayload(h.userConverter.FromDomain(domainUser))
 }
 func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Responder {
-
-	userRepository := repository.NewUserRepository()
-	domainUser, err := userRepository.UpdateUser(params.ID, h.uc.ToDomain(params.User))
+	domainUser, err := h.userRepository.UpdateUser(params.ID, h.userConverter.ToDomain(params.User))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -73,11 +71,10 @@ func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Respo
 		})
 	}
 
-	return user.NewUpdateUserOK().WithPayload(h.uc.FromDomain(domainUser))
+	return user.NewUpdateUserOK().WithPayload(h.userConverter.FromDomain(domainUser))
 }
 func (h *usersHandler) DeleteUser(params user.DeleteUserParams) middleware.Responder {
-	userRepository := repository.NewUserRepository()
-	err := userRepository.DeleteUser(params.ID)
+	err := h.userRepository.DeleteUser(params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

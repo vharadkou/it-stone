@@ -47,7 +47,7 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 		return restApi.cardsHandler.GetCards(params)
 	})
 	api.CardCreateCardHandler = card.CreateCardHandlerFunc(func(params card.CreateCardParams, token *models.Token) middleware.Responder {
-		return restApi.cardsHandler.InsertCards(params)
+		return restApi.cardsHandler.InsertCard(params)
 	})
 	api.CardDeleteCardHandler = card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.DeleteCard(params)

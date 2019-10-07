@@ -10,7 +10,10 @@ import (
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/domain"
+	"it-stone-server/helpers/search"
+	"it-stone-server/helpers/validators"
 	"it-stone-server/models"
+	"it-stone-server/repository"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/user"
@@ -41,9 +44,17 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	authHandler := handlers.NewAuthHandler()
-	cardHandler := handlers.NewCardsHandler()
-	userHandler := handlers.NewUsersHandler()
+	userRepository := repository.NewUserRepository()
+	cardRepository := repository.NewCardRepository()
+
+	userSearcher := search.NewUserSearcher()
+
+	userValidation := validators.NewUserValidation(userRepository, userSearcher)
+
+	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
+	cardHandler := handlers.NewCardsHandler(cardRepository)
+	userHandler := handlers.NewUsersHandler(userRepository)
+
 	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler)
 	restApiHandler.ConfigureRestAPI(api)
 

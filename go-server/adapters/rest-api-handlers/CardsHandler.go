@@ -13,25 +13,26 @@ import (
 type CardsHandler interface {
 	GetCard(params card.GetCardParams) middleware.Responder
 	GetCards(params card.GetCardsParams) middleware.Responder
-	InsertCards(params card.CreateCardParams) middleware.Responder
+	InsertCard(params card.CreateCardParams) middleware.Responder
 	DeleteCard(params card.DeleteCardParams) middleware.Responder
 	UpdateCard(params card.UpdateCardParams) middleware.Responder
 }
 
 type cardsHandler struct {
-	converter converters.CardConverter
+	cardRepository repository.CardRepository
+	cardConverter  converters.CardConverter
 }
 
 // NewCardsHandler func
-func NewCardsHandler() CardsHandler {
+func NewCardsHandler(cardRepository repository.CardRepository) CardsHandler {
 	return &cardsHandler{
-		converters.NewCardConverter(),
+		cardRepository: cardRepository,
+		cardConverter:  converters.NewCardConverter(),
 	}
 }
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
-	cardRepository := repository.NewCardRepository()
-	domainCard, err := cardRepository.GetCardByField("id", params.ID)
+	domainCard, err := h.cardRepository.GetCardByField("id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -41,12 +42,11 @@ func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 		})
 	}
 
-	return card.NewGetCardOK().WithPayload(h.converter.FromDomain(domainCard))
+	return card.NewGetCardOK().WithPayload(h.cardConverter.FromDomain(domainCard))
 }
 
 func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder {
-	cardRepository := repository.NewCardRepository()
-	domainCards, err := cardRepository.GetCards()
+	domainCards, err := h.cardRepository.GetCards()
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -58,17 +58,15 @@ func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder
 
 	var modelCards []*models.Card
 	for _, model := range domainCards {
-		modelCard := h.converter.FromDomain(model)
+		modelCard := h.cardConverter.FromDomain(model)
 		modelCards = append(modelCards, modelCard)
 	}
 
 	return card.NewGetCardsOK().WithPayload(modelCards)
 }
 
-func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Responder {
-	cardRepository := repository.NewCardRepository()
-
-	id, err := cardRepository.InsertCard(h.converter.ToDomain(params.Card))
+func (h *cardsHandler) InsertCard(params card.CreateCardParams) middleware.Responder {
+	id, err := h.cardRepository.InsertCard(h.cardConverter.ToDomain(params.Card))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -82,8 +80,7 @@ func (h *cardsHandler) InsertCards(params card.CreateCardParams) middleware.Resp
 }
 
 func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Responder {
-	cardRepository := repository.NewCardRepository()
-	err := cardRepository.DeleteCard(params.ID)
+	err := h.cardRepository.DeleteCard(params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -97,8 +94,8 @@ func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Respo
 }
 
 func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Responder {
-	cardRepository := repository.NewCardRepository()
-	domainCard, err := cardRepository.UpdateCard(params.ID, h.converter.ToDomain(params.Card))
+
+	domainCard, err := h.cardRepository.UpdateCard(params.ID, h.cardConverter.ToDomain(params.Card))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -107,6 +104,6 @@ func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Respo
 			Message: &errMsg,
 		})
 	}
-	modelCard := h.converter.FromDomain(domainCard)
+	modelCard := h.cardConverter.FromDomain(domainCard)
 	return card.NewUpdateCardOK().WithPayload(modelCard)
 }
