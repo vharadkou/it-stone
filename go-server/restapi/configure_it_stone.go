@@ -41,7 +41,6 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	log.Printf("Service started")
 
 	api.JSONConsumer = runtime.JSONConsumer()
-
 	api.JSONProducer = runtime.JSONProducer()
 
 	userRepository := repository.NewUserRepository()
