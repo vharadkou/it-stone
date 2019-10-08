@@ -1,14 +1,15 @@
 package validation
 
 import (
+	"context"
 	"errors"
 	"it-stone-server/helpers"
 	"it-stone-server/repository"
 )
 
 type UserValidation interface {
-	ValidateEmail(value string) error
-	ValidateUsername(value string) error
+	ValidateEmail(ctx context.Context, value string) error
+	ValidateUsername(ctx context.Context, value string) error
 }
 
 type userValidation struct {
@@ -23,16 +24,16 @@ func NewUserValidation(userRepository repository.UserRepository, userSearcher he
 	}
 }
 
-func (uv *userValidation) ValidateEmail(value string) error {
-	user, _ := uv.userRepository.GetUserByField(uv.userSearcher.SearchByEmail(), value)
+func (uv *userValidation) ValidateEmail(ctx context.Context, value string) error {
+	user, _ := uv.userRepository.GetUserByField(ctx, uv.userSearcher.SearchByEmail(), value)
 	if user.Email != "" {
 		return errors.New("User with this email is already exists!")
 	}
 	return nil
 }
 
-func (uv *userValidation) ValidateUsername(value string) error {
-	user, _ := uv.userRepository.GetUserByField(uv.userSearcher.SearchByUsername(), value)
+func (uv *userValidation) ValidateUsername(ctx context.Context, value string) error {
+	user, _ := uv.userRepository.GetUserByField(ctx, uv.userSearcher.SearchByUsername(), value)
 	if user.UserName != "" {
 		return errors.New("User with this username is already exists!")
 	}

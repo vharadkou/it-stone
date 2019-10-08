@@ -50,7 +50,8 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 		})
 	}
 
-	domainUser, err := h.userRepository.GetUserByField(h.userSearcher.SearchByUsername(), *params.LoginForm.UserName)
+	ctx := params.HTTPRequest.Context()
+	domainUser, err := h.userRepository.GetUserByField(ctx, h.userSearcher.SearchByUsername(), *params.LoginForm.UserName)
 	if err != nil {
 		errMsg := "Internal server error!"
 
@@ -97,7 +98,9 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		*params.RegistrationForm.UserName,
 		hashedPassword)
 
-	if err := h.userValidation.ValidateEmail(domainUser.Email); err != nil {
+	ctx := params.HTTPRequest.Context()
+
+	if err := h.userValidation.ValidateEmail(ctx, domainUser.Email); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -105,7 +108,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	if err := h.userValidation.ValidateUsername(domainUser.UserName); err != nil {
+	if err := h.userValidation.ValidateUsername(ctx, domainUser.UserName); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -113,7 +116,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	err = h.userRepository.InsertUser(domainUser)
+	err = h.userRepository.InsertUser(ctx, domainUser)
 
 	if err != nil {
 		errMsg := "Some problems with data base!"

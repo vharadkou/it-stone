@@ -10,6 +10,7 @@ import (
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/domain"
+	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"it-stone-server/models"
 	"it-stone-server/repository"
@@ -41,8 +42,8 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
-	userRepository := repository.NewUserRepository()
-	cardRepository := repository.NewCardRepository()
+	userRepository := repository.NewUserRepository(firestore.NewFirestoreClient)
+	cardRepository := repository.NewCardRepository(firestore.NewFirestoreClient)
 
 	userSearcher := helpers.NewUserSearchHelper()
 

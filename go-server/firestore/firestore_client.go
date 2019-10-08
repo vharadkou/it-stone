@@ -4,8 +4,9 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"google.golang.org/api/iterator"
-	"os"
 )
+
+type FirestoreClientFunc func(ctx context.Context, projectId string) (FirestoreClient, error)
 
 // DbWorker Interface
 type FirestoreClient interface {
@@ -25,15 +26,14 @@ type firestoreClient struct {
 }
 
 // NewDbClient - Creating a new db client
-func NewDbClient(ctx context.Context, cancelFunc context.CancelFunc) (FirestoreClient, error) {
-	client, err := firestore.NewClient(ctx, os.Getenv("project_id"))
+func NewFirestoreClient(ctx context.Context, projectId string) (FirestoreClient, error) {
+	client, err := firestore.NewClient(ctx, projectId)
 	if err != nil {
 		return nil, err
 	}
 	return &firestoreClient{
-		ctx:        ctx,
-		cancelFunc: cancelFunc,
-		Client:     client,
+		ctx:    ctx,
+		Client: client,
 	}, nil
 }
 
@@ -42,10 +42,6 @@ func (db *firestoreClient) Close() error {
 }
 
 func (db *firestoreClient) InsertOne(collection, id string, data map[string]interface{}) error {
-	defer func() {
-		db.cancelFunc()
-	}()
-
 	_, err := db.Client.Collection(collection).Doc(id).Set(db.ctx, data)
 	if err != nil {
 		return err
@@ -55,10 +51,6 @@ func (db *firestoreClient) InsertOne(collection, id string, data map[string]inte
 }
 
 func (db *firestoreClient) FindAll(collection string) ([]map[string]interface{}, error) {
-	defer func() {
-		db.cancelFunc()
-	}()
-
 	var records []map[string]interface{}
 	iter := db.Client.Collection(collection).Documents(db.ctx)
 	for {
@@ -83,10 +75,6 @@ func (db *firestoreClient) FindAll(collection string) ([]map[string]interface{},
 }
 
 func (db *firestoreClient) FindOneByField(collection, field, value string) (map[string]interface{}, error) {
-	defer func() {
-		db.cancelFunc()
-	}()
-
 	var record map[string]interface{}
 	iter := db.Client.Collection(collection).Where(field, "==", value).Documents(db.ctx)
 	for {
@@ -109,19 +97,11 @@ func (db *firestoreClient) FindOneByField(collection, field, value string) (map[
 }
 
 func (db *firestoreClient) DeleteOneByID(collection, id string) error {
-	defer func() {
-		db.cancelFunc()
-	}()
-
 	_, err := db.Client.Collection(collection).Doc(id).Delete(db.ctx)
 	return err
 }
 
 func (db *firestoreClient) UpdateOneByID(collection, id string, data map[string]interface{}) (map[string]interface{}, error) {
-	defer func() {
-		db.cancelFunc()
-	}()
-
 	_, err := db.Client.Collection(collection).Doc(id).Set(db.ctx, data, firestore.MergeAll)
 	if err != nil {
 		return nil, err
