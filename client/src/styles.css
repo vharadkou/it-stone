@@ -1,5 +1,5 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
 /* You can add global styles to this file, and also import other style files */
 * {
     font-family: Roboto, Arial, sans-serif;

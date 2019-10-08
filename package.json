@@ -8,5 +8,15 @@
     "start": "node start.js",
     "install": "node install.js",
     "prod": "node prod.js"
+  },
+  "dependencies": {
+    "@types/mongoose": "^5.5.12",
+    "angular-socket-io": "^0.7.0",
+    "mongoose": "^5.6.9",
+    "webpack": "^4.39.2"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
   }
 }

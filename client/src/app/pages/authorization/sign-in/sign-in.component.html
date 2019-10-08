@@ -1,22 +1,58 @@
-<form class="sign-in">
-  <h3 class="sign-in__title">Login</h3>
-  <input 
-      class="sign-in__email"
-      type="text"
-      placeholder="email"
-      [(ngModel)] = "_email"
-      name="email"
-      required 
-      email
-      #email="ngModel"
-  />
-  <input 
-      class="sign-in__password"
-      type="password" 
-      placeholder="password"
-      [(ngModel)]="_password"
-      name="password"
-      required 
-  />
-  <button type="submit" (click)='handleClick()' [disabled]='email.invalid'>Login</button>
-</form>
+<div id="menu" [@signInMode]='signInMode' class="login__sign-field">
+  <h1>Join the IT and win the battle!</h1>
+  <form class="form-content">
+    <h1 mat-dialog-title>Sign in</h1>
+    <mat-form-field>
+      <input
+        matInput
+        class="sign-in__email"
+        type="text"
+        placeholder="User name"
+        [(ngModel)]="_userName"
+        name="userName"
+        required
+        #userName="ngModel"
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        class="sign-in__password"
+        type="password"
+        placeholder="password"
+        [(ngModel)]="_password"
+        name="password"
+        required
+      />
+    </mat-form-field>
+
+    <div mat-dialog-actions align="end">
+      <button
+        type="submit"
+        (click)="handleClick()"
+        [disabled]="userName.invalid"
+        class="login__sign-field-sign_button"
+        mat-raised-button
+      >
+        Sign in
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions align="center" class="dialog__footer">
+      <span>Have no an account?Create!</span>
+      <button
+        mat-button
+        (click)="changeSignMode('signUp')"
+        mat-stroked-button
+        class="dialog__footer-button"
+      >
+        Sign up
+      </button>
+    </div>
+  
+  </form>
+
+
+</div>
