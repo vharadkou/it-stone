@@ -11,6 +11,6 @@ export interface CardsState {
   myActiveCards: Card[];
   enemyActiveCards: Card[];
   enemyCardCount: number;
-  selectedCardId: number;
+  selectedCardId: string;
   templCard: Card;
 }

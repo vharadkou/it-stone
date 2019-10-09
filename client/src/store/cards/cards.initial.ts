@@ -13,11 +13,10 @@ export const initialState: CardsState = {
   enemyActiveCards: [],
   enemyCardCount: 0,
   myActiveCards: [],
-  selectedCardId: 1,
+  selectedCardId: '1',
   templCard: {
-    _id: '0000',
     class: 'Tester',
-    id: 10,
+    id: '10',
     name: 'Name',
     surname: 'Surname',
     image: 'http://simpleicon.com/wp-content/uploads/user1.png',

@@ -97,7 +97,7 @@ const getSelectedCardId = createSelector(
   GetSelectedCard
 );
 
-const getSelectedCard = createSelector(
+/*const getSelectedCard = createSelector(
   getSelectedCardId,
   getMyCards,
   getTemplCard,
@@ -126,7 +126,7 @@ const getSelectedCard = createSelector(
 
     return result;
   }
-);
+);*/
 
 export const cardsQuery = {
   getCards,
@@ -143,6 +143,6 @@ export const cardsQuery = {
   getMyCards,
   getMyCardsInHand,
   getMyCardsId,
-  getSelectedCard,
+//  getSelectedCard,
   getSelectedCardId
 };

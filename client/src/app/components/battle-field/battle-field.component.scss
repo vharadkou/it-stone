@@ -1,10 +1,30 @@
 @import '../../settings';
 
 .its-battlefield {
+ 
   display: flex;
+border: 10px solid rgb(111, 0, 0);
   flex-flow: row nowrap;
-
-
+box-sizing: border-box;
+height: 100vh;
+width: 100vw;
+overflow:hidden;
+&__timer {
+  
+  background-color: rgb(111, 0, 0);
+  font-size: $big-size;
+  text-align: center;
+  color: $yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $righteous-font;
+  height: 50px;
+  width: 10%;
+  position: absolute;
+  top: 5px;
+  left: 45%;
+}
   &__container {
     box-sizing: border-box;
     width: 90%;
@@ -30,8 +50,8 @@
 
   &__players-hand {
     box-sizing: border-box;
-    overflow: scroll;
-    overflow-y: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
     width: 100%;
     height: 100%;
     margin: 0 auto;

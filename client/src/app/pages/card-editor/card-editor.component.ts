@@ -15,7 +15,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
   @ViewChild('cardDetail', { static: true }) public cardDetail: Component;
 
   public allCardsMy$ = this.cardsFacade.myCards$;
-  public selectedCard$ = this.cardsFacade.selectedCard$;
+  //public selectedCard$ = this.cardsFacade.selectedCard$;
   public selectedCardId$ = this.cardsFacade.selectedCardId$;
   public checkedSkills$ = this.skillsFacade.checkedSkills$;
   public skillsList$ = this.skillsFacade.allSkills$;
@@ -38,7 +38,7 @@ export class CardEditorComponent implements OnInit, OnDestroy {
     this.cardsFacade.loadCards();
   }
 
-  public checkNewCardDataLoss(id: number, form: NgForm, card?: Card): void {
+  public checkNewCardDataLoss(id: string, form: NgForm, card?: Card): void {
     this.cardsFacade.checkNewCardDataLoss(this.popupTextContent, id, form, card);
   }
 

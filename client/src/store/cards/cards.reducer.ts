@@ -1,8 +1,8 @@
-import { Card, CardForStart, Status } from 'models';
+import { Card, CardForStart, Status } from "models";
 
-import { CardsActionTypes, CardsActions } from './cards.action';
-import { initialState } from './cards.initial';
-import { CardsState } from './interfaces';
+import { CardsActionTypes, CardsActions } from "./cards.action";
+import { initialState } from "./cards.initial";
+import { CardsState } from "./interfaces";
 
 export const cardsReducer = (
   state: CardsState = initialState,
@@ -20,7 +20,7 @@ export const cardsReducer = (
         ...state,
         status: Status.Success,
         myCards: action.payload,
-        enemyCards: [...state.cards, ...action.payload]
+        enemyCards: action.payload
       };
 
     case CardsActionTypes.LoadCardsError:
@@ -44,13 +44,11 @@ export const cardsReducer = (
         state.myCards.length - action.payload,
         action.payload
       );
-      console.log(cardsForChosen)
       const cardsInPopUp: CardForStart[] = [];
       cardsForChosen.forEach(function(card: Card): void {
         const newCardInPopUp: CardForStart = { card, isChosen: false };
         cardsInPopUp.push(newCardInPopUp);
       });
-      console.log(cardsInPopUp)
       return {
         ...state,
         myCardsForChoosingAtStart: [...cardsInPopUp]
@@ -152,7 +150,6 @@ export const cardsReducer = (
       };
 
     case CardsActionTypes.GetMyBattleCard:
-     
       const myActiveCardsArray = state.myCardsInHand.filter(
         (item, index, array) => {
           return array.indexOf(item) === action.payload.event.previousIndex;
@@ -165,14 +162,16 @@ export const cardsReducer = (
       );
       myActiveCardsArray[0].effects.cardWasAddedOnMove = action.payload.move;
 
-     let myActiveCardsCopy = [...state.myActiveCards]
-     myActiveCardsCopy.splice(action.payload.event.currentIndex,0,myActiveCardsArray[0])
-     console.log(myActiveCardsCopy)
+      let myActiveCardsCopy = [...state.myActiveCards];
+      myActiveCardsCopy.splice(
+        action.payload.event.currentIndex,
+        0,
+        myActiveCardsArray[0]
+      );
       return {
         ...state,
         myActiveCards: myActiveCardsCopy,
         myCardsInHand: myUpdatedCards
-        
       };
 
     case CardsActionTypes.GetEnemyBattleCard:
@@ -204,52 +203,50 @@ export const cardsReducer = (
       };
 
     case CardsActionTypes.IncreaceMyCardAttack:
-    
       return {
         ...state,
         myActiveCards: action.payload.array
       };
 
-       case CardsActionTypes.DecreaceEnemyCardHP:
-  
+    case CardsActionTypes.DecreaceEnemyCardHP:
+      console.log("enemy card ", action.payload);
 
-      let enemyActiveCardsNewState = [...state.enemyActiveCards];   
+      let enemyActiveCardsNewState = [...state.enemyActiveCards];
 
       let enemyAttackedCard = enemyActiveCardsNewState.filter(item => {
-        return item._id === action.payload.enemyCardId;
+        return item.id === action.payload.enemyCardId;
       });
-      const indexOfEnemyCard = state.enemyActiveCards.indexOf(enemyActiveCardsNewState[0])
-      enemyAttackedCard[0].hp = enemyAttackedCard[0].hp - action.payload.userCardDamage
-console.log(enemyActiveCardsNewState)
+      const indexOfEnemyCard = state.enemyActiveCards.indexOf(
+        enemyActiveCardsNewState[0]
+      );
+      enemyAttackedCard[0].hp =
+        enemyAttackedCard[0].hp - action.payload.userCardDamage;
       return {
         ...state,
         enemyActiveCards: enemyActiveCardsNewState
       };
 
     case CardsActionTypes.DecreaceMyCardHPWithMyAttack:
+      console.log("my card ", action.payload);
       const myCard = state.myActiveCards.filter(item => {
-        return item._id === action.payload.myCardId;
+        return item.id === action.payload.myCardId;
       });
       const enemyCard = state.enemyActiveCards.filter(item => {
-        return item._id === action.payload.enemyCardId;
+        return item.id === action.payload.enemyCardId;
       });
 
- 
-  
       const myCardIndex = state.myActiveCards.indexOf(myCard[0]);
       const otherActiveCards = state.myActiveCards.filter(item => {
-        return item._id !== action.payload.myCardId;
+        return item.id !== action.payload.myCardId;
       });
 
       myCard[0].hp = myCard[0].hp - enemyCard[0].damage;
       otherActiveCards.splice(myCardIndex, 0, myCard[0]);
-
-
+      console.log("hi");
 
       return {
         ...state,
-        myActiveCards: otherActiveCards,
-      
+        myActiveCards: otherActiveCards
       };
 
     case CardsActionTypes.DeleteMyCardFromBattle:
@@ -282,7 +279,7 @@ console.log(enemyActiveCardsNewState)
         ...state
       };
 
-    case CardsActionTypes.DeleteCardSuccess:
+   /* case CardsActionTypes.DeleteCardSuccess:
       const prunedId = state.myCards.filter(item => {
         return item.id !== action.payload.id;
       });
@@ -300,7 +297,7 @@ console.log(enemyActiveCardsNewState)
         ...state,
         myCards: prunedId,
         selectedCardId: id
-      };
+      };*/
 
     case CardsActionTypes.UploadCardSuccess:
       const newCard = action.payload.card;
@@ -338,26 +335,37 @@ console.log(enemyActiveCardsNewState)
       return {
         ...state,
         myActiveCards: state.myActiveCards.map(card => {
-          if (card.id !== action.payload.card.id && !card.effects[action.payload.card.id]){
-            return {...card, damage: ++card.damage, effects: {...card.effects, [action.payload.card.id]: true}}
+          if (
+            card.id !== action.payload.card.id &&
+            !card.effects[action.payload.card.id]
+          ) {
+            return {
+              ...card,
+              damage: ++card.damage,
+              effects: { ...card.effects, [action.payload.card.id]: true }
+            };
           } else {
             return card;
           }
         })
-      }
+      };
 
     case CardsActionTypes.RemoveSomeBonus:
-      return{
+      return {
         ...state,
         myActiveCards: state.myActiveCards.map(card => {
-          if (card.id !== action.payload.card.id){
+          if (card.id !== action.payload.card.id) {
             delete card.effects[action.payload.card.id];
-            return {...card, damage: --card.damage, effects: {...card.effects}}
+            return {
+              ...card,
+              damage: --card.damage,
+              effects: { ...card.effects }
+            };
           } else {
             return card;
           }
         })
-      }
+      };
 
     default:
       return state;

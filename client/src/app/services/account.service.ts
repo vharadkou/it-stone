@@ -14,6 +14,5 @@ export class AccountService {
     const body = {idHero};
     return this.http.post('http://httpbin.org/post',body);
   }
-
     
 }

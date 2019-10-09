@@ -76,7 +76,8 @@ import { PlayerInfoComponent } from "./components/player-info/player-info.compon
 import { AccountComponent } from "./components/account/account.component";
 import { RulesComponent } from "./pages/rules/rules.component";
 import { from } from "rxjs";
-import {TokenInterceptor} from './interceptors/http.interceptor'
+import {TokenInterceptor} from './interceptors/http.interceptor';
+import { AttackViewDirective } from './components/battle-field/attack-view.directive'
 
 export function getAuthServiceConfigs(): AuthServiceConfig {
   const config = new AuthServiceConfig([
@@ -186,7 +187,8 @@ const appRoutes: Routes = [
     PlayerInfoComponent,
     AccountComponent,
     AccountPageComponent,
-    RulesComponent
+    RulesComponent,
+    AttackViewDirective
   ],
   entryComponents: [
     MaterialDialogComponent,

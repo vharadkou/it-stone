@@ -46,9 +46,8 @@ export interface Hero {
 }
 
 export interface Card {
-  _id: string,
+  id: string,
   class: string,
-  id: number;
   name: string;
   surname: string;
   image: string;

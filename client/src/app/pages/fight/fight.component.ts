@@ -153,7 +153,7 @@ export class FightPageComponent implements OnInit, AfterViewInit {
   }
 
   public onMyDrop(event: any): void {
-    console.log('1');
+ 
     this.gameEventsHandlersService.userActiveZoneDradAndDropEventHandler(event);
   }
 
@@ -162,7 +162,7 @@ export class FightPageComponent implements OnInit, AfterViewInit {
     enemyCardId: any;
     userCardDamage: any;
   }): void {
-    console.log('2');
+    
     this.gameEventsHandlersService.userActiveCardDragAndDropEventHandler(event);
   }
 

@@ -130,25 +130,25 @@ export class GetEnemyBattleCard implements Action {
 export class DeleteMyCardFromBattle implements Action {
   public readonly type = CardsActionTypes.DeleteMyCardFromBattle;
 
-  constructor(public payload: { id: number }) { }
+  constructor(public payload: { id: string }) { }
 }
 
 export class DecrementEnemyCardCount implements Action {
   public readonly type = CardsActionTypes.DecrementEnemyCardCount;
 
-  constructor(public payload: { id: number }) { }
+  constructor(public payload: { id: string }) { }
 }
 
 export class DeleteCard implements Action {
   public readonly type = CardsActionTypes.DeleteCard;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: string }) {}
 }
 
 export class DeleteCardSuccess implements Action {
   public readonly type = CardsActionTypes.DeleteCardSuccess;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: string }) {}
 }
 
 export class DeleteCardError implements Action {
@@ -194,25 +194,25 @@ export class UpdateCardError implements Action {
 export class ChangeSelectedCardId implements Action {
   public readonly type = CardsActionTypes.ChangeSelectedCardId;
 
-  constructor(public payload: { id: number, card?: Card }) {}
+  constructor(public payload: { id: string, card?: Card }) {}
 }
 
 export class ShowDeleteCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowDeleteCardPopup;
 
-  constructor(public payload: { textContent: PopupTextContent, id: number }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: string }) {}
 }
 
 export class ShowNewCardPopup implements Action {
   public readonly type = CardsActionTypes.ShowNewCardPopup;
 
-  constructor(public payload: { textContent: PopupTextContent, id: number, card?: Card }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: string, card?: Card }) {}
 }
 
 export class CheckNewCardDataLoss implements Action {
   public readonly type = CardsActionTypes.CheckNewCardDataLoss;
 
-  constructor(public payload: { textContent: PopupTextContent, id: number, form: NgForm, card?: Card }) {}
+  constructor(public payload: { textContent: PopupTextContent, id: string, form: NgForm, card?: Card }) {}
 }
 
 export class IncreaceMyCardAttack implements Action {
@@ -242,13 +242,13 @@ export class DecreaceMyCardHPWithMyAttack implements Action {
 export class DeleteEnemyCardFromBattle implements Action {
   public readonly type = CardsActionTypes.DeleteEnemyCardFromBattle;
 
-  constructor(public payload: { id: number }) {}
+  constructor(public payload: { id: string }) {}
 }
 
 export class ChangeCardEffects implements Action {
   public readonly type = CardsActionTypes.ChangeCardEffects;
 
-  constructor(public payload: { id: number, effects: { [name: string]: any } }) {}
+  constructor(public payload: { id: string, effects: { [name: string]: any } }) {}
 }
 
 export class AddSomeBonus implements Action {
