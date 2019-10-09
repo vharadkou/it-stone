@@ -17,7 +17,9 @@ jobs:
       id: go
    
     - name: Get Mockery
-      run: go get github.com/vektra/mockery/.../
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin
+        go get github.com/vektra/mockery/.../
     
     - name: Generate tests
       run: go generate ./...
