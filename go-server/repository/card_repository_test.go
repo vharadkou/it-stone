@@ -62,11 +62,11 @@ func TestCardRepository_InsertCard_ErrorInsertOne(t *testing.T) {
 
 func TestCardRepository_GetCardByField_Positive(t *testing.T) {
 	t.Parallel()
-	records := make(map[string]interface{})
+	record := make(map[string]interface{})
 	firestoreClientMock := &firestoremocks.FirestoreClient{}
 	clientFuncMock := client_firestore_mock.NewFirestoreClientFuncMock(firestoreClientMock, nil)
 
-	firestoreClientMock.On("FindOneByField", mock.Anything, mock.Anything, mock.Anything).Return(records, nil)
+	firestoreClientMock.On("FindOneByField", mock.Anything, mock.Anything, mock.Anything).Return(record, nil)
 	firestoreClientMock.On("Close").Return(nil)
 
 	cardRepository := NewCardRepository(clientFuncMock)
@@ -126,7 +126,7 @@ func TestCardRepository_GetCards_Positive(t *testing.T) {
 	firestoreClientMock.AssertExpectations(t)
 }
 
-func TestCardRepository_GetCards__WrongClient(t *testing.T) {
+func TestCardRepository_GetCards_WrongClient(t *testing.T) {
 	t.Parallel()
 	errorMock := errors.New("some error")
 
@@ -138,7 +138,7 @@ func TestCardRepository_GetCards__WrongClient(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestCardRepository_GetCards__ErrorFindAll(t *testing.T) {
+func TestCardRepository_GetCards_ErrorFindAll(t *testing.T) {
 	t.Parallel()
 	errorMock := errors.New("some error")
 

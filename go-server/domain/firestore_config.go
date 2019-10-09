@@ -1,11 +1,7 @@
 package domain
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 type FirestoreConfig struct {
@@ -34,36 +30,4 @@ func NewFirestoreConfig() *FirestoreConfig {
 		AuthProviderX509CertUrl: os.Getenv("auth_provider_x509_cert_url"),
 		ClientX509CertUrl:       os.Getenv("client_x509_cert_url"),
 	}
-}
-
-func (c *FirestoreConfig) CreateConfigFile(directory, filename string) {
-	fullPath := filepath.Join(directory, filename)
-
-	if !dirExists(directory) {
-		_ = os.Mkdir(directory, os.ModePerm)
-	}
-
-	if fileExists(fullPath) {
-		return
-	}
-
-	file, _ := json.MarshalIndent(c, "", " ")
-	str := strings.Replace(string(file), "\\n", "n", -1)
-	_ = ioutil.WriteFile(fullPath, []byte(str), 0644)
-}
-
-func dirExists(directory string) bool {
-	info, err := os.Stat(directory)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return info.IsDir()
-}
-
-func fileExists(fullPath string) bool {
-	info, err := os.Stat(fullPath)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return !info.IsDir()
 }
