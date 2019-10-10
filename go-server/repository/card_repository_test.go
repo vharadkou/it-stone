@@ -23,7 +23,7 @@ func TestCardRepository_InsertCard_Positive(t *testing.T) {
 	cardRepository := NewCardRepository(clientFuncMock)
 
 	id, err := cardRepository.InsertCard(context.Background(), &card)
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 	assert.NotNil(t, id)
 
 	firestoreClientMock.AssertExpectations(t)
