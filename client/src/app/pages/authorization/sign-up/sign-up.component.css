@@ -1,20 +1,109 @@
-.sign-up{
+
+
+
+.wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  
+  h1,
+  .login__sign-field-sign_button {
+    color: #fff;
+    font-weight: 700;
+    background: linear-gradient(to right, orange 10%, #fff 50%, orange 100%);
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textclip 3s linear infinite;
+    display: inline-block;
+  }
+  @keyframes textclip {
+    to {
+      background-position: 200% center;
+    }
+  }
+  
+  .login__sign-field {
+     padding: 5px; 
+    position: absolute;
     display: flex;
     flex-direction: column;
-    width: 280px;
-    margin: 0 auto;
     align-items: center;
-}
-.sign-up__title{
-    margin-bottom: 10px;
-}
-.sign-up__nick-name{
-    margin-bottom: 10px;
-}
-.sign-up__email{
-    margin-bottom: 10px;
-
-}
-.sign-up__password{
-    margin-bottom: 10px;
-}
+    top: 30%;
+    width: 35vw;
+    height: auto;
+    padding-top: 3%;
+    background: rgba(53, 52, 52, 0.6);
+    border-radius: 5px;
+    animation: appear 0.2s ease-out;
+    animation-fill-mode: forwards;
+  }
+  @keyframes appear {
+    from {
+      opacity: 0;
+      right: 10%;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      right: 10%;
+      transform: scale(1);
+    }
+  }
+  .form-content {
+      z-index: 999;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 90%;
+    margin-bottom: 15px;
+  }
+  input:focus {
+    outline: none !important;
+  }
+  .form-content > * {
+    width: 100%;
+  }
+  .mat-dialog-content {
+    overflow-y: hidden !important;
+  }
+  
+  .dialog__footer {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  .dialog__footer-button {
+    margin: 0 5px;
+  }
+  mat-divider {
+    margin: 20px 0;
+  }
+  
+  .anim2 {
+    animation: anim2 .2s ease-out;
+    animation-fill-mode: forwards;
+  }
+  @keyframes anim2 {
+    from {
+      opacity: 1;
+      right: 10%;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      right: 10%;
+      transform: scale(0.9);
+    }
+  }
+  

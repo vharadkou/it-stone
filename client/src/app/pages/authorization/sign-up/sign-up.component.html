@@ -1,33 +1,73 @@
-<form class="sign-up">
-  <h3 class="sign-up__title">Registration</h3>
-  <input 
-      id="signUp__nickName" 
-      class="sign-up__nick-name"
-      type="text" 
-      [(ngModel)]="_nickName"
-      name="nickName"
-      placeholder="Your Nickname"
-      required 
-  />
-  <input 
-      id="signUp__email" 
-      class="sign-up__email"
-      type="text" 
-      [(ngModel)]="_email"
-      name="email"
-      email
-      #email="ngModel"
-      placeholder="email"
-      required 
-  />
-  <input 
-      id="signUp__password" 
-      class="sign-up__password"
-      type="password" 
-      [(ngModel)]="_password"
-      name="password"
-      placeholder="password"
-      required 
-  />
-  <button type="submit" (click)="handleClick()" [disabled]='email.invalid'>Sign Up</button>
-</form>
+<div id="menu" [@signUpMode]='signUpMode' class="login__sign-field">
+  <h1>Join the IT and win the battle!</h1>
+  <form class="form-content">
+    <h1 mat-dialog-title>Sign up</h1>
+
+    <mat-form-field>
+      <input
+        matInput
+        id="signUp__nickName"
+        class="sign-up__nick-name"
+        type="text"
+        [(ngModel)]="_nickName"
+        name="nickName"
+        placeholder="Your Nickname"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        id="signUp__email"
+        class="sign-up__email"
+        type="email"
+        [(ngModel)]="_email"
+        name="email"
+        email
+        #email="ngModel"
+        placeholder="email"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        id="signUp__password"
+        class="sign-up__password"
+        type="password"
+        [(ngModel)]="_password"
+        name="password"
+        placeholder="password"
+        required
+      />
+    </mat-form-field>
+
+    <div mat-dialog-actions align="end">
+      <button
+        type="submit"
+        (click)="handleClick()"
+        [disabled]="email.invalid"
+        class="login__sign-field-sign_button"
+        mat-raised-button
+      >
+        Sign up
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div mat-dialog-actions align="center" class="dialog__footer">
+      <span> Already have an account?</span>
+      <button
+        mat-button
+        (click)="changeSignMode('signIn')"
+        mat-stroked-button
+        class="dialog__footer-button"
+      >
+        Sign in
+      </button>
+    </div>
+   
+  </form>
+</div>

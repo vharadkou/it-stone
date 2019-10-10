@@ -1,7 +1,8 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 import { PlayersHPState } from './interfaces';
 
-export const loadPlayersHPState = createFeatureSelector<PlayersHPState>('playersHPState');
+export const loadPlayersHPState = 
+createFeatureSelector<PlayersHPState>('playersHPState');
 
 export const loadMyHP = createSelector(
     loadPlayersHPState,

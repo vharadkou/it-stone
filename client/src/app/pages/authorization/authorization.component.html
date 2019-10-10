@@ -1,2 +1,3 @@
-<app-sign-in (onSignIn) = 'onSignIn($event)'></app-sign-in>
-<app-sign-up (onSignUp) = 'onSignUp($event)'></app-sign-up>
+<app-sign-in *ngIf='signInMode' (onSignIn) = 'onSignIn($event)' (onChangeMode) = 'onChangeMode($event)' ></app-sign-in>
+<app-sign-up *ngIf='!signInMode'  (onSignUp) = 'onSignUp($event)' (onChangeMode) = 'onChangeMode($event)' [signInMode] = 'signInMode'></app-sign-up>
+<app-screensaver></app-screensaver>

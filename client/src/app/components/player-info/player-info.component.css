@@ -1,0 +1,12 @@
+.user-stat {
+  width: 200px;
+}
+
+h2,
+h3 {
+  margin: 10px;
+}
+
+mat-divider {
+  margin: 10px;
+}
