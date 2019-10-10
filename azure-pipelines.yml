@@ -24,6 +24,13 @@ steps:
   displayName: 'Set up the Go workspace'
 
 - script: |
+    go get -u github.com/go-swagger/go-swagger/cmd/swagger
+    go get github.com/vektra/mockery/cmd/mockery
+    go generate ./...
+  workingDirectory: '$(modulePath)'
+  displayName: 'Install swagger, mockery, and generate swagger'
+
+- script: |
     go version
     go get -v -t -d ./...
   workingDirectory: '$(modulePath)'
