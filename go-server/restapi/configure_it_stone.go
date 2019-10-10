@@ -6,24 +6,19 @@ import (
 	"crypto/tls"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/runtime/middleware"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/domain"
-	"it-stone-server/helpers/search"
-	"it-stone-server/helpers/validators"
-	"it-stone-server/models"
+	"it-stone-server/firestore"
+	"it-stone-server/helpers"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations"
-	"it-stone-server/restapi/operations/card"
-	"it-stone-server/restapi/operations/user"
+	"it-stone-server/validation"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 )
-
-//go:generate swagger generate server --target ..\..\go-server --name ItStone --spec ..\swagger.yml --principal models.Principal
 
 func configureFlags(api *operations.ItStoneAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -43,12 +38,12 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
-	userRepository := repository.NewUserRepository()
-	cardRepository := repository.NewCardRepository()
+	userRepository := repository.NewUserRepository(firestore.NewFirestoreClient)
+	cardRepository := repository.NewCardRepository(firestore.NewFirestoreClient)
 
-	userSearcher := search.NewUserSearcher()
+	userSearcher := helpers.NewUserSearchHelper()
 
-	userValidation := validators.NewUserValidation(userRepository, userSearcher)
+	userValidation := validation.NewUserValidation(userRepository, userSearcher)
 
 	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
 	cardHandler := handlers.NewCardsHandler(cardRepository)
@@ -56,34 +51,6 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 
 	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler)
 	restApiHandler.ConfigureRestAPI(api)
-
-	if api.UserDeleteUserHandler == nil {
-		api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, token *models.Token) middleware.Responder {
-			return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
-		})
-	}
-
-	if api.UserGetUserHandler == nil {
-		api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, token *models.Token) middleware.Responder {
-			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
-		})
-	}
-	if api.UserGetUsersHandler == nil {
-		api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, token *models.Token) middleware.Responder {
-			return middleware.NotImplemented("operation user.GetUsers has not yet been implemented")
-		})
-	}
-
-	if api.CardUpdateCardHandler == nil {
-		api.CardUpdateCardHandler = card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, token *models.Token) middleware.Responder {
-			return middleware.NotImplemented("operation card.UpdateCard has not yet been implemented")
-		})
-	}
-	if api.UserUpdateUserHandler == nil {
-		api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, token *models.Token) middleware.Responder {
-			return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
-		})
-	}
 
 	api.ServerShutdown = func() {}
 
@@ -104,9 +71,16 @@ func configureServer(s *http.Server, scheme, addr string) {
 	filename := "config.json"
 
 	firestoreConfig := domain.NewFirestoreConfig()
-	firestoreConfig.CreateConfigFile(directory, filename)
+	envHelper := helpers.NewEnvHelper()
 
-	err := os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filepath.Join(directory, filename))
+	firestoreConfigCreator := firestore.NewFirestoreConfigCreator(firestoreConfig, envHelper)
+	err := firestoreConfigCreator.CreateConfigFile(directory, filename)
+
+	if err != nil {
+		panic(err)
+	}
+
+	err = os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filepath.Join(directory, filename))
 	if err != nil {
 		panic(err)
 	}

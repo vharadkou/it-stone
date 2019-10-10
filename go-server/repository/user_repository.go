@@ -4,40 +4,44 @@ import (
 	"context"
 	"encoding/json"
 	"it-stone-server/domain"
+	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"log"
-	"time"
+	"os"
 )
 
 type UserRepository interface {
-	getDbClient() (DbWorker, error)
-	GetUserByField(field, value string) (*domain.User, error)
-	GetUsers() ([]*domain.User, error)
-	InsertUser(user *domain.User) error
-	DeleteUser(id string) error
-	UpdateUser(id string, User *domain.User) (*domain.User, error)
+	GetUserByField(ctx context.Context, field, value string) (*domain.User, error)
+	GetUsers(ctx context.Context) ([]*domain.User, error)
+	InsertUser(ctx context.Context, user *domain.User) error
+	DeleteUser(ctx context.Context, id string) error
+	UpdateUser(ctx context.Context, id string, User *domain.User) (*domain.User, error)
 }
 
 type userRepository struct {
 	collection string
+	idHelper   helpers.IDHelper
+	clientFunc firestore.FirestoreClientFunc
 }
 
-func NewUserRepository() UserRepository {
-	return &userRepository{"Users"}
+func NewUserRepository(clientFunc firestore.FirestoreClientFunc) UserRepository {
+	return &userRepository{
+		collection: "Users",
+		idHelper:   helpers.NewIDHelper(),
+		clientFunc: clientFunc,
+	}
 }
 
-func (cw *userRepository) GetUserByField(field, value string) (*domain.User, error) {
-	db, err := cw.getDbClient()
+func (r *userRepository) GetUserByField(ctx context.Context, field, value string) (*domain.User, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	recordTmpMap, err := db.FindOneByField(cw.collection, field, value)
+	recordTmpMap, err := db.FindOneByField(r.collection, field, value)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -49,18 +53,16 @@ func (cw *userRepository) GetUserByField(field, value string) (*domain.User, err
 	return &user, nil
 }
 
-func (cw *userRepository) GetUsers() ([]*domain.User, error) {
-	db, err := cw.getDbClient()
+func (r *userRepository) GetUsers(ctx context.Context) ([]*domain.User, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	recordTmpMap, err := db.FindAll(cw.collection)
+	recordTmpMap, err := db.FindAll(r.collection)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -72,24 +74,22 @@ func (cw *userRepository) GetUsers() ([]*domain.User, error) {
 	return Users, nil
 }
 
-func (cw *userRepository) InsertUser(user *domain.User) error {
-	db, err := cw.getDbClient()
+func (r *userRepository) InsertUser(ctx context.Context, user *domain.User) error {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	user.ID = helpers.IDHelper.GenerateID(helpers.NewIDHelper())
+	user.ID = r.idHelper.GenerateID()
 
 	var data map[string]interface{}
 	jsonData, _ := json.Marshal(user)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(cw.collection, user.ID, data)
+	err = db.InsertOne(r.collection, user.ID, data)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -98,30 +98,26 @@ func (cw *userRepository) InsertUser(user *domain.User) error {
 	return nil
 }
 
-func (cw *userRepository) DeleteUser(id string) error {
-	db, err := cw.getDbClient()
+func (r *userRepository) DeleteUser(ctx context.Context, id string) error {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	return db.DeleteOneByID(cw.collection, id)
+	return db.DeleteOneByID(r.collection, id)
 }
 
-func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domain.User, error) {
-	db, err := cw.getDbClient()
+func (r *userRepository) UpdateUser(ctx context.Context, id string, domainUser *domain.User) (*domain.User, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
 	domainUser.ID = id
 
@@ -129,7 +125,7 @@ func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domai
 	jsonData, _ := json.Marshal(*domainUser)
 	_ = json.Unmarshal(jsonData, &data)
 
-	recordTmpMap, err := db.UpdateOneByID(cw.collection, domainUser.ID, data)
+	recordTmpMap, err := db.UpdateOneByID(r.collection, domainUser.ID, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -139,9 +135,4 @@ func (cw *userRepository) UpdateUser(id string, domainUser *domain.User) (*domai
 	sb, _ := json.Marshal(recordTmpMap)
 	_ = json.Unmarshal(sb, user)
 	return user, nil
-}
-
-func (cw *userRepository) getDbClient() (DbWorker, error) {
-	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	return NewDbClient(ctx, cancelFunc)
 }

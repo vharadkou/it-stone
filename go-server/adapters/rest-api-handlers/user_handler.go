@@ -35,7 +35,8 @@ func NewUsersHandler(userRepository repository.UserRepository) UsersHandler {
 var idField = "id"
 
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
-	domainUser, err := h.userRepository.GetUserByField(idField, params.ID)
+	ctx := params.HTTPRequest.Context()
+	domainUser, err := h.userRepository.GetUserByField(ctx, idField, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -61,7 +62,8 @@ func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder 
 	return user.NewGetUserByTokenOK().WithPayload(h.userConverter.FromDomain(domainUser))
 }
 func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Responder {
-	domainUser, err := h.userRepository.UpdateUser(params.ID, h.userConverter.ToDomain(params.User))
+	ctx := params.HTTPRequest.Context()
+	domainUser, err := h.userRepository.UpdateUser(ctx, params.ID, h.userConverter.ToDomain(params.User))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -74,7 +76,8 @@ func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Respo
 	return user.NewUpdateUserOK().WithPayload(h.userConverter.FromDomain(domainUser))
 }
 func (h *usersHandler) DeleteUser(params user.DeleteUserParams) middleware.Responder {
-	err := h.userRepository.DeleteUser(params.ID)
+	ctx := params.HTTPRequest.Context()
+	err := h.userRepository.DeleteUser(ctx, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

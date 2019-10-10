@@ -4,7 +4,10 @@ WORKDIR /app
 RUN go mod download
 
 RUN go get -u github.com/go-swagger/go-swagger/cmd/swagger
+RUN go get github.com/vektra/mockery/.../
 RUN swagger generate server -A it-stone -P models.Token
+RUN go generate ./...
+RUN go test -v ./...
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/it-stone-server/main.go
 

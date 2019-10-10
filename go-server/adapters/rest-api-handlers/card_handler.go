@@ -32,7 +32,8 @@ func NewCardsHandler(cardRepository repository.CardRepository) CardsHandler {
 }
 
 func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
-	domainCard, err := h.cardRepository.GetCardByField("id", params.ID)
+	ctx := params.HTTPRequest.Context()
+	domainCard, err := h.cardRepository.GetCardByField(ctx, "id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -46,7 +47,8 @@ func (h *cardsHandler) GetCard(params card.GetCardParams) middleware.Responder {
 }
 
 func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder {
-	domainCards, err := h.cardRepository.GetCards()
+	ctx := params.HTTPRequest.Context()
+	domainCards, err := h.cardRepository.GetCards(ctx)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -66,7 +68,8 @@ func (h *cardsHandler) GetCards(params card.GetCardsParams) middleware.Responder
 }
 
 func (h *cardsHandler) InsertCard(params card.CreateCardParams) middleware.Responder {
-	id, err := h.cardRepository.InsertCard(h.cardConverter.ToDomain(params.Card))
+	ctx := params.HTTPRequest.Context()
+	id, err := h.cardRepository.InsertCard(ctx, h.cardConverter.ToDomain(params.Card))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -80,7 +83,8 @@ func (h *cardsHandler) InsertCard(params card.CreateCardParams) middleware.Respo
 }
 
 func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Responder {
-	err := h.cardRepository.DeleteCard(params.ID)
+	ctx := params.HTTPRequest.Context()
+	err := h.cardRepository.DeleteCard(ctx, params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -94,8 +98,8 @@ func (h *cardsHandler) DeleteCard(params card.DeleteCardParams) middleware.Respo
 }
 
 func (h *cardsHandler) UpdateCard(params card.UpdateCardParams) middleware.Responder {
-
-	domainCard, err := h.cardRepository.UpdateCard(params.ID, h.cardConverter.ToDomain(params.Card))
+	ctx := params.HTTPRequest.Context()
+	domainCard, err := h.cardRepository.UpdateCard(ctx, params.ID, h.cardConverter.ToDomain(params.Card))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

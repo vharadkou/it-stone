@@ -6,12 +6,11 @@ import (
 	"it-stone-server/adapters/converters"
 	"it-stone-server/domain"
 	"it-stone-server/helpers"
-	"it-stone-server/helpers/search"
-	"it-stone-server/helpers/validators"
 	"it-stone-server/models"
 	"it-stone-server/repository"
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
+	"it-stone-server/validation"
 	"net/http"
 )
 
@@ -23,14 +22,14 @@ type AuthHandler interface {
 
 type authHandler struct {
 	userRepository repository.UserRepository
-	userSearcher   search.UserSearcher
-	userValidation validators.UserValidation
+	userSearcher   helpers.UserSearchHelper
+	userValidation validation.UserValidation
 	userConverter  converters.UserConverter
 	passHelper     helpers.PasswordHelper
 	jwtHelper      helpers.JWTHelper
 }
 
-func NewAuthHandler(userRepository repository.UserRepository, userSearcher search.UserSearcher, userValidation validators.UserValidation) AuthHandler {
+func NewAuthHandler(userRepository repository.UserRepository, userSearcher helpers.UserSearchHelper, userValidation validation.UserValidation) AuthHandler {
 	return &authHandler{
 		userRepository: userRepository,
 		userSearcher:   userSearcher,
@@ -44,14 +43,15 @@ func NewAuthHandler(userRepository repository.UserRepository, userSearcher searc
 
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	if params.LoginForm == nil {
-		errMsg := "The request body is empty!"
+		errMsg := "The request body is empty!123123"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
 		})
 	}
 
-	domainUser, err := h.userRepository.GetUserByField(h.userSearcher.SearchByUsername(), *params.LoginForm.UserName)
+	ctx := params.HTTPRequest.Context()
+	domainUser, err := h.userRepository.GetUserByField(ctx, h.userSearcher.SearchByUsername(), *params.LoginForm.UserName)
 	if err != nil {
 		errMsg := "Internal server error!"
 
@@ -63,6 +63,7 @@ func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 
 	if domainUser.ID == "" {
 		errMsg := "User does not exists!"
+
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,
@@ -97,7 +98,9 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		*params.RegistrationForm.UserName,
 		hashedPassword)
 
-	if err := h.userValidation.ValidateEmail(domainUser.Email); err != nil {
+	ctx := params.HTTPRequest.Context()
+
+	if err := h.userValidation.ValidateEmail(ctx, domainUser.Email); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -105,7 +108,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	if err := h.userValidation.ValidateUsername(domainUser.UserName); err != nil {
+	if err := h.userValidation.ValidateUsername(ctx, domainUser.UserName); err != nil {
 		errMsg := err.Error()
 		return registration.NewRegistrationDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
@@ -113,7 +116,7 @@ func (h *authHandler) Registration(params registration.RegistrationParams) middl
 		})
 	}
 
-	err = h.userRepository.InsertUser(domainUser)
+	err = h.userRepository.InsertUser(ctx, domainUser)
 
 	if err != nil {
 		errMsg := "Some problems with data base!"

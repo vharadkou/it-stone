@@ -4,44 +4,44 @@ import (
 	"context"
 	"encoding/json"
 	"it-stone-server/domain"
+	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"log"
-	"time"
+	"os"
 )
 
 type CardRepository interface {
-	getDbClient() (DbWorker, error)
-	GetCardByField(field, value string) (*domain.Card, error)
-	GetCards() ([]*domain.Card, error)
-	InsertCard(card *domain.Card) (*string, error)
-	DeleteCard(id string) error
-	UpdateCard(id string, card *domain.Card) (*domain.Card, error)
+	GetCardByField(ctx context.Context, field, value string) (*domain.Card, error)
+	GetCards(ctx context.Context) ([]*domain.Card, error)
+	InsertCard(ctx context.Context, card *domain.Card) (*string, error)
+	DeleteCard(ctx context.Context, id string) error
+	UpdateCard(ctx context.Context, id string, card *domain.Card) (*domain.Card, error)
 }
 
 type cardRepository struct {
 	collection string
 	idHelper   helpers.IDHelper
+	clientFunc firestore.FirestoreClientFunc
 }
 
-func NewCardRepository() CardRepository {
+func NewCardRepository(clientFunc firestore.FirestoreClientFunc) CardRepository {
 	return &cardRepository{
-		"Cards",
-		helpers.NewIDHelper(),
+		collection: "Cards",
+		idHelper:   helpers.NewIDHelper(),
+		clientFunc: clientFunc,
 	}
 }
 
-func (cw *cardRepository) GetCardByField(field, value string) (*domain.Card, error) {
-	db, err := cw.getDbClient()
+func (r *cardRepository) GetCardByField(ctx context.Context, field, value string) (*domain.Card, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	recordTmpMap, err := db.FindOneByField(cw.collection, field, value)
+	recordTmpMap, err := db.FindOneByField(r.collection, field, value)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -53,18 +53,16 @@ func (cw *cardRepository) GetCardByField(field, value string) (*domain.Card, err
 	return &card, nil
 }
 
-func (cw *cardRepository) GetCards() ([]*domain.Card, error) {
-	db, err := cw.getDbClient()
+func (r *cardRepository) GetCards(ctx context.Context) ([]*domain.Card, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	recordTmpMap, err := db.FindAll(cw.collection)
+	recordTmpMap, err := db.FindAll(r.collection)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -76,25 +74,23 @@ func (cw *cardRepository) GetCards() ([]*domain.Card, error) {
 	return cards, nil
 }
 
-func (cw *cardRepository) InsertCard(domainCard *domain.Card) (*string, error) {
-	db, err := cw.getDbClient()
+func (r *cardRepository) InsertCard(ctx context.Context, domainCard *domain.Card) (*string, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	id := cw.idHelper.GenerateID()
+	id := r.idHelper.GenerateID()
 	domainCard.ID = id
 
 	var data map[string]interface{}
 	jsonData, _ := json.Marshal(*domainCard)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(cw.collection, id, data)
+	err = db.InsertOne(r.collection, id, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -103,30 +99,26 @@ func (cw *cardRepository) InsertCard(domainCard *domain.Card) (*string, error) {
 	return &id, nil
 }
 
-func (cw *cardRepository) DeleteCard(id string) error {
-	db, err := cw.getDbClient()
+func (r *cardRepository) DeleteCard(ctx context.Context, id string) error {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
-	return db.DeleteOneByID(cw.collection, id)
+	return db.DeleteOneByID(r.collection, id)
 }
 
-func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domain.Card, error) {
-	db, err := cw.getDbClient()
+func (r *cardRepository) UpdateCard(ctx context.Context, id string, domainCard *domain.Card) (*domain.Card, error) {
+	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
+	defer db.Close()
 
 	domainCard.ID = id
 
@@ -134,7 +126,7 @@ func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domai
 	jsonData, _ := json.Marshal(*domainCard)
 	_ = json.Unmarshal(jsonData, &data)
 
-	recordTmpMap, err := db.UpdateOneByID(cw.collection, id, data)
+	recordTmpMap, err := db.UpdateOneByID(r.collection, id, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -144,9 +136,4 @@ func (cw *cardRepository) UpdateCard(id string, domainCard *domain.Card) (*domai
 	sb, _ := json.Marshal(recordTmpMap)
 	_ = json.Unmarshal(sb, &card)
 	return &card, nil
-}
-
-func (cw *cardRepository) getDbClient() (DbWorker, error) {
-	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	return NewDbClient(ctx, cancelFunc)
 }
