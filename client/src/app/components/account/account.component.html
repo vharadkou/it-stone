@@ -1,0 +1,23 @@
+<div *ngIf='!loading' class="account__wrapper">
+  <div  class="menu-field" [@pageOut]='pageOut' id="menu-field">
+    <button mat-button [routerLink]="'rules'">Rules</button >
+      <button mat-raised-button class='logout-button' (click)="logOut()">Log out</button >
+  </div>
+
+  <div class="user-field" [@pageOut]='pageOut'  id="user-field">
+    <h1>Information about player</h1>
+    <app-player-info></app-player-info>
+    <button class='start-button' mat-raised-button color='warn'  (click)="submit()">Start fight</button >
+  </div>
+  <div  class="hero-field " [@pageOut]='pageOut' id="hero-field">
+    <h1>Choose your hero</h1>
+    <app-account-page (onClick)="handleChange($event)" [heroList]="heroList">
+      </app-account-page
+    >
+  </div>
+</div>
+<div *ngIf='loading' class="loading">
+  <h1>Looking for a partner...</h1>
+  <app-screensaver></app-screensaver>
+</div>
+

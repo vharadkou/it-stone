@@ -1,0 +1,34 @@
+<div class="hero-data-wrapper">
+  <div class="hero-list-container">
+    <label *ngFor="let hero of heroList" class="container">
+      <input
+        name="heroChoosing"
+        [(ngModel)]="heroChoosing"
+        type="radio"
+        [value]="hero"
+        (change)="handleChange()"
+      />
+      {{ hero.name }}
+      <div class="checkmark"></div>
+    </label>
+  </div>
+
+  <div class="modal-wrapper">
+    <div class="modal" [@smoothModalAnimationOn]='smoothModalAnimationOn' id="modal-window">
+        <p>{{ heroChoosing.name }}</p>
+      <div class="colOne">
+        <p>Skills:</p>
+        <p>{{ heroChoosing.skills }}</p>
+        <p>Health:{{ heroChoosing.hp }}</p>
+      </div>
+      <div class="colTwo">
+        <p>Skills description: Can do 2 damage per move</p>
+      </div>
+    </div>
+  </div>
+  <div class='photo-wrapper'>
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 1'  src="../../../assets/PM.png" width="196" height="auto">
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 2'  src="../../../assets/TL.png" width="196" height="auto">
+  <img class="hero-photo" *ngIf = 'heroChoosing.id == 3'  src="../../../assets/ST.png" width="280" height="auto">
+</div>
+</div>
