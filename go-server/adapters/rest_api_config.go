@@ -25,10 +25,8 @@ func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.C
 	}
 }
 
-// ConfigureRestAPI func
 func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 
-	//Authentification
 	api.APIKeyHeaderAuth = func(token string) (*models.Token, error) {
 		return restApi.authHandler.APIKeyHeaderAuth(token)
 	}
