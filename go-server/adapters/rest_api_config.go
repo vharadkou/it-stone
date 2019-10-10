@@ -37,7 +37,6 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 		return restApi.authHandler.Login(params)
 	})
 
-	//Cards
 	api.CardGetCardHandler = card.GetCardHandlerFunc(func(params card.GetCardParams, token *models.Token) middleware.Responder {
 		return restApi.cardsHandler.GetCard(params)
 	})
@@ -54,7 +53,6 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 		return restApi.cardsHandler.UpdateCard(params)
 	})
 
-	//Users
 	api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.GetUser(params)
 	})
