@@ -26,13 +26,12 @@ steps:
 - script: |
     go version
     go get -v -t -d ./...
-    if [ -f Gopkg.toml ]; then
-        curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-        dep ensure
-    fi
-    go build -v ./cmd/it-stone-server
   workingDirectory: '$(modulePath)'
-  displayName: 'Get dependencies, then build'
+  displayName: 'Get dependencies'
+
+- script: go build -v ./cmd/it-stone-server
+  workingDirectory: '$(modulePath)'
+  displayName: 'Build'
 
 - script: |
     go get github.com/jstemmer/go-junit-report
