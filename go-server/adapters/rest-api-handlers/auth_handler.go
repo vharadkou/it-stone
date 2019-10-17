@@ -43,7 +43,7 @@ func NewAuthHandler(userRepository repository.UserRepository, userSearcher helpe
 
 func (h *authHandler) Login(params login.LoginParams) middleware.Responder {
 	if params.LoginForm == nil {
-		errMsg := "The request body is empty!123123"
+		errMsg := "The request body is empty!"
 		return login.NewLoginDefault(http.StatusInternalServerError).WithPayload(&models.Error{
 			Code:    http.StatusInternalServerError,
 			Message: &errMsg,

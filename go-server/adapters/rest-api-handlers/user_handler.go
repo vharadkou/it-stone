@@ -13,6 +13,7 @@ import (
 
 type UsersHandler interface {
 	GetUser(params user.GetUserParams) middleware.Responder
+	GetUsers(params user.GetUsersParams) middleware.Responder
 	UpdateUser(params user.UpdateUserParams) middleware.Responder
 	DeleteUser(params user.DeleteUserParams) middleware.Responder
 	GetUserByToken(token *models.Token) middleware.Responder
@@ -32,11 +33,9 @@ func NewUsersHandler(userRepository repository.UserRepository) UsersHandler {
 	}
 }
 
-var idField = "id"
-
 func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-	domainUser, err := h.userRepository.GetUserByField(ctx, idField, params.ID)
+	domainUser, err := h.userRepository.GetUserByField(ctx, "id", params.ID)
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)
@@ -47,6 +46,27 @@ func (h *usersHandler) GetUser(params user.GetUserParams) middleware.Responder {
 	}
 
 	return user.NewGetUserOK().WithPayload(h.userConverter.FromDomain(domainUser))
+}
+
+func (h *usersHandler) GetUsers(params user.GetUsersParams) middleware.Responder {
+	ctx := params.HTTPRequest.Context()
+	domainUsers, err := h.userRepository.GetUsers(ctx)
+
+	if err != nil {
+		errMsg := http.StatusText(http.StatusInternalServerError)
+		return user.NewGetUsersDefault(http.StatusInternalServerError).WithPayload(&models.Error{
+			Code:    http.StatusInternalServerError,
+			Message: &errMsg,
+		})
+	}
+
+	var modelUsers []*models.User
+	for _, model := range domainUsers {
+		modelUser := h.userConverter.FromDomain(model)
+		modelUsers = append(modelUsers, modelUser)
+	}
+
+	return user.NewGetUsersOK().WithPayload(modelUsers)
 }
 
 func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder {
@@ -63,7 +83,8 @@ func (h *usersHandler) GetUserByToken(token *models.Token) middleware.Responder 
 }
 func (h *usersHandler) UpdateUser(params user.UpdateUserParams) middleware.Responder {
 	ctx := params.HTTPRequest.Context()
-	domainUser, err := h.userRepository.UpdateUser(ctx, params.ID, h.userConverter.ToDomain(params.User))
+
+	domainUser, err := h.userRepository.UpdateUser(ctx, params.ID, h.userConverter.ToMap(params.User))
 
 	if err != nil {
 		errMsg := http.StatusText(http.StatusInternalServerError)

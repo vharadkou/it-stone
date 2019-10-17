@@ -65,5 +65,7 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 	api.UserGetUserByTokenHandler = user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.GetUserByToken(token)
 	})
-
+	api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, token *models.Token) middleware.Responder {
+		return restApi.usersHandler.GetUsers(params)
+	})
 }

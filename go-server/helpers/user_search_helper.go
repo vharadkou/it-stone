@@ -12,9 +12,9 @@ func NewUserSearchHelper() UserSearchHelper {
 }
 
 func (us userSearchHelper) SearchByEmail() string {
-	return "Email"
+	return "email"
 }
 
 func (us userSearchHelper) SearchByUsername() string {
-	return "UserName"
+	return "userName"
 }
