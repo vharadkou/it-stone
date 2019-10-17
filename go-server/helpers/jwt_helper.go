@@ -35,10 +35,10 @@ func (h *jwtHelper) GetDomainUserFromToken(token *models.Token) (*domain.User, e
 		return nil, err
 	}
 
-	domainUser := new(domain.User)
-	err = claims.ToStruct(domainUser)
+	var domainUser domain.User
+	err = claims.ToStruct(&domainUser)
 	if err != nil {
 		return nil, err
 	}
-	return domainUser, nil
+	return &domainUser, nil
 }

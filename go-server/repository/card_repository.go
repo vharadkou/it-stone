@@ -15,7 +15,7 @@ type CardRepository interface {
 	GetCards(ctx context.Context) ([]*domain.Card, error)
 	InsertCard(ctx context.Context, card *domain.Card) (*string, error)
 	DeleteCard(ctx context.Context, id string) error
-	UpdateCard(ctx context.Context, id string, card *domain.Card) (*domain.Card, error)
+	UpdateCard(ctx context.Context, id string, data map[string]interface{}) (*domain.Card, error)
 }
 
 type cardRepository struct {
@@ -111,7 +111,7 @@ func (r *cardRepository) DeleteCard(ctx context.Context, id string) error {
 	return db.DeleteOneByID(r.collection, id)
 }
 
-func (r *cardRepository) UpdateCard(ctx context.Context, id string, domainCard *domain.Card) (*domain.Card, error) {
+func (r *cardRepository) UpdateCard(ctx context.Context, id string, data map[string]interface{}) (*domain.Card, error) {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -119,12 +119,6 @@ func (r *cardRepository) UpdateCard(ctx context.Context, id string, domainCard *
 	}
 
 	defer db.Close()
-
-	domainCard.ID = id
-
-	var data map[string]interface{}
-	jsonData, _ := json.Marshal(*domainCard)
-	_ = json.Unmarshal(jsonData, &data)
 
 	recordTmpMap, err := db.UpdateOneByID(r.collection, id, data)
 	if err != nil {

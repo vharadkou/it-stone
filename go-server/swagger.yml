@@ -348,11 +348,11 @@ definitions:
         items:
           type: string
       hp:
-        type: number
+        type: string
       damage:
-        type: number
+        type: string
       manaCost:
-        type: number
+        type: string
       effects:
         type: object
   User:
@@ -368,10 +368,10 @@ definitions:
         type: string
         description: The email of the User.
       winGames:
-        type: integer
+        type: string
         description: Count of all games where the User has won.
       totalGames:
-        type: integer
+        type: string
         description: Count of all games of the User.
   Token:
     type: object

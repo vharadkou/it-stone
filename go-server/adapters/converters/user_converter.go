@@ -1,6 +1,7 @@
 package converters
 
 import (
+	"encoding/json"
 	"it-stone-server/domain"
 	"it-stone-server/models"
 )
@@ -9,6 +10,7 @@ type UserConverter interface {
 	FromDomain(model *domain.User) *models.User
 	ToDomain(model *models.User) *domain.User
 	ToUserForToken(model *domain.User) *domain.UserForToken
+	ToMap(model *models.User) map[string]interface{}
 }
 
 type userConverter struct{}
@@ -45,4 +47,11 @@ func (uc *userConverter) ToUserForToken(model *domain.User) *domain.UserForToken
 		TotalGames: model.TotalGames,
 		WinGames:   model.WinGames,
 	}
+}
+
+func (uc *userConverter) ToMap(model *models.User) map[string]interface{} {
+	var data map[string]interface{}
+	jsonData, _ := json.Marshal(*model)
+	_ = json.Unmarshal(jsonData, &data)
+	return data
 }

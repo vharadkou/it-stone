@@ -42,11 +42,12 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	cardRepository := repository.NewCardRepository(firestore.NewFirestoreClient)
 
 	userSearcher := helpers.NewUserSearchHelper()
+	cardSearcher := helpers.NewCardSearchHelper()
 
 	userValidation := validation.NewUserValidation(userRepository, userSearcher)
 
 	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
-	cardHandler := handlers.NewCardsHandler(cardRepository)
+	cardHandler := handlers.NewCardsHandler(cardRepository, cardSearcher)
 	userHandler := handlers.NewUsersHandler(userRepository)
 
 	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler)

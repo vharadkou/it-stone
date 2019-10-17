@@ -15,7 +15,7 @@ type UserRepository interface {
 	GetUsers(ctx context.Context) ([]*domain.User, error)
 	InsertUser(ctx context.Context, user *domain.User) error
 	DeleteUser(ctx context.Context, id string) error
-	UpdateUser(ctx context.Context, id string, User *domain.User) (*domain.User, error)
+	UpdateUser(ctx context.Context, id string, data map[string]interface{}) (*domain.User, error)
 }
 
 type userRepository struct {
@@ -110,7 +110,7 @@ func (r *userRepository) DeleteUser(ctx context.Context, id string) error {
 	return db.DeleteOneByID(r.collection, id)
 }
 
-func (r *userRepository) UpdateUser(ctx context.Context, id string, domainUser *domain.User) (*domain.User, error) {
+func (r *userRepository) UpdateUser(ctx context.Context, id string, data map[string]interface{}) (*domain.User, error) {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -119,13 +119,7 @@ func (r *userRepository) UpdateUser(ctx context.Context, id string, domainUser *
 
 	defer db.Close()
 
-	domainUser.ID = id
-
-	var data map[string]interface{}
-	jsonData, _ := json.Marshal(*domainUser)
-	_ = json.Unmarshal(jsonData, &data)
-
-	recordTmpMap, err := db.UpdateOneByID(r.collection, domainUser.ID, data)
+	recordTmpMap, err := db.UpdateOneByID(r.collection, id, data)
 	if err != nil {
 		log.Println(err)
 		return nil, err

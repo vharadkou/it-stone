@@ -192,7 +192,7 @@ func TestUserRepository_DeleteUser_WrongClient(t *testing.T) {
 
 func TestUserRepository_UpdateUser_Positive(t *testing.T) {
 	t.Parallel()
-	user := domain.User{}
+	user := make(map[string]interface{})
 	data := make(map[string]interface{})
 	firestoreClientMock := &firestoremocks.FirestoreClient{}
 	clientFuncMock := client_firestore_mock.NewFirestoreClientFuncMock(firestoreClientMock, nil)
@@ -201,7 +201,7 @@ func TestUserRepository_UpdateUser_Positive(t *testing.T) {
 	firestoreClientMock.On("Close").Return(nil)
 
 	userRepository := NewUserRepository(clientFuncMock)
-	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", &user)
+	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", user)
 
 	assert.NotNil(t, updatedUser)
 	assert.Nil(t, err)
@@ -211,13 +211,13 @@ func TestUserRepository_UpdateUser_Positive(t *testing.T) {
 
 func TestUserRepository_UpdateUser_WrongClient(t *testing.T) {
 	t.Parallel()
-	user := domain.User{}
+	user := make(map[string]interface{})
 	errorMock := errors.New("some error")
 
 	clientFuncMock := client_firestore_mock.NewFirestoreClientFuncMock(nil, errorMock)
 
 	userRepository := NewUserRepository(clientFuncMock)
-	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", &user)
+	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", user)
 
 	assert.NotNil(t, err)
 	assert.Nil(t, updatedUser)
@@ -225,7 +225,7 @@ func TestUserRepository_UpdateUser_WrongClient(t *testing.T) {
 
 func TestUserRepository_UpdateUser_ErrorUpdateOneByID(t *testing.T) {
 	t.Parallel()
-	user := domain.User{}
+	user := make(map[string]interface{})
 	errorMock := errors.New("some error")
 
 	firestoreClientMock := &firestoremocks.FirestoreClient{}
@@ -235,7 +235,7 @@ func TestUserRepository_UpdateUser_ErrorUpdateOneByID(t *testing.T) {
 	firestoreClientMock.On("Close").Return(nil)
 
 	userRepository := NewUserRepository(clientFuncMock)
-	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", &user)
+	updatedUser, err := userRepository.UpdateUser(context.Background(), "some id", user)
 
 	assert.Nil(t, updatedUser)
 	assert.NotNil(t, err)
