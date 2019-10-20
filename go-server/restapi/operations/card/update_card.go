@@ -14,16 +14,16 @@ import (
 )
 
 // UpdateCardHandlerFunc turns a function with the right signature into a update card handler
-type UpdateCardHandlerFunc func(UpdateCardParams, *models.Principal) middleware.Responder
+type UpdateCardHandlerFunc func(UpdateCardParams, *models.Token) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateCardHandlerFunc) Handle(params UpdateCardParams, principal *models.Principal) middleware.Responder {
+func (fn UpdateCardHandlerFunc) Handle(params UpdateCardParams, principal *models.Token) middleware.Responder {
 	return fn(params, principal)
 }
 
 // UpdateCardHandler interface for that can handle valid update card params
 type UpdateCardHandler interface {
-	Handle(UpdateCardParams, *models.Principal) middleware.Responder
+	Handle(UpdateCardParams, *models.Token) middleware.Responder
 }
 
 // NewUpdateCard creates a new http.Handler for the update card operation
@@ -56,9 +56,9 @@ func (o *UpdateCard) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.Token
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.Token) // this is really a models.Token, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

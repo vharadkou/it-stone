@@ -227,7 +227,7 @@ func init() {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "$ref": "#/definitions/UserToken"
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
@@ -259,6 +259,64 @@ func init() {
         "responses": {
           "200": {
             "description": "Registration successful"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/search": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search another player",
+        "operationId": "searchAnother",
+        "responses": {
+          "200": {
+            "description": "Search for another player completed successfully",
+            "schema": {
+              "$ref": "#/definitions/State"
+            }
+          },
+          "504": {
+            "description": "Couldn't search for another player in time"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "default": {
             "description": "Internal server error",
@@ -413,13 +471,13 @@ func init() {
           "type": "string"
         },
         "damage": {
-          "type": "number"
+          "type": "string"
         },
         "effects": {
           "type": "object"
         },
         "hp": {
-          "type": "number"
+          "type": "string"
         },
         "id": {
           "type": "string"
@@ -427,8 +485,8 @@ func init() {
         "image": {
           "type": "string"
         },
-        "mana_cost": {
-          "type": "number"
+        "manaCost": {
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -439,7 +497,7 @@ func init() {
             "type": "string"
           }
         },
-        "surname": {
+        "surName": {
           "type": "string"
         }
       }
@@ -484,27 +542,23 @@ func init() {
     "LoginForm": {
       "type": "object",
       "required": [
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "type": "string"
         }
       }
-    },
-    "Principal": {
-      "type": "string"
     },
     "RegistrationForm": {
       "type": "object",
       "required": [
         "email",
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
@@ -513,10 +567,41 @@ func init() {
           "format": "email"
         },
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
+          "type": "string",
+          "maxLength": 16,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_]{3,16}$"
+        }
+      }
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The ID of the state.",
+          "type": "string"
+        },
+        "player1": {
+          "$ref": "#/definitions/User"
+        },
+        "player1Cards": {
+          "$ref": "#/definitions/Card"
+        },
+        "player2": {
+          "$ref": "#/definitions/User"
+        },
+        "player2Cards": {
+          "$ref": "#/definitions/Card"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
           "type": "string"
         }
       }
@@ -526,40 +611,23 @@ func init() {
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string",
-          "format": "email"
+          "type": "string"
         },
         "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "password": {
-          "description": "The password of the User.",
-          "type": "string",
-          "format": "password"
-        },
-        "total_games": {
+        "totalGames": {
           "description": "Count of all games of the User.",
-          "type": "integer"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "description": "The user name.",
           "type": "string"
         },
-        "win_games": {
+        "winGames": {
           "description": "Count of all games where the User has won.",
-          "type": "integer"
-        }
-      }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
           "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
     }
@@ -822,7 +890,7 @@ func init() {
           "200": {
             "description": "Login successful.",
             "schema": {
-              "$ref": "#/definitions/UserToken"
+              "$ref": "#/definitions/Token"
             }
           },
           "default": {
@@ -854,6 +922,69 @@ func init() {
         "responses": {
           "200": {
             "description": "Registration successful"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/search": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search another player",
+        "operationId": "searchAnother",
+        "responses": {
+          "200": {
+            "description": "Search for another player completed successfully",
+            "schema": {
+              "$ref": "#/definitions/State"
+            }
+          },
+          "504": {
+            "description": "Couldn't search for another player in time"
+          },
+          "default": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/v0/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Receiving the user by token",
+        "operationId": "getUserByToken",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Authentication information is missing or invalid",
+            "headers": {
+              "WWW_Authenticate": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "The user with the specified ID was not found.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
           },
           "default": {
             "description": "Internal server error",
@@ -1023,13 +1154,13 @@ func init() {
           "type": "string"
         },
         "damage": {
-          "type": "number"
+          "type": "string"
         },
         "effects": {
           "type": "object"
         },
         "hp": {
-          "type": "number"
+          "type": "string"
         },
         "id": {
           "type": "string"
@@ -1037,8 +1168,8 @@ func init() {
         "image": {
           "type": "string"
         },
-        "mana_cost": {
-          "type": "number"
+        "manaCost": {
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -1049,7 +1180,7 @@ func init() {
             "type": "string"
           }
         },
-        "surname": {
+        "surName": {
           "type": "string"
         }
       }
@@ -1094,27 +1225,23 @@ func init() {
     "LoginForm": {
       "type": "object",
       "required": [
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "type": "string"
         }
       }
-    },
-    "Principal": {
-      "type": "string"
     },
     "RegistrationForm": {
       "type": "object",
       "required": [
         "email",
-        "username",
+        "userName",
         "password"
       ],
       "properties": {
@@ -1123,10 +1250,41 @@ func init() {
           "format": "email"
         },
         "password": {
-          "type": "string",
-          "format": "password"
+          "type": "string"
         },
-        "username": {
+        "userName": {
+          "type": "string",
+          "maxLength": 16,
+          "minLength": 3,
+          "pattern": "^[A-Za-z0-9_]{3,16}$"
+        }
+      }
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The ID of the state.",
+          "type": "string"
+        },
+        "player1": {
+          "$ref": "#/definitions/User"
+        },
+        "player1Cards": {
+          "$ref": "#/definitions/Card"
+        },
+        "player2": {
+          "$ref": "#/definitions/User"
+        },
+        "player2Cards": {
+          "$ref": "#/definitions/Card"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
           "type": "string"
         }
       }
@@ -1136,40 +1294,23 @@ func init() {
       "properties": {
         "email": {
           "description": "The email of the User.",
-          "type": "string",
-          "format": "email"
+          "type": "string"
         },
         "id": {
           "description": "The ID of the User.",
           "type": "string"
         },
-        "password": {
-          "description": "The password of the User.",
-          "type": "string",
-          "format": "password"
-        },
-        "total_games": {
+        "totalGames": {
           "description": "Count of all games of the User.",
-          "type": "integer"
+          "type": "string"
         },
-        "username": {
+        "userName": {
           "description": "The user name.",
           "type": "string"
         },
-        "win_games": {
+        "winGames": {
           "description": "Count of all games where the User has won.",
-          "type": "integer"
-        }
-      }
-    },
-    "UserToken": {
-      "type": "object",
-      "properties": {
-        "token": {
           "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/User"
         }
       }
     }

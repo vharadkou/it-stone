@@ -14,16 +14,16 @@ import (
 )
 
 // CreateCardHandlerFunc turns a function with the right signature into a create card handler
-type CreateCardHandlerFunc func(CreateCardParams, *models.Principal) middleware.Responder
+type CreateCardHandlerFunc func(CreateCardParams, *models.Token) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn CreateCardHandlerFunc) Handle(params CreateCardParams, principal *models.Principal) middleware.Responder {
+func (fn CreateCardHandlerFunc) Handle(params CreateCardParams, principal *models.Token) middleware.Responder {
 	return fn(params, principal)
 }
 
 // CreateCardHandler interface for that can handle valid create card params
 type CreateCardHandler interface {
-	Handle(CreateCardParams, *models.Principal) middleware.Responder
+	Handle(CreateCardParams, *models.Token) middleware.Responder
 }
 
 // NewCreateCard creates a new http.Handler for the create card operation
@@ -56,9 +56,9 @@ func (o *CreateCard) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.Token
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.Token) // this is really a models.Token, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

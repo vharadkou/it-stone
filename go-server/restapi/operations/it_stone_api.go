@@ -22,6 +22,7 @@ import (
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
+	"it-stone-server/restapi/operations/search"
 	"it-stone-server/restapi/operations/user"
 
 	models "it-stone-server/models"
@@ -44,25 +45,28 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Principal) middleware.Responder {
+		CardCreateCardHandler: card.CreateCardHandlerFunc(func(params card.CreateCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardCreateCard has not yet been implemented")
 		}),
-		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Principal) middleware.Responder {
+		CardDeleteCardHandler: card.DeleteCardHandlerFunc(func(params card.DeleteCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardDeleteCard has not yet been implemented")
 		}),
-		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Principal) middleware.Responder {
+		UserDeleteUserHandler: user.DeleteUserHandlerFunc(func(params user.DeleteUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserDeleteUser has not yet been implemented")
 		}),
-		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Principal) middleware.Responder {
+		CardGetCardHandler: card.GetCardHandlerFunc(func(params card.GetCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCard has not yet been implemented")
 		}),
-		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Principal) middleware.Responder {
+		CardGetCardsHandler: card.GetCardsHandlerFunc(func(params card.GetCardsParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardGetCards has not yet been implemented")
 		}),
-		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
-		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Principal) middleware.Responder {
+		UserGetUserByTokenHandler: user.GetUserByTokenHandlerFunc(func(params user.GetUserByTokenParams, principal *models.Token) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUserByToken has not yet been implemented")
+		}),
+		UserGetUsersHandler: user.GetUsersHandlerFunc(func(params user.GetUsersParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUsers has not yet been implemented")
 		}),
 		LoginLoginHandler: login.LoginHandlerFunc(func(params login.LoginParams) middleware.Responder {
@@ -71,15 +75,18 @@ func NewItStoneAPI(spec *loads.Document) *ItStoneAPI {
 		RegistrationRegistrationHandler: registration.RegistrationHandlerFunc(func(params registration.RegistrationParams) middleware.Responder {
 			return middleware.NotImplemented("operation RegistrationRegistration has not yet been implemented")
 		}),
-		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Principal) middleware.Responder {
+		SearchSearchAnotherHandler: search.SearchAnotherHandlerFunc(func(params search.SearchAnotherParams, principal *models.Token) middleware.Responder {
+			return middleware.NotImplemented("operation SearchSearchAnother has not yet been implemented")
+		}),
+		CardUpdateCardHandler: card.UpdateCardHandlerFunc(func(params card.UpdateCardParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation CardUpdateCard has not yet been implemented")
 		}),
-		UserUpdateUserHandler: user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		UserUpdateUserHandler: user.UpdateUserHandlerFunc(func(params user.UpdateUserParams, principal *models.Token) middleware.Responder {
 			return middleware.NotImplemented("operation UserUpdateUser has not yet been implemented")
 		}),
 
 		// Applies when the "JWT-Token" header is set
-		APIKeyHeaderAuth: func(token string) (*models.Principal, error) {
+		APIKeyHeaderAuth: func(token string) (*models.Token, error) {
 			return nil, errors.NotImplemented("api key auth (APIKeyHeader) JWT-Token from header param [JWT-Token] has not yet been implemented")
 		},
 
@@ -118,7 +125,7 @@ type ItStoneAPI struct {
 
 	// APIKeyHeaderAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key JWT-Token provided in the header
-	APIKeyHeaderAuth func(string) (*models.Principal, error)
+	APIKeyHeaderAuth func(string) (*models.Token, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
@@ -135,12 +142,16 @@ type ItStoneAPI struct {
 	CardGetCardsHandler card.GetCardsHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
+	// UserGetUserByTokenHandler sets the operation handler for the get user by token operation
+	UserGetUserByTokenHandler user.GetUserByTokenHandler
 	// UserGetUsersHandler sets the operation handler for the get users operation
 	UserGetUsersHandler user.GetUsersHandler
 	// LoginLoginHandler sets the operation handler for the login operation
 	LoginLoginHandler login.LoginHandler
 	// RegistrationRegistrationHandler sets the operation handler for the registration operation
 	RegistrationRegistrationHandler registration.RegistrationHandler
+	// SearchSearchAnotherHandler sets the operation handler for the search another operation
+	SearchSearchAnotherHandler search.SearchAnotherHandler
 	// CardUpdateCardHandler sets the operation handler for the update card operation
 	CardUpdateCardHandler card.UpdateCardHandler
 	// UserUpdateUserHandler sets the operation handler for the update user operation
@@ -236,6 +247,10 @@ func (o *ItStoneAPI) Validate() error {
 		unregistered = append(unregistered, "user.GetUserHandler")
 	}
 
+	if o.UserGetUserByTokenHandler == nil {
+		unregistered = append(unregistered, "user.GetUserByTokenHandler")
+	}
+
 	if o.UserGetUsersHandler == nil {
 		unregistered = append(unregistered, "user.GetUsersHandler")
 	}
@@ -246,6 +261,10 @@ func (o *ItStoneAPI) Validate() error {
 
 	if o.RegistrationRegistrationHandler == nil {
 		unregistered = append(unregistered, "registration.RegistrationHandler")
+	}
+
+	if o.SearchSearchAnotherHandler == nil {
+		unregistered = append(unregistered, "search.SearchAnotherHandler")
 	}
 
 	if o.CardUpdateCardHandler == nil {
@@ -400,6 +419,11 @@ func (o *ItStoneAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/v0/user"] = user.NewGetUserByToken(o.context, o.UserGetUserByTokenHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/v0/users"] = user.NewGetUsers(o.context, o.UserGetUsersHandler)
 
 	if o.handlers["POST"] == nil {
@@ -411,6 +435,11 @@ func (o *ItStoneAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/v0/registration"] = registration.NewRegistration(o.context, o.RegistrationRegistrationHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/v0/search"] = search.NewSearchAnother(o.context, o.SearchSearchAnotherHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

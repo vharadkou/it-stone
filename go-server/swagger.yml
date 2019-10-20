@@ -34,7 +34,7 @@ paths:
         200:
           description: Login successful.
           schema:
-            $ref: "#/definitions/UserToken"
+            $ref: "#/definitions/Token"
         default:
           description: Internal server error
           schema:
@@ -171,6 +171,27 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /v0/user:
+    get:
+      operationId: getUserByToken
+      tags:
+        - user
+      summary: Receiving the user by token
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: The user with the specified ID was not found.
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
   /v0/users:
     get:
       summary: Receiving all users
@@ -260,6 +281,24 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /v0/search:
+    get:
+      tags:
+        - search
+      operationId: searchAnother
+      summary: Search another player
+      responses:
+        200:
+          description: Search for another player completed successfully
+          schema:
+              $ref: "#/definitions/State"
+        504:
+          description: Couldn't search for another player in time
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+
 responses:
   UnauthorizedError:
     description: Authentication information is missing or invalid
@@ -272,28 +311,29 @@ definitions:
     type: object
     required:
       - email
-      - username
+      - userName
       - password
     properties:
       email:
         type: string
         format: email
-      username:
+      userName:
         type: string
+        pattern: '^[A-Za-z0-9_]{3,16}$'
+        minLength: 3
+        maxLength: 16
       password:
         type: string
-        format: password
   LoginForm:
     type: object
     required:
-      - username
+      - userName
       - password
     properties:
-      username:
+      userName:
         type: string
       password:
         type: string
-        format: password
   CreatedEntity:
     type: object
     required:
@@ -317,7 +357,7 @@ definitions:
         type: string
       name:
         type: string
-      surname:
+      surName:
         type: string
       image:
         type: string
@@ -326,11 +366,11 @@ definitions:
         items:
           type: string
       hp:
-        type: number
+        type: string
       damage:
-        type: number
-      mana_cost:
-        type: number
+        type: string
+      manaCost:
+        type: string
       effects:
         type: object
   User:
@@ -339,28 +379,37 @@ definitions:
       id:
         type: string
         description: The ID of the User.
-      username:
+      userName:
         type: string
         description: The user name.
       email:
         type: string
-        format: email
         description: The email of the User.
-      password:
+      winGames:
         type: string
-        format: password
-        description: The password of the User.
-      win_games:
-        type: integer
         description: Count of all games where the User has won.
-      total_games:
-        type: integer
+      totalGames:
+        type: string
         description: Count of all games of the User.
-  UserToken:
+ 
+  State:
     type: object
     properties:
-      user:
+      id:
+        type: string
+        description: The ID of the state.
+      player1:
         $ref: "#/definitions/User"
+      player2:
+        $ref: "#/definitions/User"
+      player1Cards:
+          $ref: "#/definitions/Card"
+      player2Cards:
+          $ref: "#/definitions/Card"
+          
+  Token:
+    type: object
+    properties:
       token:
         type: string
   Error:
@@ -373,5 +422,3 @@ definitions:
         format: int64
       message:
         type: string
-  Principal:
-    type: string
