@@ -1,8 +1,9 @@
 package firestore
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
+
+	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
 )
 
@@ -16,6 +17,7 @@ type FirestoreClient interface {
 	FindOneByField(collection, field, value string) (map[string]interface{}, error)
 	DeleteOneByID(collection, id string) error
 	UpdateOneByID(collection, id string, data map[string]interface{}) (map[string]interface{}, error)
+	FindOneNotEqualField(collection, field, value string) (map[string]interface{}, error)
 }
 
 // DbFirestore Struct
@@ -107,4 +109,30 @@ func (db *firestoreClient) UpdateOneByID(collection, id string, data map[string]
 		return nil, err
 	}
 	return db.FindOneByField(collection, "id", id)
+}
+
+func (db *firestoreClient) FindOneNotEqualField(collection, field, value string) (map[string]interface{}, error) {
+	var record map[string]interface{}
+	iter := db.Client.Collection(collection).Documents(db.ctx)
+	for {
+		record = nil
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		err = doc.DataTo(&record)
+		if err != nil {
+			return nil, err
+		}
+
+		if record[field] != value {
+			break
+		}
+	}
+
+	return record, nil
 }
