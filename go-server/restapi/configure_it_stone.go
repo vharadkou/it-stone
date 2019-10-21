@@ -13,7 +13,9 @@ import (
 	"it-stone-server/validation"
 	"log"
 	"net/http"
-
+	"os"
+	"path/filepath"
+	"it-stone-server/domain"
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 )
