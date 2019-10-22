@@ -3,17 +3,17 @@ package repository
 import (
 	"context"
 	"encoding/json"
+	"it-stone-server/domain"
 	"it-stone-server/firestore"
 	"it-stone-server/helpers"
-	"it-stone-server/models"
 	"log"
 	"os"
 )
 
 type StateRepository interface {
-	GetState(ctx context.Context, field, value string) (*models.State, error)
-	InsertState(ctx context.Context, state *models.State) error
-	UpdateState(ctx context.Context, state *models.State) error
+	GetState(ctx context.Context, field, value string) (*domain.Game, error)
+	InsertState(ctx context.Context, game *domain.Game) error
+	UpdateState(ctx context.Context, game *domain.Game) error
 	DeleteState(ctx context.Context, id string) error
 }
 
@@ -31,7 +31,7 @@ func NewStateRepository(clientFunc firestore.FirestoreClientFunc) StateRepositor
 	}
 }
 
-func (r *stateRepository) GetState(ctx context.Context, field, value string) (*models.State, error) {
+func (r *stateRepository) GetState(ctx context.Context, field, value string) (*domain.Game, error) {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -46,13 +46,13 @@ func (r *stateRepository) GetState(ctx context.Context, field, value string) (*m
 		return nil, err
 	}
 
-	var st models.State
+	var game domain.Game
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, &st)
-	return &st, nil
+	_ = json.Unmarshal(sb, &game)
+	return &game, nil
 }
 
-func (r *stateRepository) InsertState(ctx context.Context, state *models.State) error {
+func (r *stateRepository) InsertState(ctx context.Context, game *domain.Game) error {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -61,13 +61,13 @@ func (r *stateRepository) InsertState(ctx context.Context, state *models.State) 
 
 	defer db.Close()
 
-	state.ID = r.idHelper.GenerateID()
+	game.ID = r.idHelper.GenerateID()
 
 	var data map[string]interface{}
-	jsonData, _ := json.Marshal(state)
+	jsonData, _ := json.Marshal(game)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(r.collection, state.ID, data)
+	err = db.InsertOne(r.collection, game.ID, data)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -76,7 +76,7 @@ func (r *stateRepository) InsertState(ctx context.Context, state *models.State) 
 	return nil
 }
 
-func (r *stateRepository) UpdateState(ctx context.Context, state *models.State) error {
+func (r *stateRepository) UpdateState(ctx context.Context, game *domain.Game) error {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -85,13 +85,13 @@ func (r *stateRepository) UpdateState(ctx context.Context, state *models.State) 
 
 	defer db.Close()
 
-	state.ID = r.idHelper.GenerateID()
+	game.ID = r.idHelper.GenerateID()
 
 	var data map[string]interface{}
-	jsonData, _ := json.Marshal(state)
+	jsonData, _ := json.Marshal(game)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(r.collection, state.ID, data)
+	err = db.InsertOne(r.collection, game.ID, data)
 	if err != nil {
 		log.Println(err)
 		return err

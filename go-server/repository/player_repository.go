@@ -3,35 +3,35 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"it-stone-server/models"
+	"it-stone-server/domain"
 	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"log"
 	"os"
 )
 
-type SearchRepository interface {
-	GetAnotherUser(ctx context.Context, field, value string) (*models.User, error)
-	GetUser(ctx context.Context, field, value string) (*models.User, error)
-	InsertUser(ctx context.Context, user *models.User) error
-	DeleteUser(ctx context.Context, id string) error
+type PlayerRepository interface {
+	GetAnotherPlayer(ctx context.Context, field, value string) (*domain.Player, error)
+	GetPlayer(ctx context.Context, field, value string) (*domain.Player, error)
+	InsertPlayer(ctx context.Context, player *domain.Player) error
+	DeletePlayer(ctx context.Context, id string) error
 }
 
-type searchRepository struct {
+type playerRepository struct {
 	collection string
 	idHelper   helpers.IDHelper
 	clientFunc firestore.FirestoreClientFunc
 }
 
-func NewSearchRepository(clientFunc firestore.FirestoreClientFunc) SearchRepository {
-	return &searchRepository{
+func NewPlayerRepository(clientFunc firestore.FirestoreClientFunc) PlayerRepository {
+	return &playerRepository{
 		collection: "Search",
 		idHelper:   helpers.NewIDHelper(),
 		clientFunc: clientFunc,
 	}
 }
 
-func (r *searchRepository) GetAnotherUser(ctx context.Context, field, value string) (*models.User, error) {
+func (r *playerRepository) GetAnotherPlayer(ctx context.Context, field, value string) (*domain.Player, error) {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -46,13 +46,13 @@ func (r *searchRepository) GetAnotherUser(ctx context.Context, field, value stri
 		return nil, err
 	}
 
-	var user models.User
+	var player domain.Player
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, &user)
-	return &user, nil
+	_ = json.Unmarshal(sb, &player)
+	return &player, nil
 }
 
-func (r *searchRepository) GetUser(ctx context.Context, field, value string) (*models.User, error) {
+func (r *playerRepository) GetPlayer(ctx context.Context, field, value string) (*domain.Player, error) {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -67,13 +67,13 @@ func (r *searchRepository) GetUser(ctx context.Context, field, value string) (*m
 		return nil, err
 	}
 
-	var user models.User
+	var player domain.Player
 	sb, _ := json.Marshal(recordTmpMap)
-	_ = json.Unmarshal(sb, &user)
-	return &user, nil
+	_ = json.Unmarshal(sb, &player)
+	return &player, nil
 }
 
-func (r *searchRepository) InsertUser(ctx context.Context, user *models.User) error {
+func (r *playerRepository) InsertPlayer(ctx context.Context, player *domain.Player) error {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)
@@ -82,13 +82,13 @@ func (r *searchRepository) InsertUser(ctx context.Context, user *models.User) er
 
 	defer db.Close()
 
-	user.ID = r.idHelper.GenerateID()
+	player.ID = r.idHelper.GenerateID()
 
 	var data map[string]interface{}
-	jsonData, _ := json.Marshal(user)
+	jsonData, _ := json.Marshal(player)
 	_ = json.Unmarshal(jsonData, &data)
 
-	err = db.InsertOne(r.collection, user.ID, data)
+	err = db.InsertOne(r.collection, player.ID, data)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -97,7 +97,7 @@ func (r *searchRepository) InsertUser(ctx context.Context, user *models.User) er
 	return nil
 }
 
-func (r *searchRepository) DeleteUser(ctx context.Context, id string) error {
+func (r *playerRepository) DeletePlayer(ctx context.Context, id string) error {
 	db, err := r.clientFunc(ctx, os.Getenv("project_id"))
 	if err != nil {
 		log.Println(err)

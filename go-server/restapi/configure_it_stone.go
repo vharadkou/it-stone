@@ -13,6 +13,7 @@ import (
 	"it-stone-server/validation"
 	"log"
 	"net/http"
+
 	"os"
 	"path/filepath"
 	"it-stone-server/domain"
@@ -40,7 +41,8 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 
 	userRepository := repository.NewUserRepository(firestore.NewFirestoreClient)
 	cardRepository := repository.NewCardRepository(firestore.NewFirestoreClient)
-	searchRepository := repository.NewSearchRepository(firestore.NewFirestoreClient)
+	playerRepository := repository.NewPlayerRepository(firestore.NewFirestoreClient)
+	stateRepository := repository.NewStateRepository(firestore.NewFirestoreClient)
 
 	userSearcher := helpers.NewUserSearchHelper()
 	cardSearcher := helpers.NewCardSearchHelper()
@@ -50,7 +52,7 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
 	cardHandler := handlers.NewCardsHandler(cardRepository, cardSearcher)
 	userHandler := handlers.NewUsersHandler(userRepository)
-	searchHandler := handlers.NewSearchHandler(searchRepository)
+	searchHandler := handlers.NewSearchHandler(playerRepository, stateRepository)
 
 	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler, searchHandler)
 	restApiHandler.ConfigureRestAPI(api)
@@ -70,23 +72,23 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
-		directory := "temp"
-		filename := "config.json"
+	directory := "temp"
+	filename := "config.json"
 
-		firestoreConfig := domain.NewFirestoreConfig()
-		envHelper := helpers.NewEnvHelper()
+	firestoreConfig := domain.NewFirestoreConfig()
+	envHelper := helpers.NewEnvHelper()
 
-		firestoreConfigCreator := firestore.NewFirestoreConfigCreator(firestoreConfig, envHelper)
-		err := firestoreConfigCreator.CreateConfigFile(directory, filename)
+	firestoreConfigCreator := firestore.NewFirestoreConfigCreator(firestoreConfig, envHelper)
+	err := firestoreConfigCreator.CreateConfigFile(directory, filename)
 
-		if err != nil {
-			panic(err)
-		}
+	if err != nil {
+		panic(err)
+	}
 
-		err = os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filepath.Join(directory, filename))
-		if err != nil {
-			panic(err)
-		}
+	err = os.Setenv("GOOGLE_APPLICATION_CREDENTIALS", filepath.Join(directory, filename))
+	if err != nil {
+		panic(err)
+	}
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
