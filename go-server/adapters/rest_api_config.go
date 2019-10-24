@@ -1,27 +1,31 @@
 package adapters
 
 import (
-	"github.com/go-openapi/runtime/middleware"
 	handlers "it-stone-server/adapters/rest-api-handlers"
 	"it-stone-server/models"
 	"it-stone-server/restapi/operations"
 	"it-stone-server/restapi/operations/card"
 	"it-stone-server/restapi/operations/login"
 	"it-stone-server/restapi/operations/registration"
+	"it-stone-server/restapi/operations/search"
 	"it-stone-server/restapi/operations/user"
+
+	"github.com/go-openapi/runtime/middleware"
 )
 
 type RestAPIHandlers struct {
-	authHandler  handlers.AuthHandler
-	cardsHandler handlers.CardsHandler
-	usersHandler handlers.UsersHandler
+	authHandler   handlers.AuthHandler
+	cardsHandler  handlers.CardsHandler
+	usersHandler  handlers.UsersHandler
+	searchHandler handlers.SearchHandler
 }
 
-func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.CardsHandler, usersHandler handlers.UsersHandler) RestAPIHandlers {
+func NewRestAPIHandler(authHandler handlers.AuthHandler, cardsHandler handlers.CardsHandler, usersHandler handlers.UsersHandler, searchHandler handlers.SearchHandler) RestAPIHandlers {
 	return RestAPIHandlers{
-		authHandler:  authHandler,
-		cardsHandler: cardsHandler,
-		usersHandler: usersHandler,
+		authHandler:   authHandler,
+		cardsHandler:  cardsHandler,
+		usersHandler:  usersHandler,
+		searchHandler: searchHandler,
 	}
 }
 
@@ -67,5 +71,10 @@ func (restApi *RestAPIHandlers) ConfigureRestAPI(api *operations.ItStoneAPI) {
 	})
 	api.UserGetUsersHandler = user.GetUsersHandlerFunc(func(params user.GetUsersParams, token *models.Token) middleware.Responder {
 		return restApi.usersHandler.GetUsers(params)
+	})
+
+	//Search
+	api.SearchSearchAnotherHandler = search.SearchAnotherHandlerFunc(func(params search.SearchAnotherParams, token *models.Token) middleware.Responder {
+		return restApi.searchHandler.SearchAnotherUser(params, token)
 	})
 }

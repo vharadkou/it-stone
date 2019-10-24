@@ -4,11 +4,8 @@ package restapi
 
 import (
 	"crypto/tls"
-	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime"
 	"it-stone-server/adapters"
 	handlers "it-stone-server/adapters/rest-api-handlers"
-	"it-stone-server/domain"
 	"it-stone-server/firestore"
 	"it-stone-server/helpers"
 	"it-stone-server/repository"
@@ -16,8 +13,12 @@ import (
 	"it-stone-server/validation"
 	"log"
 	"net/http"
+
 	"os"
 	"path/filepath"
+	"it-stone-server/domain"
+	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 )
 
 func configureFlags(api *operations.ItStoneAPI) {
@@ -40,6 +41,8 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 
 	userRepository := repository.NewUserRepository(firestore.NewFirestoreClient)
 	cardRepository := repository.NewCardRepository(firestore.NewFirestoreClient)
+	playerRepository := repository.NewPlayerRepository(firestore.NewFirestoreClient)
+	stateRepository := repository.NewStateRepository(firestore.NewFirestoreClient)
 
 	userSearcher := helpers.NewUserSearchHelper()
 	cardSearcher := helpers.NewCardSearchHelper()
@@ -49,8 +52,9 @@ func configureAPI(api *operations.ItStoneAPI) http.Handler {
 	authHandler := handlers.NewAuthHandler(userRepository, userSearcher, userValidation)
 	cardHandler := handlers.NewCardsHandler(cardRepository, cardSearcher)
 	userHandler := handlers.NewUsersHandler(userRepository)
+	searchHandler := handlers.NewSearchHandler(playerRepository, stateRepository)
 
-	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler)
+	restApiHandler := adapters.NewRestAPIHandler(authHandler, cardHandler, userHandler, searchHandler)
 	restApiHandler.ConfigureRestAPI(api)
 
 	api.ServerShutdown = func() {}

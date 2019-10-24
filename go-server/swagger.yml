@@ -281,6 +281,24 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
+  /v0/search:
+    get:
+      tags:
+        - search
+      operationId: searchAnother
+      summary: Search another player
+      responses:
+        200:
+          description: Search for another player completed successfully
+          schema:
+              $ref: "#/definitions/State"
+        504:
+          description: Couldn't search for another player in time
+        default:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/Error"
+
 responses:
   UnauthorizedError:
     description: Authentication information is missing or invalid
@@ -373,6 +391,22 @@ definitions:
       totalGames:
         type: string
         description: Count of all games of the User.
+ 
+  State:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The ID of the state.
+      player1:
+        $ref: "#/definitions/User"
+      player2:
+        $ref: "#/definitions/User"
+      player1Cards:
+          $ref: "#/definitions/Card"
+      player2Cards:
+          $ref: "#/definitions/Card"
+          
   Token:
     type: object
     properties:
