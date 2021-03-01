@@ -41,7 +41,7 @@
     "postprocessing": "^6.7.0",
     "rxjs": "^6.5.3",
     "socket.io-client": "^2.2.0",
-    "three": "^0.108.0",
+    "three": "^0.125.0",
     "web-animations-js": "2.3.2",
     "zone.js": "~0.10.2"
   },
