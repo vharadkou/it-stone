@@ -13,10 +13,10 @@
     "@types/mongoose": "^5.5.12",
     "angular-socket-io": "^0.7.0",
     "mongoose": "^5.7.5",
-    "webpack": "^4.39.2"
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
-    "webpack-cli": "^3.3.6",
+    "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^3.8.0"
   }
 }
